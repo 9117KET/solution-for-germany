@@ -138,8 +138,8 @@ export const BENEFITS: readonly Benefit[] = [
     reimbursementOnly: true,
     conditional: false,
     caveat: {
-      de: 'Die frühere Wartezeit von sechs Monaten ist seit 1. Juli 2025 abgeschafft — der Anspruch besteht sofort.',
-      en: 'The former six-month qualifying period was abolished on 1 July 2025 — the entitlement applies immediately.',
+      de: 'Die frühere Wartezeit von sechs Monaten ist seit 1. Juli 2025 abgeschafft — der Anspruch besteht sofort. Wichtig: Übernimmt eine nahe Angehörige oder ein naher Angehöriger die Vertretung, ist die Verhinderungspflege auf das Doppelte des Pflegegeldes begrenzt — 694 € bei Pflegegrad 2, 1.198 € bei 3, 1.600 € bei 4, 1.980 € bei 5. Der volle Betrag gilt für die Kurzzeitpflege und für eine Vertretung durch andere Personen.',
+      en: 'The former six-month qualifying period was abolished on 1 July 2025 — the entitlement applies immediately. Important: where a close relative provides the cover, Verhinderungspflege is capped at twice the Pflegegeld — €694 at Pflegegrad 2, €1,198 at 3, €1,600 at 4, €1,980 at 5. The full amount applies to short-term care, and to cover provided by anyone else.',
     },
   },
   {
@@ -177,6 +177,22 @@ export const BENEFITS: readonly Benefit[] = [
     },
   },
 ] as const;
+
+/**
+ * Verhinderungspflege ceiling when the substitute carer is a close relative.
+ *
+ * The Gemeinsamer Jahresbetrag is 3.539 € for the pooled budget, but § 39 SGB XI
+ * caps the Verhinderungspflege share at twice the Pflegegeld where a nahe
+ * Angehörige stands in — which is the common case, not the exception. The full
+ * amount remains available for Kurzzeitpflege and for cover by anyone else.
+ *
+ * Held here rather than only in the caveat prose so the figures can be checked.
+ * Verified against BMG, "Zahlen, Daten und Fakten zur Pflegeversicherung",
+ * Stand Juli 2026, table X.
+ */
+export const VERHINDERUNGSPFLEGE_BY_RELATIVE: readonly [
+  Cents, Cents, Cents, Cents, Cents, Cents,
+] = [_, _, euro(694), euro(1198), euro(1600), euro(1980)];
 
 export function benefit(id: BenefitId): Benefit {
   const b = BENEFITS.find((x) => x.id === id);

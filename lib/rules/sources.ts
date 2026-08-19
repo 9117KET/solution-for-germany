@@ -73,7 +73,11 @@ export const SOURCES = {
     note:
       'Verhinderungspflege extended from 6 to 8 weeks (56 days). The former ' +
       '6-month qualifying period (Vorpflegezeit) was abolished entirely — a ' +
-      'common reason families wrongly believe they are not yet eligible.',
+      'common reason families wrongly believe they are not yet eligible. ' +
+      'The 3.539 € is the pooled ceiling: where a close relative provides the ' +
+      'cover, the Verhinderungspflege share is capped at twice the Pflegegeld ' +
+      '(§ 39 SGB XI). Cross-checked 2026-08-19 against BMG, "Zahlen, Daten und ' +
+      'Fakten zur Pflegeversicherung", Stand Juli 2026.',
   },
   wohnumfeldverbesserung: {
     law: '§ 40 Abs. 4 SGB XI',

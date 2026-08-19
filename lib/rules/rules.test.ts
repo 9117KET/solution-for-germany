@@ -3,6 +3,7 @@ import {
   assess,
   gradeForPoints,
   MODULES,
+  type Pflegegrad,
   type RawScores,
   type ModuleId,
 } from './nba';
@@ -14,6 +15,7 @@ import {
   formatEuro,
   monthlyEquivalent,
   benefit,
+  VERHINDERUNGSPFLEGE_BY_RELATIVE,
 } from './benefits';
 import { analyse, type CareProfile, type Circumstances } from './gap';
 import { SOURCES } from './sources';
@@ -327,5 +329,39 @@ describe('gap analysis', () => {
     expect(report.disclaimer.de).toMatch(/Medizinischen Dienst/);
     expect(report.disclaimer.de).toMatch(/§ 7a SGB XI/);
     expect(report.disclaimer.en).toMatch(/does not replace/);
+  });
+});
+
+describe('Verhinderungspflege when a relative provides the cover', () => {
+  it('is capped at exactly twice the Pflegegeld', () => {
+    // Not a coincidence to be re-typed if Pflegegeld changes: § 39 SGB XI
+    // defines the cap as double, so the test asserts the relationship.
+    for (const grade of [2, 3, 4, 5] as Pflegegrad[]) {
+      expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[grade]).toBe(
+        entitlement('pflegegeld', grade) * 2,
+      );
+    }
+  });
+
+  it('is far below the pooled annual budget, which is the point', () => {
+    // A household whose stand-in is a family member — the common case — cannot
+    // reach 3.539 € on Verhinderungspflege alone. Showing the pooled figure
+    // without this caveat would overstate, which is the one failure mode this
+    // product is built to avoid.
+    for (const grade of [2, 3, 4, 5] as Pflegegrad[]) {
+      expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[grade]).toBeLessThan(
+        entitlement('gemeinsamerJahresbetrag', grade),
+      );
+    }
+    expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[2]).toBe(euro(694));
+    expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[5]).toBe(euro(1980));
+  });
+
+  it('says so in both languages wherever the benefit is shown', () => {
+    const caveat = benefit('gemeinsamerJahresbetrag').caveat!;
+    expect(caveat.de).toContain('694');
+    expect(caveat.en).toContain('694');
+    expect(caveat.de).toMatch(/nahe Angehörige/);
+    expect(caveat.en).toMatch(/close relative/);
   });
 });
