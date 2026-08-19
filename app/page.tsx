@@ -243,7 +243,7 @@ export default function Home() {
   })();
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:py-10">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-4 pt-5 sm:pb-10 sm:pt-10">
       {screen.kind !== 'welcome' && screen.kind !== 'report' ? (
         <Progress
           current={progress.n}
@@ -528,7 +528,19 @@ export default function Home() {
       </div>
 
       {screen.kind !== 'welcome' && screen.kind !== 'report' ? (
-        <nav className="no-print flex items-center justify-between gap-3 border-t border-line pt-5">
+        /*
+         * Pinned to the bottom of the screen on a phone.
+         *
+         * A question with four answers and its official wording underneath is
+         * taller than a phone, so a nav that sits at the end of the document
+         * puts "Continue" below the fold on every single question — forty-nine
+         * scrolls to the end for someone who is already finding this hard.
+         * From `sm:` up there is room, so it returns to the flow.
+         */
+        <nav
+          className="no-print sticky bottom-0 -mx-4 mt-auto flex items-center justify-between gap-3 border-t border-line bg-bg px-4 py-3 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-5"
+          style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+        >
           <Button variant="secondary" onClick={goBack}>
             ← {t('back')}
           </Button>

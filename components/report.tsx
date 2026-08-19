@@ -179,7 +179,60 @@ export function Report({
       {relevant.length > 0 ? (
         <section className="flex flex-col gap-3">
           <h3 className="text-2xl font-bold tracking-tight">{t('breakdownTitle')}</h3>
-          <div className="bordered overflow-x-auto rounded-lg">
+
+          {/*
+           * On a phone the same figures are stacked as cards rather than put in
+           * a table. The table is 34rem wide at the smallest text setting and
+           * wider than any phone at the default one, so on mobile it could only
+           * ever be scrolled sideways — and side-scrolling a benefits breakdown
+           * is exactly the experience this product exists to avoid. Same data,
+           * same order, laid out to be read down the screen.
+           */}
+          <div className="flex flex-col gap-3 sm:hidden">
+            {relevant.map((g) => {
+              const st = STATUS[g.status];
+              return (
+                <Card key={g.benefit.id}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p {...content} className="text-lg font-semibold">
+                      {s(g.benefit.name)}
+                    </p>
+                    <span
+                      className={`inline-block rounded border-[length:var(--line-width)] px-2 py-0.5 text-sm font-bold ${st.className}`}
+                    >
+                      {t(st.key)}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 font-mono text-sm text-fg-muted">
+                    {SOURCES[g.source].law} · {t(PERIOD[g.benefit.period])}
+                  </p>
+                  <dl className="mt-3 flex flex-col gap-1 text-base">
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-fg-muted">{t('colEntitled')}</dt>
+                      <dd className="tabular-nums">{money(g.entitled)}</dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-fg-muted">{t('colClaimed')}</dt>
+                      <dd className="tabular-nums">{money(g.claimed)}</dd>
+                    </div>
+                    <div className="flex justify-between gap-3 border-t border-line pt-1">
+                      <dt className="font-semibold">{t('colGap')}</dt>
+                      <dd className="font-bold tabular-nums">
+                        {g.gap > 0 ? money(g.gap) : '—'}
+                      </dd>
+                    </div>
+                  </dl>
+                  {g.benefit.caveat ? (
+                    <p {...content} className="mt-2 text-sm text-fg-muted">
+                      {s(g.benefit.caveat)}
+                    </p>
+                  ) : null}
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="bordered hidden overflow-x-auto rounded-lg sm:block">
             <table className="w-full min-w-[34rem] border-collapse text-base">
               <thead>
                 <tr className="bg-surface-2 text-start">

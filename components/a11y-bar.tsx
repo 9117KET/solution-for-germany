@@ -64,10 +64,15 @@ export function A11yBar() {
 
   return (
     <div className="no-print sticky top-0 z-50 border-b border-line bg-surface">
-      <div className="mx-auto flex w-full max-w-3xl flex-wrap items-center gap-2 px-4 py-2">
-        <span className="mr-auto text-sm font-semibold tracking-tight">Anspruch</span>
+      <div className="mx-auto flex w-full max-w-3xl items-center gap-2 px-3 py-2 sm:px-4">
+        {/* The wordmark is decorative — the page already carries its name in a
+            heading. On a phone it is the first thing to go, because every row
+            this bar occupies is a row taken from the question underneath it. */}
+        <span className="me-auto hidden text-sm font-semibold tracking-tight sm:block">
+          Anspruch
+        </span>
 
-        <div className="flex items-center gap-1" role="group" aria-label={t('textSize')}>
+        <div className="flex items-center gap-1 sm:me-0" role="group" aria-label={t('textSize')}>
           <button
             type="button"
             onClick={() => set('textSize', smaller)}
@@ -94,9 +99,12 @@ export function A11yBar() {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls="display-panel"
-          className="target bordered rounded-md px-3 text-sm font-semibold"
+          className="target bordered ms-auto rounded-md px-3 text-sm font-semibold sm:ms-0"
         >
-          {open ? t('settingsClose') : t('settingsOpen')}
+          <span className="sm:hidden">{open ? t('settingsClose') : t('settings')}</span>
+          <span className="hidden sm:inline">
+            {open ? t('settingsClose') : t('settingsOpen')}
+          </span>
         </button>
       </div>
 
@@ -104,9 +112,12 @@ export function A11yBar() {
         <div
           id="display-panel"
           ref={panelRef}
-          className="border-t border-line bg-surface-2"
+          /* Capped and scrollable: with seven groups at the largest text size
+             the panel is taller than a phone, and a settings panel you cannot
+             scroll out of is worse than no settings panel. */
+          className="max-h-[70dvh] overflow-y-auto border-t border-line bg-surface-2 overscroll-contain"
         >
-          <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-4 py-5">
+          <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-3 py-5 sm:px-4">
             <Group label={t('language')}>
               {LANGUAGES.map((l) => (
                 <Pill
