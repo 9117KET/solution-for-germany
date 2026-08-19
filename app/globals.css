@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+/*
+ * Text scaling works by moving the root font size, not by swapping type
+ * classes. Everything in the interface is measured in rem — type, padding,
+ * gaps, minimum tap targets — so one variable grows the whole layout together
+ * and large text never ends up crammed into a small button.
+ */
+:root {
+  --text-scale: 1;
+  font-size: calc(100% * var(--text-scale));
+}
+
+/* ------------------------------------------------------------ light (default) */
+:root,
+:root[data-theme="light"] {
+  --bg: #f4f7f7;
+  --surface: #ffffff;
+  --surface-2: #eaf0f0;
+  --fg: #131b1e;
+  --fg-muted: #425258;
+  --line: #c4d0d3;
+  --line-width: 1px;
+  --accent: #085a52;
+  --accent-fg: #ffffff;
+  --accent-soft: #dcefec;
+  --accent-line: #085a52;
+  --warn-bg: #fdf3e0;
+  --warn-line: #b8791a;
+  --warn-fg: #4a2f04;
+  --focus: #085a52;
+  --shadow: 0 1px 2px rgb(19 27 30 / 0.06);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e1417;
+  --surface: #161f23;
+  --surface-2: #1e2a2f;
+  --fg: #e6edee;
+  --fg-muted: #a5b6bb;
+  --line: #2c3b41;
+  --line-width: 1px;
+  --accent: #4fd6c4;
+  --accent-fg: #06231f;
+  --accent-soft: #14302d;
+  --accent-line: #4fd6c4;
+  --warn-bg: #2e2410;
+  --warn-line: #d9a83a;
+  --warn-fg: #f6e4bd;
+  --focus: #4fd6c4;
+  --shadow: none;
+}
+
+/*
+ * The two high-contrast schemes drop every mid-tone and thicken every border.
+ * Both exceed the WCAG AAA ratio of 7:1 for body text — pure black on white is
+ * 21:1, and the yellow below is 16.7:1 on black. Yellow on black is the
+ * combination long-standing sight-loss guidance settles on, and people who need
+ * it tend to ask for it by name, which is why it is labelled by its colours
+ * rather than as "high contrast".
+ */
+:root[data-theme="contrast-light"] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --fg: #000000;
+  --fg-muted: #000000;
+  --line: #000000;
+  --line-width: 3px;
+  --accent: #00407a;
+  --accent-fg: #ffffff;
+  --accent-soft: #ffffff;
+  --accent-line: #00407a;
+  --warn-bg: #ffffff;
+  --warn-line: #000000;
+  --warn-fg: #000000;
+  --focus: #00407a;
+  --shadow: none;
+}
+
+:root[data-theme="contrast-dark"] {
+  --bg: #000000;
+  --surface: #000000;
+  --surface-2: #000000;
+  --fg: #ffe700;
+  --fg-muted: #ffe700;
+  --line: #ffe700;
+  --line-width: 3px;
+  --accent: #ffe700;
+  --accent-fg: #000000;
+  --accent-soft: #000000;
+  --accent-line: #ffe700;
+  --warn-bg: #000000;
+  --warn-line: #ffffff;
+  --warn-fg: #ffffff;
+  --focus: #ffffff;
+  --shadow: none;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-line: var(--warn-line);
+  --color-warn-fg: var(--warn-fg);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* Slightly looser than default: helps low-vision and dyslexic readers, and
+     costs nothing for everyone else. */
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+/*
+ * One visible focus style for everything, in every theme. Keyboard users are a
+ * large share of this audience — a tremor makes a mouse hard and a keyboard
+ * easy — so focus is never allowed to be invisible.
+ */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Bordered surfaces pick up the theme's border width automatically, so the
+   high-contrast schemes thicken every edge without per-component overrides. */
+.bordered {
+  border: var(--line-width) solid var(--line);
+}
+
+/*
+ * Minimum tap target. WCAG 2.2 asks for 24px and the mobile platform guidelines
+ * for 44px; this audience gets 2.75rem, which is 44px at normal size and grows
+ * with the text scale.
+ */
+.target {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+/* Respect a stated preference for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Screen-reader-only text that still gets read aloud. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/*
+ * Printing matters here: the result is something people take to the Pflegekasse
+ * or to a relative. Force it onto white, drop the interface chrome, and let the
+ * action list break across pages sensibly.
+ */
+@media print {
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --fg: #000000;
+    --fg-muted: #333333;
+    --line: #999999;
+    --line-width: 1px;
+    --accent: #000000;
+    --accent-soft: #ffffff;
+    --shadow: none;
+  }
+  .no-print {
+    display: none !important;
+  }
+  li,
+  section,
+  tr {
+    break-inside: avoid;
+  }
+}
