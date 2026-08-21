@@ -1,7 +1,7 @@
 /**
  * Everyday wording for the assessment questions.
  *
- * The official instrument is written in administrative German — nominalised,
+ * The official instrument is written in administrative German: nominalised,
  * genitive-stacked phrases like "Mundgerechtes Zubereiten der Nahrung und
  * Eingießen von Getränken". People answer that question wrongly not because
  * they misjudge the care needed but because they cannot parse the sentence.
@@ -17,8 +17,8 @@
  * voice, no genitive chains, no abbreviations, no subjunctive, and concrete
  * verbs in place of nominalisations.
  *
- * Both wordings are shown together in the interface — the everyday phrasing
- * leads, the official phrasing sits underneath in small type — so that nobody
+ * Both wordings are shown together in the interface: the everyday phrasing
+ * leads and the official phrasing sits underneath in small type, so that nobody
  * is cut off from the terminology the assessor will actually use.
  */
 
@@ -201,8 +201,8 @@ export const PLAIN_SCALE: Record<ScaleVariant, ReadonlyArray<Localised>> = {
   tubeFeeding: [
     { de: 'Nicht jeden Tag, oder gar nicht', en: 'Not every day, or not at all' },
     {
-      de: 'Jeden Tag — und die Person isst auch mit dem Mund',
-      en: 'Every day — and the person also eats by mouth',
+      de: 'Jeden Tag, und die Person isst auch mit dem Mund',
+      en: 'Every day, and the person also eats by mouth',
     },
     { de: 'Fast nur über den Schlauch', en: 'Almost only through the tube' },
   ],

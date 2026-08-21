@@ -44,7 +44,7 @@ describe('every string exists in every language', () => {
 
   it('uses the same placeholders in every language', () => {
     // A placeholder present in one language and absent in another shows the
-    // person a literal "{amount}" — or worse, silently drops the number. With
+    // person a literal "{amount}", or worse, silently drops the number. With
     // six languages this is the single easiest mistake to make, so every
     // language is compared against the German source rather than just to English.
     const placeholders = (s: string) => (s.match(/\{(\w+)\}/g) ?? []).sort().join(',');
@@ -167,6 +167,34 @@ describe('the boundary between interface and content', () => {
       }).format(1234.5);
       // Whatever the separators, the digits have to survive.
       expect(out.replace(/\D/g, ''), meta.id).toContain('12345');
+    }
+  });
+
+  it('writes an interpolated score with the reader’s decimal separator', () => {
+    // The weighted module scores step in 1.25s, so a fractional total is the
+    // ordinary case rather than an edge one: this is the headline figure on
+    // the report. `String(47.5)` gives "47.5" in every language, which is
+    // wrong in four of the six.
+    expect(translate('pointsOf100', 'de', { n: 47.5 })).toContain('47,5');
+    expect(translate('pointsOf100', 'tr', { n: 47.5 })).toContain('47,5');
+    expect(translate('pointsOf100', 'ru', { n: 47.5 })).toContain('47,5');
+    expect(translate('pointsOf100', 'pl', { n: 47.5 })).toContain('47,5');
+    expect(translate('pointsOf100', 'en', { n: 47.5 })).toContain('47.5');
+  });
+
+  it('keeps interpolated numbers in Latin digits in Arabic', () => {
+    // Same reasoning as the money case: the figure gets copied onto a German
+    // form, so Eastern Arabic numerals would make more work, not less.
+    const out = translate('pointsOf100', 'ar', { n: 47.5 });
+    expect(out).toMatch(/47/);
+    expect(out).not.toMatch(/[٠-٩]/);
+  });
+
+  it('leaves whole numbers unpunctuated in every language', () => {
+    // Question counters run through the same path. "Frage 1 von 63" must not
+    // pick up a grouping separator or a stray decimal.
+    for (const meta of LANGUAGES) {
+      expect(translate('pointsOf100', meta.id, { n: 100 }), meta.id).toContain('100');
     }
   });
 });

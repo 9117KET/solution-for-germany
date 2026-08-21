@@ -5,7 +5,7 @@
  * are the only source of fractions, so money never touches a float that could
  * accumulate error across a sum.
  *
- * Values are 2026. 2026 is a Nullrunde — the figures are the 1 Jan 2025
+ * Values are 2026. 2026 is a Nullrunde: the figures are the 1 Jan 2025
  * amounts, which remain in force. See SOURCES for per-benefit provenance.
  */
 
@@ -82,8 +82,8 @@ export const BENEFITS: readonly Benefit[] = [
     id: 'pflegesachleistung',
     name: { de: 'Pflegesachleistung', en: 'Professional home care' },
     what: {
-      de: 'Wert der Leistungen, die ein ambulanter Pflegedienst erbringen kann — wird direkt mit dem Dienst abgerechnet.',
-      en: 'Value of services an outpatient care service may provide — billed directly to the service.',
+      de: 'Wert der Leistungen, die ein ambulanter Pflegedienst erbringen kann, wird direkt mit dem Dienst abgerechnet.',
+      en: 'Value of services an outpatient care service may provide, billed directly to the service.',
     },
     period: 'month',
     source: 'pflegesachleistung',
@@ -112,8 +112,8 @@ export const BENEFITS: readonly Benefit[] = [
     id: 'pflegehilfsmittel',
     name: { de: 'Pflegehilfsmittel zum Verbrauch', en: 'Consumable care aids' },
     what: {
-      de: 'Handschuhe, Desinfektionsmittel, Bettschutzeinlagen und Ähnliches — monatlich, ab Pflegegrad 1.',
-      en: 'Gloves, disinfectant, bed protection and similar — monthly, from Pflegegrad 1.',
+      de: 'Handschuhe, Desinfektionsmittel, Bettschutzeinlagen und Ähnliches: monatlich, ab Pflegegrad 1.',
+      en: 'Gloves, disinfectant, bed protection and similar: monthly, from Pflegegrad 1.',
     },
     period: 'month',
     source: 'pflegehilfsmittel',
@@ -138,8 +138,8 @@ export const BENEFITS: readonly Benefit[] = [
     reimbursementOnly: true,
     conditional: false,
     caveat: {
-      de: 'Die frühere Wartezeit von sechs Monaten ist seit 1. Juli 2025 abgeschafft — der Anspruch besteht sofort. Wichtig: Übernimmt eine nahe Angehörige oder ein naher Angehöriger die Vertretung, ist die Verhinderungspflege auf das Doppelte des Pflegegeldes begrenzt — 694 € bei Pflegegrad 2, 1.198 € bei 3, 1.600 € bei 4, 1.980 € bei 5. Der volle Betrag gilt für die Kurzzeitpflege und für eine Vertretung durch andere Personen.',
-      en: 'The former six-month qualifying period was abolished on 1 July 2025 — the entitlement applies immediately. Important: where a close relative provides the cover, Verhinderungspflege is capped at twice the Pflegegeld — €694 at Pflegegrad 2, €1,198 at 3, €1,600 at 4, €1,980 at 5. The full amount applies to short-term care, and to cover provided by anyone else.',
+      de: 'Die frühere Wartezeit von sechs Monaten ist seit 1. Juli 2025 abgeschafft, der Anspruch besteht sofort. Wichtig: Übernimmt eine nahe Angehörige oder ein naher Angehöriger die Vertretung, ist die Verhinderungspflege auf das Doppelte des Pflegegeldes begrenzt: 694 € bei Pflegegrad 2, 1.198 € bei 3, 1.600 € bei 4, 1.980 € bei 5. Der volle Betrag gilt für die Kurzzeitpflege und für eine Vertretung durch andere Personen.',
+      en: 'The former six-month qualifying period was abolished on 1 July 2025, the entitlement applies immediately. Important: where a close relative provides the cover, Verhinderungspflege is capped at twice the Pflegegeld: €694 at Pflegegrad 2, €1,198 at 3, €1,600 at 4, €1,980 at 5. The full amount applies to short-term care, and to cover provided by anyone else.',
     },
   },
   {
@@ -183,7 +183,7 @@ export const BENEFITS: readonly Benefit[] = [
  *
  * The Gemeinsamer Jahresbetrag is 3.539 € for the pooled budget, but § 39 SGB XI
  * caps the Verhinderungspflege share at twice the Pflegegeld where a nahe
- * Angehörige stands in — which is the common case, not the exception. The full
+ * Angehörige stands in, which is the common case, not the exception. The full
  * amount remains available for Kurzzeitpflege and for cover by anyone else.
  *
  * Held here rather than only in the caveat prose so the figures can be checked.
@@ -214,7 +214,7 @@ export function entitlementsFor(grade: Pflegegrad): Array<{ benefit: Benefit; am
 
 /**
  * Normalise a benefit to a monthly figure so unlike periods can be compared and
- * summed. One-off grants are excluded — annualising a stairlift would inflate
+ * summed. One-off grants are excluded: annualising a stairlift would inflate
  * the headline number, which is exactly the kind of dishonesty that destroys
  * trust in a tool like this.
  */

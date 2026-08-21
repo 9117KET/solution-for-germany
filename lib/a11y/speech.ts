@@ -136,7 +136,7 @@ function hasPhrase(text: string, phrase: string): boolean {
  *
  * Options are matched three ways, in order of how reliable they are:
  *
- *  1. The number of the option — what the interface actually tells people to
+ *  1. The number of the option, what the interface actually tells people to
  *     say, and by far the most robust thing to recognise.
  *  2. The full wording of the option, in case they read it out.
  *  3. A distinctive word from the option, but only where that word belongs to
@@ -211,7 +211,7 @@ export interface SpokenSegment {
  * A question screen is genuinely bilingual: the question and its answers are
  * content (German or English), while the closing instruction is interface copy
  * (any of the six). Reading the whole thing with one voice means a Turkish
- * voice attempting German words, which is not accented — it is unintelligible.
+ * voice attempting German words, which is not accented: it is unintelligible.
  *
  * So the script comes back as segments, each carrying its own language, and the
  * synthesiser picks a voice per segment. The voice then matches the text on the
@@ -248,8 +248,8 @@ export function spokenScript(
  * Join neighbouring segments that share a language.
  *
  * Every utterance boundary is an audible pause, so a script that is really one
- * language should be one utterance. This keeps the common case — a German
- * interface reading German questions — as a single flowing sentence.
+ * language should be one utterance. This keeps the common case (a German
+ * interface reading German questions) as a single flowing sentence.
  */
 function mergeAdjacent(segments: readonly SpokenSegment[]): SpokenSegment[] {
   const out: SpokenSegment[] = [];
@@ -338,7 +338,7 @@ export function speak(text: string, options: SpeakOptions): void {
  * synthesiser already queues them in order; `onEnd` is attached to the last one
  * so callers learn when the whole thing has finished.
  *
- * A genuine failure counts as finished — a missing voice must not leave voice
+ * A genuine failure counts as finished: a missing voice must not leave voice
  * mode waiting forever for a sentence that will never end. Being *cancelled*
  * does not: `interrupted` and `canceled` mean someone deliberately stopped the
  * speech, either by pressing stop or by starting a new question, and in both

@@ -4,7 +4,7 @@
  * Settings are genuinely external state: they live in localStorage and on the
  * document element, not in the React tree. Reading them with
  * `useSyncExternalStore` rather than "empty state, then fill it in from an
- * effect" is both what React wants and what gets hydration right — the server
+ * effect" is both what React wants and what gets hydration right: the server
  * renders `DEFAULTS`, hydration matches against `DEFAULTS`, and the stored
  * settings take over immediately afterwards in one clean re-render.
  */
@@ -41,7 +41,7 @@ export function setSetting<K extends keyof Settings>(key: K, value: Settings[K])
   const next = { ...getSnapshot(), [key]: value };
 
   // Choosing German or English as the interface language moves the questions
-  // with it — being handed a German interface but English questions would be
+  // with it: being handed a German interface but English questions would be
   // baffling. The four interface-only languages leave the choice alone,
   // because they have no content of their own to move it to.
   if (key === 'lang' && hasContent(next.lang)) next.contentLang = next.lang;

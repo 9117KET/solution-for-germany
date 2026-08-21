@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anspruch — welche Pflegeleistungen Ihnen zustehen",
+  title: "Anspruch: welche Pflegeleistungen Ihnen zustehen",
   description:
     "Schätzen Sie ein, welcher Pflegegrad wahrscheinlich herauskommt, und sehen Sie, " +
     "welche Leistungen nach SGB XI Sie noch nicht bekommen. Läuft vollständig in Ihrem Browser.",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     // Turn off the browser's own machine translation.
     //
     // Chrome sees `lang="de"`, decides the reader wants English, and rewrites
-    // the page — so choosing "Deutsch" in the language picker still produced an
+    // the page, so choosing "Deutsch" in the language picker still produced an
     // English screen. That alone would be reason enough, but the worse part is
     // what it translates: euro amounts, paragraph references and the statutory
     // caveats. This product deliberately refuses to ship translations of that
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     // machine-translate the same text behind our back is the identical hazard,
     // just harder to notice.
     //
-    // The cost is real — a speaker of a language we do not offer loses a
+    // The cost is real: a speaker of a language we do not offer loses a
     // fallback. Six languages and an explicit content-language notice are the
     // answer to that, and deleting this line is all it takes to reverse the
     // decision.
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
  * Without this, someone who chose very large text or yellow-on-black sees the
  * default rendering flash past on every page load before their settings are
  * restored from an effect. For a person who needs those settings that flash is
- * not a cosmetic detail — it is a screen they cannot read, every single time.
+ * not a cosmetic detail: it is a screen they cannot read, every single time.
  *
  * Deliberately duplicates a little of `lib/a11y/settings.ts` rather than
  * importing it: this has to be a tiny synchronous script in the document head,

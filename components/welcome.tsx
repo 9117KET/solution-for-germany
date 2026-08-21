@@ -38,7 +38,7 @@ const THEME_SWATCH: Record<Theme, { bg: string; fg: string; line: string }> = {
  * with the change visible immediately, costs a confident user four seconds.
  *
  * Choices are applied live rather than on submit, so the screen itself is the
- * preview — a size control that only takes effect on the next page is a control
+ * preview: a size control that only takes effect on the next page is a control
  * you cannot judge.
  */
 export function Welcome({ onStart }: { onStart: () => void }) {
@@ -266,7 +266,11 @@ function Tile({
           {title}
         </span>
         {hint ? (
-          <span className={`mt-0.5 block text-base ${active ? 'opacity-80' : 'text-fg-muted'}`}>
+          <span
+            // Full strength when selected. See the note in ui.tsx; 80%
+            // opacity on the accent falls below the 7:1 the palette promises.
+            className={`mt-0.5 block text-base ${active ? '' : 'text-fg-muted'}`}
+          >
             {hint}
           </span>
         ) : null}

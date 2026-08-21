@@ -171,7 +171,7 @@ describe('conditional criteria', () => {
     // An ungated row is asked of every household.
     expect(isM5Applicable(medication, a.conditions)).toBe(true);
 
-    // Bowel management stands on incontinence alone — no stoma required.
+    // Bowel management stands on incontinence alone, no stoma required.
     a.conditions.hasIncontinence = true;
     expect(isM5Applicable(bowel, a.conditions)).toBe(true);
     expect(isM5Applicable(stoma, a.conditions)).toBe(false);

@@ -6,7 +6,7 @@
  * rather than a blank space in front of someone who cannot read the others.
  *
  * The German is the source text; the rest follow it. Where two versions differ
- * in tone, German is the one to trust — it is the language of the forms.
+ * in tone, German is the one to trust: it is the language of the forms.
  *
  * Turkish, Russian, Polish and Arabic cover the interface only. The assessment
  * questions and the benefit catalogue stay in German or English, for the
@@ -17,11 +17,12 @@
  * statutory substance (`privacyBody`, `m5CapBody`, `exclusiveNote`,
  * `disclaimerExtra`). Paragraph references are left untranslated, because
  * "§ 7a SGB XI" is the same string a person has to quote at their insurer
- * whatever language they think in. The same goes for the German terms of art —
- * Pflegegrad, Pflegegeld, Bescheid — which are kept so that what is on the
+ * whatever language they think in. The same goes for the German terms of art
+ * (Pflegegrad, Pflegegeld, Bescheid), which are kept so that what is on the
  * screen matches what is on the letter.
  */
 
+import { languageMeta } from './index';
 import type { ChromeText, Lang } from './index';
 
 export const UI = {
@@ -122,17 +123,17 @@ export const UI = {
     de: 'Die Fragen selbst sind auf Deutsch oder Englisch',
     en: 'The questions themselves are in German or English',
     tr: 'Soruların kendisi Almanca veya İngilizcedir',
-    ru: 'Сами вопросы — на немецком или английском',
+    ru: 'Сами вопросы на немецком или английском',
     pl: 'Same pytania są po niemiecku lub angielsku',
     ar: 'الأسئلة نفسها بالألمانية أو الإنجليزية',
   },
   contentNoticeBody: {
-    de: 'Die Bedienung ist in Ihrer Sprache. Die Fragen und die Namen der Leistungen zeigen wir auf Deutsch oder Englisch — es sind Begriffe aus dem Gesetz und aus den Formularen. Eine ungeprüfte Übersetzung wäre gefährlicher als gar keine, weil man ihr glauben würde. Mit „Einfache Wörter“ werden die Fragen deutlich leichter.',
-    en: 'The interface is in your language. The questions and the names of the benefits are shown in German or English — they are terms from the law and from the forms. An unchecked translation would be more dangerous than none, because people would believe it. “Plain words” makes the questions considerably easier.',
-    tr: 'Arayüz sizin dilinizde. Soruları ve yardımların adlarını Almanca veya İngilizce gösteriyoruz — bunlar kanundan ve formlardan gelen terimlerdir. Kontrol edilmemiş bir çeviri, hiç çeviri olmamasından daha tehlikeli olurdu, çünkü insanlar ona inanır. „Basit kelimeler“ ile sorular çok daha kolaylaşır.',
-    ru: 'Интерфейс на вашем языке. Вопросы и названия услуг показаны по-немецки или по-английски — это термины из закона и из бланков. Непроверенный перевод был бы опаснее, чем его отсутствие, потому что ему бы поверили. С «простыми словами» вопросы становятся заметно понятнее.',
-    pl: 'Interfejs jest w Twoim języku. Pytania i nazwy świadczeń pokazujemy po niemiecku lub angielsku — to terminy z ustawy i z formularzy. Niesprawdzone tłumaczenie byłoby groźniejsze niż jego brak, bo ludzie by mu uwierzyli. Z „prostymi słowami” pytania stają się znacznie łatwiejsze.',
-    ar: 'الواجهة بلغتك. أما الأسئلة وأسماء الخدمات فنعرضها بالألمانية أو الإنجليزية — فهي مصطلحات من القانون ومن الاستمارات. وترجمة غير مراجَعة ستكون أخطر من عدمها، لأن الناس سيصدّقونها. وخيار «كلمات بسيطة» يجعل الأسئلة أسهل بكثير.',
+    de: 'Die Bedienung ist in Ihrer Sprache. Die Fragen und die Namen der Leistungen zeigen wir auf Deutsch oder Englisch, denn es sind Begriffe aus dem Gesetz und aus den Formularen. Eine ungeprüfte Übersetzung wäre gefährlicher als gar keine, weil man ihr glauben würde. Mit „Einfache Wörter“ werden die Fragen deutlich leichter.',
+    en: 'The interface is in your language. The questions and the names of the benefits are shown in German or English, because they are terms from the law and from the forms. An unchecked translation would be more dangerous than none, because people would believe it. “Plain words” makes the questions considerably easier.',
+    tr: 'Arayüz sizin dilinizde. Soruları ve yardımların adlarını Almanca veya İngilizce gösteriyoruz, çünkü bunlar kanundan ve formlardan gelen terimlerdir. Kontrol edilmemiş bir çeviri, hiç çeviri olmamasından daha tehlikeli olurdu, çünkü insanlar ona inanır. „Basit kelimeler“ ile sorular çok daha kolaylaşır.',
+    ru: 'Интерфейс на вашем языке. Вопросы и названия услуг показаны по-немецки или по-английски, это термины из закона и из бланков. Непроверенный перевод был бы опаснее, чем его отсутствие, потому что ему бы поверили. С «простыми словами» вопросы становятся заметно понятнее.',
+    pl: 'Interfejs jest w Twoim języku. Pytania i nazwy świadczeń pokazujemy po niemiecku lub angielsku, ponieważ to terminy z ustawy i z formularzy. Niesprawdzone tłumaczenie byłoby groźniejsze niż jego brak, bo ludzie by mu uwierzyli. Z „prostymi słowami” pytania stają się znacznie łatwiejsze.',
+    ar: 'الواجهة بلغتك. أما الأسئلة وأسماء الخدمات فنعرضها بالألمانية أو الإنجليزية، فهي مصطلحات من القانون ومن الاستمارات. وترجمة غير مراجَعة ستكون أخطر من عدمها، لأن الناس سيصدّقونها. وخيار «كلمات بسيطة» يجعل الأسئلة أسهل بكثير.',
   },
   textSize: {
     de: 'Schriftgröße',
@@ -391,12 +392,12 @@ export const UI = {
     ar: 'لم أفهم ذلك. من فضلك أعد المحاولة أو المس الإجابة.',
   },
   voiceUnavailable: {
-    de: 'Dieser Browser kann nicht zuhören. Sie können die Antworten antippen — das funktioniert immer.',
-    en: 'This browser cannot listen. You can tap the answers instead — that always works.',
-    tr: 'Bu tarayıcı dinleyemiyor. Cevaplara dokunabilirsiniz — bu her zaman çalışır.',
-    ru: 'Этот браузер не умеет слушать. Вы можете нажимать на ответы — это работает всегда.',
-    pl: 'Ta przeglądarka nie potrafi słuchać. Możesz dotykać odpowiedzi — to działa zawsze.',
-    ar: 'هذا المتصفح لا يستطيع الاستماع. يمكنك لمس الإجابات — وهذا يعمل دائمًا.',
+    de: 'Dieser Browser kann nicht zuhören. Sie können die Antworten antippen. Das funktioniert immer.',
+    en: 'This browser cannot listen. You can tap the answers instead. That always works.',
+    tr: 'Bu tarayıcı dinleyemiyor. Cevaplara dokunabilirsiniz. Bu her zaman çalışır.',
+    ru: 'Этот браузер не умеет слушать. Вы можете нажимать на ответы. Это работает всегда.',
+    pl: 'Ta przeglądarka nie potrafi słuchać. Możesz dotykać odpowiedzi. To działa zawsze.',
+    ar: 'هذا المتصفح لا يستطيع الاستماع. يمكنك لمس الإجابات. وهذا يعمل دائمًا.',
   },
   speechUnavailable: {
     de: 'Dieser Browser kann nicht vorlesen.',
@@ -613,12 +614,12 @@ export const UI = {
     ar: 'عندئذٍ يتوقف التقدير عند Pflegegrad 4',
   },
   m5CapBody: {
-    de: 'Ärztlich verordnete Maßnahmen zählen 20 von 100 Punkten. Ohne sie kann die Einschätzung keinen Pflegegrad 5 ergeben — auch dann nicht, wenn die Person sonst überall Hilfe braucht. Wenn es doch regelmäßig Medikamente, Verbände, Spritzen oder Therapien gibt, gehen Sie bitte zurück.',
-    en: 'Prescribed medical measures count for 20 of the 100 points. Without them the estimate cannot reach Pflegegrad 5 — not even for someone who needs help with everything else. If there really are regular medications, dressings, injections or therapies, please go back.',
-    tr: 'Doktor tarafından reçete edilen uygulamalar 100 puanın 20’sini oluşturur. Bunlar olmadan değerlendirme Pflegegrad 5’e ulaşamaz — kişi başka her konuda yardıma muhtaç olsa bile. Düzenli olarak ilaç, pansuman, iğne veya terapi varsa lütfen geri dönün.',
-    ru: 'Назначенные врачом мероприятия дают 20 из 100 баллов. Без них оценка не может достичь Pflegegrad 5 — даже если человеку нужна помощь во всём остальном. Если регулярно нужны лекарства, перевязки, уколы или терапия, пожалуйста, вернитесь назад.',
-    pl: 'Zalecone przez lekarza czynności dają 20 ze 100 punktów. Bez nich ocena nie może osiągnąć Pflegegrad 5 — nawet jeśli osoba potrzebuje pomocy we wszystkim innym. Jeśli regularnie potrzebne są leki, opatrunki, zastrzyki lub terapia, wróć proszę.',
-    ar: 'الإجراءات الموصوفة طبيًا تمثل 20 من أصل 100 نقطة. بدونها لا يمكن أن يصل التقدير إلى Pflegegrad 5 — حتى لو كان الشخص بحاجة إلى مساعدة في كل شيء آخر. إذا كانت هناك أدوية أو ضمادات أو حقن أو علاج بانتظام، فارجع من فضلك.',
+    de: 'Ärztlich verordnete Maßnahmen zählen 20 von 100 Punkten. Ohne sie kann die Einschätzung keinen Pflegegrad 5 ergeben, auch dann nicht, wenn die Person sonst überall Hilfe braucht. Wenn es doch regelmäßig Medikamente, Verbände, Spritzen oder Therapien gibt, gehen Sie bitte zurück.',
+    en: 'Prescribed medical measures count for 20 of the 100 points. Without them the estimate cannot reach Pflegegrad 5, not even for someone who needs help with everything else. If there really are regular medications, dressings, injections or therapies, please go back.',
+    tr: 'Doktor tarafından reçete edilen uygulamalar 100 puanın 20’sini oluşturur. Bunlar olmadan değerlendirme Pflegegrad 5’e ulaşamaz, kişi başka her konuda yardıma muhtaç olsa bile. Düzenli olarak ilaç, pansuman, iğne veya terapi varsa lütfen geri dönün.',
+    ru: 'Назначенные врачом мероприятия дают 20 из 100 баллов. Без них оценка не может достичь Pflegegrad 5, даже если человеку нужна помощь во всём остальном. Если регулярно нужны лекарства, перевязки, уколы или терапия, пожалуйста, вернитесь назад.',
+    pl: 'Zalecone przez lekarza czynności dają 20 ze 100 punktów. Bez nich ocena nie może osiągnąć Pflegegrad 5, nawet jeśli osoba potrzebuje pomocy we wszystkim innym. Jeśli regularnie potrzebne są leki, opatrunki, zastrzyki lub terapia, wróć proszę.',
+    ar: 'الإجراءات الموصوفة طبيًا تمثل 20 من أصل 100 نقطة. بدونها لا يمكن أن يصل التقدير إلى Pflegegrad 5، حتى لو كان الشخص بحاجة إلى مساعدة في كل شيء آخر. إذا كانت هناك أدوية أو ضمادات أو حقن أو علاج بانتظام، فارجع من فضلك.',
   },
 
   yes: { de: 'Ja', en: 'Yes', tr: 'Evet', ru: 'Да', pl: 'Tak', ar: 'نعم' },
@@ -726,12 +727,12 @@ export const UI = {
     ar: 'على الأرجح تستحق {amount} شهريًا لا تحصل عليها بعد.',
   },
   headlineYear: {
-    de: 'Das sind {amount} im Jahr — zusätzlich zu dem, was Sie schon bekommen.',
+    de: 'Das sind {amount} im Jahr, zusätzlich zu dem, was Sie schon bekommen.',
     en: 'That is {amount} over a year, on top of what you already receive.',
-    tr: 'Bu yılda {amount} eder — zaten aldıklarınıza ek olarak.',
-    ru: 'Это {amount} в год — дополнительно к тому, что вы уже получаете.',
-    pl: 'To {amount} rocznie — dodatkowo do tego, co już otrzymujesz.',
-    ar: 'أي {amount} في السنة — إضافةً إلى ما تحصل عليه بالفعل.',
+    tr: 'Bu yılda {amount} eder, zaten aldıklarınıza ek olarak.',
+    ru: 'Это {amount} в год, дополнительно к тому, что вы уже получаете.',
+    pl: 'To {amount} rocznie, dodatkowo do tego, co już otrzymujesz.',
+    ar: 'أي {amount} في السنة، إضافةً إلى ما تحصل عليه بالفعل.',
   },
   headlineNone: {
     de: 'Bei Ihrem heutigen Pflegegrad haben wir kein Geld gefunden, das regelmäßig liegen bleibt.',
@@ -799,12 +800,12 @@ export const UI = {
   },
   none: { de: 'keiner', en: 'none', tr: 'yok', ru: 'нет', pl: 'brak', ar: 'لا شيء' },
   whatToDo: {
-    de: 'Was Sie tun können — in dieser Reihenfolge',
+    de: 'Was Sie tun können, in dieser Reihenfolge',
     en: 'What to do, in order',
-    tr: 'Ne yapabilirsiniz — bu sırayla',
-    ru: 'Что можно сделать — в этом порядке',
-    pl: 'Co możesz zrobić — w tej kolejności',
-    ar: 'ما يمكنك فعله — بهذا الترتيب',
+    tr: 'Ne yapabilirsiniz, bu sırayla',
+    ru: 'Что можно сделать, в этом порядке',
+    pl: 'Co możesz zrobić, w tej kolejności',
+    ar: 'ما يمكنك فعله، بهذا الترتيب',
   },
   perMonthShort: {
     de: 'im Monat',
@@ -900,7 +901,7 @@ export const UI = {
     de: 'Pflegegeld und Pflegesachleistung sind eine Entscheidung zwischen zwei Wegen, keine Summe. Wir zählen sie einmal. Beides zusammenzurechnen würde die Zahl fast verdoppeln und wäre falsch.',
     en: 'Pflegegeld and Pflegesachleistung are a choice between two routes, not a sum. We count them once. Adding them together would nearly double the figure and would be wrong.',
     tr: 'Pflegegeld ve Pflegesachleistung iki yol arasında bir seçimdir, bir toplam değildir. Bunları bir kez sayıyoruz. İkisini toplamak rakamı neredeyse ikiye katlar ve yanlış olurdu.',
-    ru: 'Pflegegeld и Pflegesachleistung — это выбор между двумя путями, а не сумма. Мы считаем их один раз. Их сложение почти удвоило бы сумму и было бы неверным.',
+    ru: 'Pflegegeld и Pflegesachleistung – это выбор между двумя путями, а не сумма. Мы считаем их один раз. Их сложение почти удвоило бы сумму и было бы неверным.',
     pl: 'Pflegegeld i Pflegesachleistung to wybór między dwiema drogami, a nie suma. Liczymy je raz. Dodanie ich do siebie niemal podwoiłoby kwotę i byłoby błędem.',
     ar: 'Pflegegeld وPflegesachleistung اختيار بين طريقين، وليسا مبلغين يُجمعان. نحتسبهما مرة واحدة. جمعهما معًا يكاد يضاعف الرقم وسيكون خطأً.',
   },
@@ -916,7 +917,7 @@ export const UI = {
     de: 'Ohne bewilligten Pflegegrad gibt es noch keinen Anspruch, dem wir etwas gegenüberstellen könnten. Der Antrag ist der Schritt, der alles öffnet.',
     en: 'Without an awarded Pflegegrad there is no entitlement to measure against yet. Applying is the step that opens everything.',
     tr: 'Onaylanmış bir Pflegegrad olmadan karşılaştırabileceğimiz bir hak henüz yok. Başvuru, her şeyi açan adımdır.',
-    ru: 'Без назначенного Pflegegrad пока нет права, с которым можно сравнивать. Заявление — это шаг, который открывает всё остальное.',
+    ru: 'Без назначенного Pflegegrad пока нет права, с которым можно сравнивать. Заявление – это шаг, который открывает всё остальное.',
     pl: 'Bez przyznanego Pflegegrad nie ma jeszcze uprawnienia, z którym moglibyśmy porównywać. Wniosek to krok, który otwiera wszystko.',
     ar: 'من دون Pflegegrad مُعتمَد لا يوجد بعد استحقاق نقارن به. تقديم الطلب هو الخطوة التي تفتح كل شيء.',
   },
@@ -948,7 +949,7 @@ export const UI = {
     de: 'Von den nachgeprüften Gutachten waren etwa 29 von 100 falsch und wurden geändert. Der erste Punkt in der Liste unten ist der wichtigste.',
     en: 'Of the reports that were checked again, about 29 in 100 were wrong and were changed. The first item in the list below is the one that matters.',
     tr: 'Yeniden incelenen raporların yaklaşık 100’de 29’u yanlış çıktı ve düzeltildi. Aşağıdaki listedeki ilk madde en önemlisidir.',
-    ru: 'Из перепроверенных заключений около 29 из 100 оказались неверными и были исправлены. Первый пункт в списке ниже — самый важный.',
+    ru: 'Из перепроверенных заключений около 29 из 100 оказались неверными и были исправлены. Первый пункт в списке ниже – самый важный.',
     pl: 'Spośród ponownie sprawdzonych orzeczeń około 29 na 100 okazało się błędnych i zostało poprawionych. Pierwsza pozycja na liście poniżej jest najważniejsza.',
     ar: 'من بين التقارير التي أُعيد فحصها، تبيّن أن نحو 29 من كل 100 كانت خاطئة وجرى تصحيحها. البند الأول في القائمة أدناه هو الأهم.',
   },
@@ -1138,8 +1139,20 @@ export type UiKey = keyof typeof UI;
  * Look up a string, filling `{placeholders}` from `vars`.
  *
  * Placeholders are named rather than positional because the six languages put
- * the same values in different places in a sentence — Turkish, for one, puts
+ * the same values in different places in a sentence. Turkish, for one, puts
  * the total before the index: "{total} sorudan {n}. soru".
+ *
+ * Numbers are formatted for the reader's language rather than stringified.
+ * `String(47.5)` is "47.5" in every language, which is wrong in five of the
+ * six, because German, Turkish, Russian and Polish all separate decimals with a
+ * comma. The weighted module scores are routinely fractional (11.25, 47.5),
+ * so this is the headline figure on the report, not an edge case, and an
+ * English-formatted number in a document about German statutory law is exactly
+ * the detail that costs a reader their confidence in the rest of it.
+ *
+ * Money never arrives here as a number: it is formatted by `formatEuro`
+ * before interpolation, because it needs a currency symbol placed by the same
+ * locale rules.
  */
 export function translate(
   key: UiKey,
@@ -1148,8 +1161,13 @@ export function translate(
 ): string {
   let out: string = UI[key][lang];
   if (vars) {
+    // Two decimals covers the weighted scores, whose smallest step is 1.25.
+    const number = new Intl.NumberFormat(languageMeta(lang).numberLocale, {
+      maximumFractionDigits: 2,
+    });
     for (const [name, value] of Object.entries(vars)) {
-      out = out.split(`{${name}}`).join(String(value));
+      const text = typeof value === 'number' ? number.format(value) : value;
+      out = out.split(`{${name}}`).join(text);
     }
   }
   return out;

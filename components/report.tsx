@@ -184,7 +184,7 @@ export function Report({
            * On a phone the same figures are stacked as cards rather than put in
            * a table. The table is 34rem wide at the smallest text setting and
            * wider than any phone at the default one, so on mobile it could only
-           * ever be scrolled sideways — and side-scrolling a benefits breakdown
+           * ever be scrolled sideways, and side-scrolling a benefits breakdown
            * is exactly the experience this product exists to avoid. Same data,
            * same order, laid out to be read down the screen.
            */}
@@ -218,7 +218,7 @@ export function Report({
                     <div className="flex justify-between gap-3 border-t border-line pt-1">
                       <dt className="font-semibold">{t('colGap')}</dt>
                       <dd className="font-bold tabular-nums">
-                        {g.gap > 0 ? money(g.gap) : '—'}
+                        {g.gap > 0 ? money(g.gap) : '–'}
                       </dd>
                     </div>
                   </dl>
@@ -275,7 +275,7 @@ export function Report({
                       <td className="px-4 py-3 tabular-nums">{money(g.entitled)}</td>
                       <td className="px-4 py-3 tabular-nums">{money(g.claimed)}</td>
                       <td className="px-4 py-3 font-bold tabular-nums">
-                        {g.gap > 0 ? money(g.gap) : '—'}
+                        {g.gap > 0 ? money(g.gap) : '–'}
                       </td>
                       <td className="px-4 py-3">
                         <span

@@ -86,8 +86,8 @@ export interface Option {
  * Attributes that keep German or English text readable inside an Arabic page.
  *
  * Without an explicit direction, a German sentence in a right-to-left container
- * has its trailing full stop reordered to the visual left — ".Sich im Bett
- * bewegen" — because the punctuation is direction-neutral and inherits the
+ * has its trailing full stop reordered to the visual left (".Sich im Bett
+ * bewegen") because the punctuation is direction-neutral and inherits the
  * container's direction. Declaring the direction on the element that holds the
  * text isolates it and puts the punctuation back where it belongs.
  *
@@ -108,7 +108,7 @@ export function textAttrs(lang?: string): { lang?: string; dir?: 'ltr' } {
  *
  * Options stack vertically by default instead of sitting in a four-across row.
  * A row forces each label into a narrow column, which wraps badly and becomes
- * unreadable the moment the text scale goes up — exactly when it matters most.
+ * unreadable the moment the text scale goes up, exactly when it matters most.
  */
 export function Choice({
   label,
@@ -196,7 +196,11 @@ export function Choice({
                 {opt.sub ? (
                   <span
                     {...optionAttrs}
-                    className={`mt-0.5 block text-sm ${active ? 'opacity-80' : 'text-fg-muted'}`}
+                    // Not dimmed when selected. Fading the sub-label to 80%
+                    // put it at 5.8:1 on the accent, under the 7:1 the rest of
+                    // the palette is held to, and the smaller size already
+                    // carries the hierarchy without spending contrast on it.
+                    className={`mt-0.5 block text-sm ${active ? '' : 'text-fg-muted'}`}
                   >
                     {opt.sub}
                   </span>

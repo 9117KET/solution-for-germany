@@ -2,8 +2,8 @@
 
 /*
  * Text scaling works by moving the root font size, not by swapping type
- * classes. Everything in the interface is measured in rem — type, padding,
- * gaps, minimum tap targets — so one variable grows the whole layout together
+ * classes. Everything in the interface is measured in rem (type, padding,
+ * gaps, minimum tap targets), so one variable grows the whole layout together
  * and large text never ends up crammed into a small button.
  */
 :root {
@@ -11,49 +11,77 @@
   font-size: calc(100% * var(--text-scale));
 }
 
+/*
+ * The palette is paper and ink, not software.
+ *
+ * What this thing produces is a document, something a family prints, marks up
+ * and carries to the Pflegekasse, so the screen is set like a printed page:
+ * a warm paper ground, a warm near-black ink, and one saturated ink-blue doing
+ * every job an accent has to do. Blue-on-cream is the register of official
+ * printed matter, which is the register this belongs in.
+ *
+ * Two things it deliberately is not. It is not the cyan-and-mint that every
+ * health product defaults to. And it is not tinted with the accent hue: the
+ * neutrals lean warm while the accent stays cold, so the two never blur into
+ * one wash.
+ *
+ * Warm neutrals are also the kinder choice for the eyes this is written for.
+ * Age-related lens yellowing shifts perceived colour warm, and a cool blue-grey
+ * ground reads as dingy under the indoor light most of these households have.
+ *
+ * Red is avoided as an accent on purpose: on a screen that says how much money
+ * someone is owed, red reads as an error.
+ */
+
 /* ------------------------------------------------------------ light (default) */
 :root,
 :root[data-theme="light"] {
-  --bg: #f4f7f7;
-  --surface: #ffffff;
-  --surface-2: #eaf0f0;
-  --fg: #131b1e;
-  --fg-muted: #425258;
-  --line: #c4d0d3;
+  --bg: #f6f2ea;
+  --surface: #fffcf5;
+  --surface-2: #efe9dc;
+  --fg: #1a1713;
+  --fg-muted: #4a423a;
+  --line: #cfc5b4;
   --line-width: 1px;
-  --accent: #085a52;
-  --accent-fg: #ffffff;
-  --accent-soft: #dcefec;
-  --accent-line: #085a52;
-  --warn-bg: #fdf3e0;
-  --warn-line: #b8791a;
-  --warn-fg: #4a2f04;
-  --focus: #085a52;
-  --shadow: 0 1px 2px rgb(19 27 30 / 0.06);
+  --accent: #14406b;
+  --accent-fg: #fffcf5;
+  --accent-soft: #dfe7ef;
+  --accent-line: #14406b;
+  --warn-bg: #f9eed6;
+  --warn-line: #9a6413;
+  --warn-fg: #4a3208;
+  --focus: #14406b;
+  --shadow: 0 1px 2px rgb(26 23 19 / 0.07);
 }
 
+/*
+ * Dark is the same page at night, not a different product: warm charcoal in
+ * place of paper, and a warm sand in place of the blue. The blue is dropped
+ * here because a dark blue cannot clear 7:1 against a dark ground without
+ * turning into the bright cyan this palette exists to avoid.
+ */
 :root[data-theme="dark"] {
-  --bg: #0e1417;
-  --surface: #161f23;
-  --surface-2: #1e2a2f;
-  --fg: #e6edee;
-  --fg-muted: #a5b6bb;
-  --line: #2c3b41;
+  --bg: #16140f;
+  --surface: #211e17;
+  --surface-2: #2b2720;
+  --fg: #ece6da;
+  --fg-muted: #c0b7a6;
+  --line: #3d382e;
   --line-width: 1px;
-  --accent: #4fd6c4;
-  --accent-fg: #06231f;
-  --accent-soft: #14302d;
-  --accent-line: #4fd6c4;
-  --warn-bg: #2e2410;
+  --accent: #e6b45c;
+  --accent-fg: #16140f;
+  --accent-soft: #33291a;
+  --accent-line: #e6b45c;
+  --warn-bg: #2e2617;
   --warn-line: #d9a83a;
-  --warn-fg: #f6e4bd;
-  --focus: #4fd6c4;
+  --warn-fg: #f2e3c4;
+  --focus: #e6b45c;
   --shadow: none;
 }
 
 /*
  * The two high-contrast schemes drop every mid-tone and thicken every border.
- * Both exceed the WCAG AAA ratio of 7:1 for body text — pure black on white is
+ * Both exceed the WCAG AAA ratio of 7:1 for body text: pure black on white is
  * 21:1, and the yellow below is 16.7:1 on black. Yellow on black is the
  * combination long-standing sight-loss guidance settles on, and people who need
  * it tend to ask for it by name, which is why it is labelled by its colours
@@ -127,8 +155,8 @@ body {
 
 /*
  * One visible focus style for everything, in every theme. Keyboard users are a
- * large share of this audience — a tremor makes a mouse hard and a keyboard
- * easy — so focus is never allowed to be invisible.
+ * large share of this audience (a tremor makes a mouse hard and a keyboard
+ * easy), so focus is never allowed to be invisible.
  */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 3px solid var(--focus);

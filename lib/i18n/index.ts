@@ -4,10 +4,10 @@
  * There are two distinct layers of text here, and conflating them would be a
  * lie to the user:
  *
- *  - **Chrome** — buttons, navigation, headings, explanations. Written in all
+ *  - **Chrome**: buttons, navigation, headings, explanations. Written in all
  *    six languages. This is what `ChromeText` and `translate()` handle.
  *
- *  - **Content** — the assessment criteria, the benefit catalogue, the
+ *  - **Content**: the assessment criteria, the benefit catalogue, the
  *    statutory caveats. German and English only. These are transcriptions of a
  *    legal instrument and statements about money someone is entitled to; a
  *    translation that has not been checked by a native speaker who knows the
@@ -21,7 +21,7 @@
  *
  * `plain` is a reading register, not a language: everyday wording in place of
  * the official terminology, following the rules German plain language sets out.
- * The official wording is never thrown away — it stays underneath in small
+ * The official wording is never thrown away: it stays underneath in small
  * type, because that is what the assessor will say.
  */
 
@@ -33,7 +33,7 @@ export type ContentLang = 'de' | 'en';
 
 export interface LanguageMeta {
   id: Lang;
-  /** The language's name in itself — the only name a speaker reliably knows. */
+  /** The language's name in itself, the only name a speaker reliably knows. */
   nativeName: string;
   englishName: string;
   bcp47: string;
@@ -124,7 +124,7 @@ export function hasContent(lang: Lang): lang is ContentLang {
 
 // ------------------------------------------------------------------- chrome
 
-/** Interface copy. Every language, always — a gap here is a compile error. */
+/** Interface copy. Every language, always: a gap here is a compile error. */
 export type ChromeText = Record<Lang, string>;
 
 // ------------------------------------------------------------------ content
@@ -156,7 +156,7 @@ export function lead(s: Readable, lang: ContentLang, plain: boolean): string {
 }
 
 /**
- * The official wording, but only when it is worth showing as a second line —
+ * The official wording, but only when it is worth showing as a second line,
  * that is, when plain mode is on and it actually differs from the lead.
  */
 export function official(s: Readable, lang: ContentLang, plain: boolean): string | null {

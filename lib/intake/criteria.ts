@@ -7,7 +7,7 @@
  *
  * Module 3 scores by how often a behaviour occurs, on a 0/1/3/5 scale.
  *
- * Module 5 does not score per criterion at all — it aggregates frequencies
+ * Module 5 does not score per criterion at all: it aggregates frequencies
  * across groups of criteria and converts the group total. It is modelled
  * separately in `score.ts`.
  *
@@ -20,11 +20,11 @@ import type { ModuleId } from '../rules/nba';
 
 /** Which four-level wording the UI should present for a criterion. */
 export type ScaleVariant =
-  /** selbständig … unselbständig — used by modules 1, 4, 6 */
+  /** selbständig … unselbständig, used by modules 1, 4, 6 */
   | 'independence'
-  /** vorhanden … nicht vorhanden — used by module 2 */
+  /** vorhanden … nicht vorhanden, used by module 2 */
   | 'ability'
-  /** nie … täglich — used by module 3 */
+  /** nie … täglich, used by module 3 */
   | 'frequency'
   /** the special three-outcome scale of criterion 4.13 */
   | 'tubeFeeding';
@@ -44,7 +44,7 @@ export interface Criterion {
   points: readonly number[];
   /**
    * Criterion only applies when this condition holds. Lets the intake skip
-   * whole blocks — most households answer "no" to stoma, catheter and tube
+   * whole blocks: most households answer "no" to stoma, catheter and tube
    * feeding, and should never be asked the follow-ups.
    */
   dependsOn?: ConditionId;
@@ -71,8 +71,8 @@ export const CONDITIONS: Record<ConditionId, { de: string; en: string }> = {
     en: 'Is feeding done through a tube or intravenously?',
   },
   hasMedicalMeasures: {
-    de: 'Sind regelmäßig ärztlich verordnete Maßnahmen nötig — Medikamente, Verbände, Spritzen, Therapien?',
-    en: 'Are prescribed medical measures needed regularly — medication, dressings, injections, therapies?',
+    de: 'Sind regelmäßig ärztlich verordnete Maßnahmen nötig: Medikamente, Verbände, Spritzen, Therapien?',
+    en: 'Are prescribed medical measures needed regularly: medication, dressings, injections, therapies?',
   },
 };
 
