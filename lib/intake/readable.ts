@@ -2,7 +2,7 @@
  * Joins the official wording to its everyday rewording.
  *
  * The interface never reaches into either registry directly. It asks here, gets
- * a `Readable` back, and renders both wordings — everyday phrasing first when
+ * a `Readable` back, and renders both wordings, everyday phrasing first when
  * plain words are on, official phrasing underneath. That keeps the decision
  * about which words to lead with in one place instead of at every call site.
  */

@@ -5,7 +5,7 @@ and how much of that money is going unclaimed.
 
 You answer questions about everyday life. The app estimates the *Pflegegrad* the
 assessment would likely arrive at, compares the resulting entitlement against what
-the household already receives, and lists what to do about the difference — in order,
+the household already receives, and lists what to do about the difference, in order,
 with the statutory basis for each step.
 
 Everything runs in the browser. There is no account, no server, and no analytics;
@@ -20,8 +20,8 @@ answers never leave the device.
 
 Care benefits in Germany are not paid automatically. They have to be applied for,
 separately, in language most families do not speak. Money that has already been
-awarded routinely goes uncollected — the *Entlastungsbetrag* alone is famously
-under-claimed — and the assessment itself is frequently wrong: of the reports that
+awarded routinely goes uncollected (the *Entlastungsbetrag* alone is famously
+under-claimed) and the assessment itself is frequently wrong: of the reports that
 get checked again, roughly 29 in 100 are corrected.
 
 The people who lose most from this are the ones least equipped to fight it: the very
@@ -29,7 +29,7 @@ old, the very tired, and families doing the paperwork in a second language.
 
 ## Built around that
 
-**Six interface languages.** German, English, Turkish, Russian, Polish, Arabic —
+**Six interface languages.** German, English, Turkish, Russian, Polish, Arabic,
 the largest first languages among family carers in Germany. Arabic renders
 right-to-left throughout.
 
@@ -42,7 +42,7 @@ of the two the questions appear in.
 **Plain wording, with the official wording kept.** The instrument says
 *"Mundgerechtes Zubereiten der Nahrung und Eingießen von Getränken"*. The app leads
 with *"Essen klein schneiden und Getränke eingießen"* and keeps the official phrasing
-underneath in small type — because that is the wording the assessor will use.
+underneath in small type, because that is the wording the assessor will use.
 
 **Set up before the questions, not hidden in a menu.** Text size, colour scheme,
 language and pace are on the first screen, applied live. The people who most need
@@ -66,7 +66,7 @@ that cannot be traced does not get shown.
 
 The headline is deliberately conservative. One-off grants never enter the monthly
 total. Conditional benefits are reported as "check whether this applies", never as
-certain money. *Pflegegeld* and *Pflegesachleistung* are counted **once**, not summed —
+certain money. *Pflegegeld* and *Pflegesachleistung* are counted **once**, not summed:
 they are alternatives under § 38 SGB XI, and adding them would roughly double every
 headline and be straightforwardly false.
 
@@ -91,7 +91,7 @@ npm run build
 
 | Path | What lives there |
 | --- | --- |
-| `lib/rules/` | The entitlement engine — statute figures, the NBA conversion tables, gap analysis |
+| `lib/rules/` | The entitlement engine: statute figures, the NBA conversion tables, gap analysis |
 | `lib/intake/` | Assessment criteria, scoring, and the plain-language overlay |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |

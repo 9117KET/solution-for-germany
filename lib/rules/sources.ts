@@ -27,7 +27,7 @@ export interface Source {
 export const SOURCES = {
   pflegegeld: {
     law: '§ 37 SGB XI',
-    covers: 'Pflegegeld — cash benefit paid when care is provided privately',
+    covers: 'Pflegegeld: cash benefit paid when care is provided privately',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__37.html',
     checkedOn: '2026-08-18',
     validFrom: '2025-01-01',
@@ -37,7 +37,7 @@ export const SOURCES = {
   },
   pflegesachleistung: {
     law: '§ 36 SGB XI',
-    covers: 'Pflegesachleistung — value of professional home-care services',
+    covers: 'Pflegesachleistung: value of professional home-care services',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__36.html',
     checkedOn: '2026-08-18',
     validFrom: '2025-01-01',
@@ -46,7 +46,7 @@ export const SOURCES = {
   entlastungsbetrag: {
     law: '§ 45b SGB XI',
     covers:
-      'Entlastungsbetrag — monthly allowance for relief services, available ' +
+      'Entlastungsbetrag: monthly allowance for relief services, available ' +
       'from Pflegegrad 1. Reimburses approved services; never paid as cash.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__45b.html',
     checkedOn: '2026-08-18',
@@ -54,25 +54,25 @@ export const SOURCES = {
   },
   pflegehilfsmittel: {
     law: '§ 40 Abs. 2 SGB XI',
-    covers: 'Pflegehilfsmittel zum Verbrauch — monthly allowance for consumable care aids',
+    covers: 'Pflegehilfsmittel zum Verbrauch: monthly allowance for consumable care aids',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__40.html',
     checkedOn: '2026-08-18',
     validFrom: '2025-01-01',
     note:
       'Reform proposals would fold this into a broader Entlastungsbudget. ' +
-      'Not enacted as of Aug 2026 — recheck before each release.',
+      'Not enacted as of Aug 2026: recheck before each release.',
   },
   gemeinsamerJahresbetrag: {
     law: '§ 42a SGB XI',
     covers:
-      'Gemeinsamer Jahresbetrag — pooled annual budget merging Verhinderungspflege ' +
+      'Gemeinsamer Jahresbetrag: pooled annual budget merging Verhinderungspflege ' +
       'and Kurzzeitpflege. Replaced the two separate budgets on 1 July 2025.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__42a.html',
     checkedOn: '2026-08-18',
     validFrom: '2025-07-01',
     note:
       'Verhinderungspflege extended from 6 to 8 weeks (56 days). The former ' +
-      '6-month qualifying period (Vorpflegezeit) was abolished entirely — a ' +
+      '6-month qualifying period (Vorpflegezeit) was abolished entirely, a ' +
       'common reason families wrongly believe they are not yet eligible. ' +
       'The 3.539 € is the pooled ceiling: where a close relative provides the ' +
       'cover, the Verhinderungspflege share is capped at twice the Pflegegeld ' +
@@ -82,7 +82,7 @@ export const SOURCES = {
   wohnumfeldverbesserung: {
     law: '§ 40 Abs. 4 SGB XI',
     covers:
-      'Wohnumfeldverbessernde Maßnahmen — one-off grant per measure for home ' +
+      'Wohnumfeldverbessernde Maßnahmen: one-off grant per measure for home ' +
       'adaptation. Available from Pflegegrad 1.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__40.html',
     checkedOn: '2026-08-18',
@@ -93,7 +93,7 @@ export const SOURCES = {
   },
   wohngruppenzuschlag: {
     law: '§ 38a SGB XI',
-    covers: 'Wohngruppenzuschlag — monthly supplement for members of a shared care household',
+    covers: 'Wohngruppenzuschlag: monthly supplement for members of a shared care household',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__38a.html',
     checkedOn: '2026-08-18',
     validFrom: '2025-01-01',
@@ -101,7 +101,7 @@ export const SOURCES = {
   kombinationsleistung: {
     law: '§ 38 SGB XI',
     covers:
-      'Kombinationsleistung — where professional services are used at less than ' +
+      'Kombinationsleistung: where professional services are used at less than ' +
       'their full value, Pflegegeld is paid pro rata for the unused share.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__38.html',
     checkedOn: '2026-08-18',
@@ -119,7 +119,7 @@ export const SOURCES = {
   pflegeberatung: {
     law: '§ 7a SGB XI',
     covers:
-      'Free statutory care advice. A legal entitlement — the insurer must offer ' +
+      'Free statutory care advice. A legal entitlement: the insurer must offer ' +
       'an appointment within two weeks of a request.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__7a.html',
     checkedOn: '2026-08-18',

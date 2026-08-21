@@ -134,7 +134,7 @@ function circumstantiallyEligible(b: Benefit, c: Circumstances): boolean | 'unkn
 /**
  * Entitlement for the care-provision slot.
  *
- * Reported as the Pflegegeld figure — the amount that actually reaches a family
+ * Reported as the Pflegegeld figure, the amount that actually reaches a family
  * providing care themselves. The higher Sachleistung value is real but only
  * realisable as invoiced services, so it belongs in the explanation, not the
  * headline.
@@ -152,7 +152,7 @@ export function analyse(profile: CareProfile): GapReport {
   const estimatedGrade = assessment.grade;
 
   // Gaps are measured against the grade the household actually holds. Money
-  // from a higher estimated grade is not "unclaimed" — it is unawarded, and it
+  // from a higher estimated grade is not "unclaimed": it is unawarded, and it
   // belongs in the actions as an appeal, not in the headline as cash.
   const grade = currentGrade;
 
@@ -263,8 +263,8 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
     actions.push({
       kind: 'apply-grade',
       title: {
-        de: `Pflegegrad beantragen — die Einschätzung ergibt Pflegegrad ${estimated}`,
-        en: `Apply for a Pflegegrad — the estimate indicates Pflegegrad ${estimated}`,
+        de: `Pflegegrad beantragen: die Einschätzung ergibt Pflegegrad ${estimated}`,
+        en: `Apply for a Pflegegrad: the estimate indicates Pflegegrad ${estimated}`,
       },
       why: {
         de: 'Ohne Pflegegrad besteht kein Anspruch auf die übrigen Leistungen. Dieser Antrag schaltet alles Weitere frei.',
@@ -290,12 +290,12 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
       kind: withinAppealWindow ? 'appeal-grade' : 'request-upgrade',
       title: withinAppealWindow
         ? {
-            de: `Widerspruch einlegen — die Einschätzung ergibt Pflegegrad ${estimated}, bewilligt ist ${currentGrade}`,
-            en: `Lodge an objection — the estimate indicates Pflegegrad ${estimated}, but ${currentGrade} was awarded`,
+            de: `Widerspruch einlegen: die Einschätzung ergibt Pflegegrad ${estimated}, bewilligt ist ${currentGrade}`,
+            en: `Lodge an objection: the estimate indicates Pflegegrad ${estimated}, but ${currentGrade} was awarded`,
           }
         : {
-            de: `Höherstufung beantragen — die Einschätzung ergibt Pflegegrad ${estimated}`,
-            en: `Request a reassessment — the estimate indicates Pflegegrad ${estimated}`,
+            de: `Höherstufung beantragen: die Einschätzung ergibt Pflegegrad ${estimated}`,
+            en: `Request a reassessment: the estimate indicates Pflegegrad ${estimated}`,
           },
       why: {
         de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',

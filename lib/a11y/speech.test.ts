@@ -3,7 +3,7 @@
  *
  * Voice mode hangs its whole flow off "the sentence has finished": that is when
  * the microphone opens. Getting the definition of *finished* wrong is not a
- * cosmetic bug — treating a cancelled utterance as a completed one opens the
+ * cosmetic bug: treating a cancelled utterance as a completed one opens the
  * microphone in the middle of a sentence, and the microphone then records the
  * app's own voice. These tests pin the distinction.
  */
@@ -80,7 +80,7 @@ describe('when a spoken script counts as finished', () => {
     'does NOT report finished when the speech was cancelled (%s)',
     (error) => {
       // Someone pressed stop, or moved to the next question. Whatever was
-      // queued to follow — opening the microphone — must not happen.
+      // queued to follow (opening the microphone) must not happen.
       const onEnd = vi.fn();
       speakSegments([{ text: 'Frage', lang: 'de' }], { onEnd });
       spoken[0].onerror?.({ error });

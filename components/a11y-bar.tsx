@@ -34,7 +34,7 @@ const THEME_SWATCH: Record<Theme, { bg: string; fg: string }> = {
  * Two things are deliberate here. First, text size sits directly in the bar
  * rather than inside the panel: it is the control people need most and the one
  * they need before they can comfortably read anything else, including the panel
- * that would otherwise contain it. Second, nothing is icon-only — every control
+ * that would otherwise contain it. Second, nothing is icon-only: every control
  * carries a word, because an unlabelled glyph is a guess.
  */
 export function A11yBar() {
@@ -48,7 +48,7 @@ export function A11yBar() {
   const smaller = TEXT_SIZES[Math.max(0, sizeIndex - 1)];
   const bigger = TEXT_SIZES[Math.min(TEXT_SIZES.length - 1, sizeIndex + 1)];
 
-  // Escape closes the panel and returns focus to the button that opened it —
+  // Escape closes the panel and returns focus to the button that opened it,
   // otherwise keyboard users are dropped at the top of the document.
   useEffect(() => {
     if (!open) return;
@@ -65,7 +65,7 @@ export function A11yBar() {
   return (
     <div className="no-print sticky top-0 z-50 border-b border-line bg-surface">
       <div className="mx-auto flex w-full max-w-3xl items-center gap-2 px-3 py-2 sm:px-4">
-        {/* The wordmark is decorative — the page already carries its name in a
+        {/* The wordmark is decorative: the page already carries its name in a
             heading. On a phone it is the first thing to go, because every row
             this bar occupies is a row taken from the question underneath it. */}
         <span className="me-auto hidden text-sm font-semibold tracking-tight sm:block">

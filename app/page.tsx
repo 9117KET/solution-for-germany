@@ -131,7 +131,7 @@ export default function Home() {
       }
     };
 
-    // m1–m4 come first, then module 5 where it applies, then m6 — the order the
+    // m1–m4 come first, then module 5 where it applies, then m6, the order the
     // official instrument uses.
     pushModule('m1');
     pushModule('m2');
@@ -212,7 +212,7 @@ export default function Home() {
   /**
    * Where we are, counted in the same units as the label claims.
    *
-   * On a question screen this counts questions, not screens — telling someone
+   * On a question screen this counts questions, not screens: telling someone
    * they are on "question 2" while showing them the first question is a small
    * lie that makes the number useless. Everywhere else it counts steps.
    */
@@ -533,7 +533,7 @@ export default function Home() {
          *
          * A question with four answers and its official wording underneath is
          * taller than a phone, so a nav that sits at the end of the document
-         * puts "Continue" below the fold on every single question — forty-nine
+         * puts "Continue" below the fold on every single question, forty-nine
          * scrolls to the end for someone who is already finding this hard.
          * From `sm:` up there is room, so it returns to the flow.
          */

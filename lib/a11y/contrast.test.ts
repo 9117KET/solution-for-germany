@@ -47,27 +47,31 @@ const AAA = 7;
 
 /** Every foreground/background pair the interface actually puts text on. */
 const PAIRS: ReadonlyArray<{ theme: string; what: string; fg: string; bg: string }> = [
-  // light
-  { theme: 'light', what: 'body text on the page', fg: '#131b1e', bg: '#f4f7f7' },
-  { theme: 'light', what: 'body text on a card', fg: '#131b1e', bg: '#ffffff' },
-  { theme: 'light', what: 'muted text on a card', fg: '#425258', bg: '#ffffff' },
-  { theme: 'light', what: 'muted text on a raised card', fg: '#425258', bg: '#eaf0f0' },
-  { theme: 'light', what: 'accent text on a card', fg: '#085a52', bg: '#ffffff' },
-  { theme: 'light', what: 'accent text on a raised card', fg: '#085a52', bg: '#eaf0f0' },
-  { theme: 'light', what: 'body text on a raised card', fg: '#131b1e', bg: '#eaf0f0' },
-  { theme: 'light', what: 'label on a selected option', fg: '#ffffff', bg: '#085a52' },
-  { theme: 'light', what: 'warning text', fg: '#4a2f04', bg: '#fdf3e0' },
+  // light: warm paper, warm ink, cold ink-blue accent
+  { theme: 'light', what: 'body text on the page', fg: '#1a1713', bg: '#f6f2ea' },
+  { theme: 'light', what: 'body text on a card', fg: '#1a1713', bg: '#fffcf5' },
+  { theme: 'light', what: 'muted text on a card', fg: '#4a423a', bg: '#fffcf5' },
+  { theme: 'light', what: 'muted text on a raised card', fg: '#4a423a', bg: '#efe9dc' },
+  { theme: 'light', what: 'accent text on a card', fg: '#14406b', bg: '#fffcf5' },
+  { theme: 'light', what: 'accent text on a raised card', fg: '#14406b', bg: '#efe9dc' },
+  { theme: 'light', what: 'body text on a raised card', fg: '#1a1713', bg: '#efe9dc' },
+  { theme: 'light', what: 'label on a selected option', fg: '#fffcf5', bg: '#14406b' },
+  { theme: 'light', what: 'body text on a soft accent panel', fg: '#1a1713', bg: '#dfe7ef' },
+  { theme: 'light', what: 'accent text on a soft accent panel', fg: '#14406b', bg: '#dfe7ef' },
+  { theme: 'light', what: 'warning text', fg: '#4a3208', bg: '#f9eed6' },
 
-  // dark
-  { theme: 'dark', what: 'body text on the page', fg: '#e6edee', bg: '#0e1417' },
-  { theme: 'dark', what: 'body text on a card', fg: '#e6edee', bg: '#161f23' },
-  { theme: 'dark', what: 'muted text on a card', fg: '#a5b6bb', bg: '#161f23' },
-  { theme: 'dark', what: 'muted text on a raised card', fg: '#a5b6bb', bg: '#1e2a2f' },
-  { theme: 'dark', what: 'accent text on a card', fg: '#4fd6c4', bg: '#161f23' },
-  { theme: 'dark', what: 'accent text on a raised card', fg: '#4fd6c4', bg: '#1e2a2f' },
-  { theme: 'dark', what: 'body text on a raised card', fg: '#e6edee', bg: '#1e2a2f' },
-  { theme: 'dark', what: 'label on a selected option', fg: '#06231f', bg: '#4fd6c4' },
-  { theme: 'dark', what: 'warning text', fg: '#f6e4bd', bg: '#2e2410' },
+  // dark: warm charcoal, warm sand accent
+  { theme: 'dark', what: 'body text on the page', fg: '#ece6da', bg: '#16140f' },
+  { theme: 'dark', what: 'body text on a card', fg: '#ece6da', bg: '#211e17' },
+  { theme: 'dark', what: 'muted text on a card', fg: '#c0b7a6', bg: '#211e17' },
+  { theme: 'dark', what: 'muted text on a raised card', fg: '#c0b7a6', bg: '#2b2720' },
+  { theme: 'dark', what: 'accent text on a card', fg: '#e6b45c', bg: '#211e17' },
+  { theme: 'dark', what: 'accent text on a raised card', fg: '#e6b45c', bg: '#2b2720' },
+  { theme: 'dark', what: 'body text on a raised card', fg: '#ece6da', bg: '#2b2720' },
+  { theme: 'dark', what: 'label on a selected option', fg: '#16140f', bg: '#e6b45c' },
+  { theme: 'dark', what: 'body text on a soft accent panel', fg: '#ece6da', bg: '#33291a' },
+  { theme: 'dark', what: 'accent text on a soft accent panel', fg: '#e6b45c', bg: '#33291a' },
+  { theme: 'dark', what: 'warning text', fg: '#f2e3c4', bg: '#2e2617' },
 
   // high contrast
   { theme: 'contrast-light', what: 'body text', fg: '#000000', bg: '#ffffff' },

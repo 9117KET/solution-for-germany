@@ -6,7 +6,7 @@
  * hidden behind a gear icon. Three rules follow from that:
  *
  *  1. They are offered up front, on the first screen, in the words of the
- *     person choosing — "Bigger text", not "Font scale 1.5".
+ *     person choosing: "Bigger text", not "Font scale 1.5".
  *  2. They stay reachable from every screen afterwards, because someone only
  *     discovers the text is too small once they meet a real question.
  *  3. They survive a reload. Setting them again every visit is exactly the
@@ -122,7 +122,7 @@ export function loadSettings(): Settings {
 
   // The language is deliberately NOT taken from the browser. This is a German
   // entitlement, claimed from a German insurer on German forms, so German is
-  // where everyone starts — including a carer whose laptop happens to be set to
+  // where everyone starts, including a carer whose laptop happens to be set to
   // English. The language control sits on the first screen and in the bar on
   // every screen after it, so changing it costs one tap.
   //
@@ -143,7 +143,7 @@ export function loadSettings(): Settings {
     // Settings written before the language became unconditionally German were
     // seeded from the browser, so a machine set to English has "en" stored from
     // a choice nobody made. Those files are recognisable by having no
-    // `contentLang` field. Drop the language from them and keep the rest — text
+    // `contentLang` field. Drop the language from them and keep the rest: text
     // size and contrast were still deliberate choices worth preserving.
     if (typeof raw.contentLang !== 'string') {
       parsed.lang = DEFAULTS.lang;
@@ -170,7 +170,7 @@ export function saveSettings(s: Settings): void {
  * Push settings onto the document element.
  *
  * The text scale is applied as a root font size so that everything measured in
- * `rem` — type, padding, gaps, tap targets — grows together. Scaling only the
+ * `rem` (type, padding, gaps, tap targets) grows together. Scaling only the
  * type would leave large text crammed into small buttons.
  */
 export function applySettings(s: Settings): void {

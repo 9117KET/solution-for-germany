@@ -344,7 +344,7 @@ describe('Verhinderungspflege when a relative provides the cover', () => {
   });
 
   it('is far below the pooled annual budget, which is the point', () => {
-    // A household whose stand-in is a family member — the common case — cannot
+    // A household whose stand-in is a family member (the common case) cannot
     // reach 3.539 € on Verhinderungspflege alone. Showing the pooled figure
     // without this caveat would overstate, which is the one failure mode this
     // product is built to avoid.

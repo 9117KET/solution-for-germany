@@ -5,7 +5,7 @@ import { spokenScript } from '@/lib/a11y/speech';
 import { useListener, useSettings, useSpeaker, useT } from './settings';
 import { Notice } from './ui';
 
-/** Separator for the options key — a character no option will ever contain. */
+/** Separator for the options key: a character no option will ever contain. */
 const OPTION_SEP = '';
 
 export interface VoiceQuestion {
@@ -15,7 +15,7 @@ export interface VoiceQuestion {
   hint?: string;
   options: readonly string[];
   /**
-   * Set when the options are interface copy rather than content — a gating
+   * Set when the options are interface copy rather than content: a gating
    * question asks something German but answers "Ja / Nein" in the interface
    * language, and each half has to be spoken in its own voice.
    */
@@ -26,14 +26,14 @@ export interface VoiceQuestion {
  * Read-aloud and speak-your-answer controls for a single question.
  *
  * The two capabilities are kept separate on purpose. Reading aloud works almost
- * everywhere and helps a much wider group than voice input does — poor near
- * vision, tired eyes, reading difficulty — so it is offered on its own and is
+ * everywhere and helps a much wider group than voice input does (poor near
+ * vision, tired eyes, reading difficulty), so it is offered on its own and is
  * never gated behind voice mode. Listening is the fragile half: it needs an API
  * this browser may not have and a microphone the person must grant, so it is
  * strictly additive and every failure lands on "tap the answer instead".
  *
  * Voice mode runs one strict sequence per question: read the question, wait for
- * the voice to stop, then open the microphone. The waiting is not politeness —
+ * the voice to stop, then open the microphone. The waiting is not politeness:
  * a microphone open while the synthesiser is talking records the synthesiser,
  * and the person's actual answer arrives on top of the app's own voice.
  */
@@ -129,7 +129,7 @@ export function VoiceControls({
 
     return () => {
       // Tearing this effect down cancels whatever is being said, so the record
-      // of "already read" has to go with it — otherwise the question is marked
+      // of "already read" has to go with it, otherwise the question is marked
       // read while nothing was ever heard.
       //
       // This is not hypothetical: React runs every effect setup/cleanup/setup
@@ -213,7 +213,7 @@ export function VoiceControls({
 /**
  * A read-aloud button for a screen that is a form rather than a question.
  *
- * The situation screen has a grade picker, a date and a set of checkboxes —
+ * The situation screen has a grade picker, a date and a set of checkboxes,
  * nothing a spoken number can drive. But it is the very first screen after
  * "Start", so leaving it silent means someone who chose to be read to gets
  * silence at the exact moment they are deciding whether any of this works.

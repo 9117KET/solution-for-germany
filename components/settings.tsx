@@ -136,7 +136,7 @@ export function useSpeaker(): Speaker {
     (script: string | readonly SpokenSegment[], onDone?: () => void) => {
       if (!supported) {
         // Nothing will be spoken, so whatever was meant to follow the sentence
-        // has to happen anyway — otherwise voice mode stalls on a browser with
+        // has to happen anyway, otherwise voice mode stalls on a browser with
         // no synthesiser.
         onDone?.();
         return;
