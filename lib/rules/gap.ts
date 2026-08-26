@@ -10,6 +10,9 @@
  *  - Pflegegeld and Pflegesachleistung are treated as ONE entitlement, not two.
  *    They are alternatives under § 38 SGB XI; adding them together would roughly
  *    double every headline and would be straightforwardly false.
+ *  - The Gemeinsamer Jahresbetrag enters the headline at the figure a household
+ *    covered by a nahe Angehörige can actually draw, not at the full pooled
+ *    budget. See `headlineEntitlement`.
  *
  * A number that is too high is worse than no number at all: the family finds
  * out at the Pflegekasse, and never trusts anything the tool said again.
@@ -21,6 +24,7 @@ import {
   type Benefit,
   type BenefitId,
   type Cents,
+  VERHINDERUNGSPFLEGE_BY_RELATIVE,
   benefit,
   monthlyEquivalent,
 } from './benefits';
@@ -69,6 +73,12 @@ export interface BenefitGap {
   benefit: Benefit;
   status: GapStatus;
   entitled: Cents;
+  /**
+   * Where `entitled` was reduced by a conservative assumption, the unreduced
+   * figure. Present only for the Gemeinsamer Jahresbetrag today. The report
+   * shows it as reachable upside, never as part of the headline.
+   */
+  fullEntitled?: Cents;
   claimed: Cents;
   gap: Cents;
   /** Gap expressed per month; null for one-off grants. */
@@ -117,6 +127,35 @@ export interface GapReport {
   disclaimer: { de: string; en: string };
 }
 
+/**
+ * Entitlement as the headline is allowed to count it.
+ *
+ * The Gemeinsamer Jahresbetrag pools Verhinderungspflege and Kurzzeitpflege.
+ * Where a nahe Angehörige provides the cover, the Verhinderungspflege share is
+ * capped at twice the Pflegegeld: 694 € at Pflegegrad 2 against a pooled budget
+ * of 3.539 €. That is the ordinary case in a household reached by this tool at
+ * all, and the intake does not establish who would stand in, so the headline
+ * assumes the relative and counts the capped figure.
+ *
+ * The full budget is real and stays reachable through Kurzzeitpflege or cover
+ * by anyone else. It is carried on the gap row as `fullEntitled` so the report
+ * can show it as upside, and the benefit's own caveat states the rule.
+ *
+ * Counting the full figure would put roughly 295 € a month into a typical
+ * headline that the family cannot draw the way they will read it, which is the
+ * failure this file exists to avoid.
+ */
+function headlineEntitlement(
+  b: Benefit,
+  grade: Pflegegrad,
+): { entitled: Cents; full?: Cents } {
+  const full = b.amounts[grade];
+  if (b.id !== 'gemeinsamerJahresbetrag') return { entitled: full };
+
+  const capped = VERHINDERUNGSPFLEGE_BY_RELATIVE[grade];
+  return capped > 0 && capped < full ? { entitled: capped, full } : { entitled: full };
+}
+
 /** Does this benefit apply at all, given the household's circumstances? */
 function circumstantiallyEligible(b: Benefit, c: Circumstances): boolean | 'unknown' {
   switch (b.id) {
@@ -163,7 +202,7 @@ export function analyse(profile: CareProfile): GapReport {
     if (groupMembers.has(b.id)) continue;
 
     const eligibility = circumstantiallyEligible(b, circumstances);
-    const entitled = b.amounts[grade];
+    const { entitled, full: fullEntitled } = headlineEntitlement(b, grade);
     const already = claimed[b.id] ?? 0;
 
     if (entitled <= 0 || eligibility === false) {
@@ -187,6 +226,7 @@ export function analyse(profile: CareProfile): GapReport {
       benefit: b,
       status,
       entitled,
+      ...(fullEntitled === undefined ? {} : { fullEntitled }),
       claimed: already,
       gap,
       monthlyGap: gap > 0 ? monthlyEquivalent(b, gap) : 0,

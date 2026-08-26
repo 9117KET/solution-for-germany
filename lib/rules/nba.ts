@@ -180,7 +180,25 @@ export interface Assessment {
   /** Weighted points still needed to reach the next grade; null at grade 5. */
   pointsToNextGrade: number | null;
   nextGrade: Pflegegrad | null;
+  /**
+   * True where the grade comes from the besondere Bedarfskonstellation rather
+   * than from the point total. The report must say so: the points shown will
+   * not otherwise explain the grade, and the assignment is a decision the
+   * Medizinischer Dienst makes, not an arithmetic outcome.
+   */
+  viaBedarfskonstellation: boolean;
+  /** Grade the points alone would have produced. Equals `grade` normally. */
+  gradeFromPoints: Pflegegrad;
   source: SourceId;
+}
+
+export interface AssessOptions {
+  /**
+   * Both arms and both legs unusable, per the Begutachtungs-Richtlinien: a
+   * complete loss of grasping, standing and walking that assistive devices
+   * cannot compensate, minimal residual movement notwithstanding.
+   */
+  limbUnusability?: boolean;
 }
 
 function clampRaw(spec: ModuleSpec, raw: number): number {
@@ -216,8 +234,20 @@ export function gradeForPoints(totalWeighted: number): Pflegegrad {
  * Modules 2 and 3 compete for one 15-point slot: the higher weighted score
  * counts and the other is carried through marked `counted: false`, so the UI
  * can show why it did not contribute.
+ *
+ * One rule sits outside the arithmetic. Under § 15 Abs. 4 SGB XI a
+ * *besondere Bedarfskonstellation* can be assigned Pflegegrad 5 "auch wenn ihre
+ * Gesamtpunkte unter 90 liegen", and the Begutachtungs-Richtlinien recognise
+ * exactly one: the Gebrauchsunfähigkeit beider Arme und beider Beine. Where the
+ * intake reports it, the grade is 5 whatever the points say.
+ *
+ * This is the one place the engine departs upward from the points, so it is
+ * flagged rather than silently applied: the statute says "können ... zugeordnet
+ * werden", which makes it a pflegefachliche decision by the Medizinischer
+ * Dienst and not a certainty. `viaBedarfskonstellation` exists so the report can
+ * say that, and `gradeFromPoints` keeps the arithmetic answer visible.
  */
-export function assess(raw: RawScores): Assessment {
+export function assess(raw: RawScores, options: AssessOptions = {}): Assessment {
   const results: ModuleResult[] = (Object.keys(MODULES) as ModuleId[]).map((id) => {
     const spec = MODULES[id];
     const r = clampRaw(spec, raw[id]);
@@ -245,10 +275,18 @@ export function assess(raw: RawScores): Assessment {
     .filter((m) => m.counted)
     .reduce((sum, m) => sum + m.weighted, 0);
 
-  const grade = gradeForPoints(totalWeighted);
-  const next = GRADE_THRESHOLDS.filter((t) => t.from > totalWeighted).sort(
-    (a, b) => a.from - b.from,
-  )[0];
+  const gradeFromPoints = gradeForPoints(totalWeighted);
+  const viaBedarfskonstellation = options.limbUnusability === true && gradeFromPoints < 5;
+  const grade: Pflegegrad = viaBedarfskonstellation ? 5 : gradeFromPoints;
+
+  // Where the constellation carries the grade, there is no "next grade" to
+  // work towards: 5 is the top, and the points that fall short of it are no
+  // longer the thing that decides.
+  const next = grade === 5
+    ? undefined
+    : GRADE_THRESHOLDS.filter((t) => t.from > totalWeighted).sort(
+        (a, b) => a.from - b.from,
+      )[0];
 
   return {
     grade,
@@ -256,7 +294,9 @@ export function assess(raw: RawScores): Assessment {
     modules: results,
     pointsToNextGrade: next ? round2(next.from - totalWeighted) : null,
     nextGrade: next ? next.grade : null,
-    source: 'nbaAssessment',
+    viaBedarfskonstellation,
+    gradeFromPoints,
+    source: viaBedarfskonstellation ? 'bedarfskonstellation' : 'nbaAssessment',
   };
 }
 

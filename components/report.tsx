@@ -93,6 +93,30 @@ export function Report({
           <p className="mt-1 text-base text-fg-muted">
             {t('pointsOf100', { n: assessment.totalWeighted })}
           </p>
+          {/* The grade came from § 15 Abs. 4, not from the points above it, so
+              the points would otherwise read as a contradiction. Say which rule
+              produced the number, and that the Medizinischer Dienst decides it:
+              the statute says "können ... zugeordnet werden". */}
+          {assessment.viaBedarfskonstellation ? (
+            <p {...content} className="mt-2 text-sm text-fg-muted">
+              {s({
+                de:
+                  'Nicht über die Punkte: Bei Gebrauchsunfähigkeit beider Arme und ' +
+                  'beider Beine kann der Medizinische Dienst Pflegegrad 5 zuerkennen, ' +
+                  'auch unter 90 Punkten (§ 15 Abs. 4 SGB XI, besondere ' +
+                  'Bedarfskonstellation). Nach den Punkten allein wäre es Pflegegrad ' +
+                  `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : assessment.gradeFromPoints}. ` +
+                  'Diese Zuordnung ist eine pflegefachliche Entscheidung, kein Automatismus.',
+                en:
+                  'Not from the points: where both arms and both legs are unusable, ' +
+                  'the Medizinischer Dienst can award Pflegegrad 5 even below 90 ' +
+                  'points (§ 15 Abs. 4 SGB XI, besondere Bedarfskonstellation). On ' +
+                  'the points alone this would be ' +
+                  `${assessment.gradeFromPoints === 0 ? 'no Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. ` +
+                  'The assignment is a professional decision, not automatic.',
+              })}
+            </p>
+          ) : null}
         </Card>
         <Card>
           <p className="text-sm font-semibold uppercase tracking-wide text-fg-muted">
@@ -123,7 +147,11 @@ export function Report({
         </Card>
       </section>
 
-      {m5Skipped ? (
+      {/* The cap warning says the estimate cannot reach Pflegegrad 5 without the
+          medical questions. Once it has reached 5 anyway, by the besondere
+          Bedarfskonstellation, that sentence contradicts the number directly
+          above it. A reader who spots the contradiction stops believing both. */}
+      {m5Skipped && assessment.grade < 5 ? (
         <Notice tone="warn" title={t('m5SkippedTitle')}>
           {t('m5CapBody')}
         </Notice>
@@ -211,6 +239,19 @@ export function Report({
                       <dt className="text-fg-muted">{t('colEntitled')}</dt>
                       <dd className="tabular-nums">{money(g.entitled)}</dd>
                     </div>
+                    {/* Where the headline figure was reduced to what a household
+                        covered by a relative can draw, name the pooled budget too,
+                        so the smaller number is never mistaken for the whole rule. */}
+                    {g.fullEntitled ? (
+                      <div className="flex justify-between gap-3">
+                        <dt {...content} className="text-sm text-fg-muted">
+                          {s({ de: 'Voller Jahresbetrag', en: 'Full annual budget' })}
+                        </dt>
+                        <dd className="text-sm tabular-nums text-fg-muted">
+                          {money(g.fullEntitled)}
+                        </dd>
+                      </div>
+                    ) : null}
                     <div className="flex justify-between gap-3">
                       <dt className="text-fg-muted">{t('colClaimed')}</dt>
                       <dd className="tabular-nums">{money(g.claimed)}</dd>
@@ -272,7 +313,17 @@ export function Report({
                           </span>
                         ) : null}
                       </th>
-                      <td className="px-4 py-3 tabular-nums">{money(g.entitled)}</td>
+                      <td className="px-4 py-3 tabular-nums">
+                        {money(g.entitled)}
+                        {g.fullEntitled ? (
+                          <span
+                            {...content}
+                            className="mt-0.5 block text-sm font-normal text-fg-muted"
+                          >
+                            {s({ de: 'von', en: 'of' })} {money(g.fullEntitled)}
+                          </span>
+                        ) : null}
+                      </td>
                       <td className="px-4 py-3 tabular-nums">{money(g.claimed)}</td>
                       <td className="px-4 py-3 font-bold tabular-nums">
                         {g.gap > 0 ? money(g.gap) : '–'}

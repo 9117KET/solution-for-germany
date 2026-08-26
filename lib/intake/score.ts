@@ -13,7 +13,7 @@
  * number that falls apart.
  */
 
-import type { ModuleId, RawScores } from '../rules/nba';
+import { assess, type Assessment, type ModuleId, type RawScores } from '../rules/nba';
 import { CRITERIA, type ConditionId, type Criterion } from './criteria';
 
 // ---------------------------------------------------------------- Module 5
@@ -196,6 +196,28 @@ export function scoreIntake(answers: IntakeAnswers): ScoredIntake {
     raw,
     coverage: totals.sort((a, b) => a.module.localeCompare(b.module)),
     completeness: applicable === 0 ? 0 : answered / applicable,
+  };
+}
+
+/**
+ * Score an intake and run the assessment over it in one step.
+ *
+ * Prefer this to calling `scoreIntake` and `assess` separately: the besondere
+ * Bedarfskonstellation lives in the intake's gating answers rather than in the
+ * raw module scores, so a caller that assembles the two by hand can silently
+ * drop it, and the failure is invisible — a household entitled to Pflegegrad 5
+ * would simply be shown a lower grade with plausible-looking points.
+ */
+export function assessIntake(answers: IntakeAnswers): {
+  scored: ScoredIntake;
+  assessment: Assessment;
+} {
+  const scored = scoreIntake(answers);
+  return {
+    scored,
+    assessment: assess(scored.raw, {
+      limbUnusability: answers.conditions.hasLimbUnusability === true,
+    }),
   };
 }
 

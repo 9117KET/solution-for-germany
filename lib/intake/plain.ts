@@ -169,6 +169,21 @@ export const PLAIN_CONDITIONS: Record<ConditionId, Localised> = {
     de: 'Braucht die Person regelmäßig Medikamente, Verbände, Spritzen oder Therapien?',
     en: 'Does the person regularly need medicines, dressings, injections or therapy?',
   },
+  // "Gebrauchsunfähig" is the word the rule uses and the word families get
+  // wrong: it sounds like nothing moves at all, while the rule still counts a
+  // hand that can nudge a joystick. The everyday version leads with what the
+  // person cannot do, and keeps the joystick, because that example is what
+  // makes someone answer yes who would otherwise answer no.
+  hasLimbUnusability: {
+    de:
+      'Kann die Person mit den Händen nichts mehr greifen und weder stehen noch ' +
+      'gehen, auch nicht mit Hilfsmitteln? Ganz kleine Restbewegungen zählen ' +
+      'trotzdem dazu, zum Beispiel einen Rollstuhl mit dem Ellenbogen steuern.',
+    en:
+      'Can the person no longer grip anything with their hands, and neither ' +
+      'stand nor walk, even with aids? Very small remaining movements still ' +
+      'count, for example steering a wheelchair with an elbow.',
+  },
 };
 
 /**
