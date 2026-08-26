@@ -1,6 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import {
   CONDITIONS,
   criteriaFor,
@@ -9,14 +16,22 @@ import {
 } from '@/lib/intake/criteria';
 import {
   M5_CRITERIA,
+  assessIntake,
   emptyIntake,
   isApplicable,
   isM5Applicable,
-  scoreIntake,
   type Frequency,
   type IntakeAnswers,
   type M5Criterion,
 } from '@/lib/intake/score';
+import { saveSession } from '@/lib/intake/session';
+import {
+  discardSession,
+  dismissOffer,
+  getServerSessionSnapshot,
+  getSessionSnapshot,
+  subscribeSession,
+} from '@/lib/intake/session-store';
 import {
   conditionLabel,
   criterionLabel,
@@ -27,7 +42,6 @@ import {
 import {
   BENEFITS,
   analyse,
-  assess,
   entitlement,
   type BenefitId,
   type Circumstances,
@@ -90,6 +104,14 @@ export default function Home() {
     wantsHomeAdaptation: false,
   });
   const [index, setIndex] = useState(0);
+
+  // A session found on this device, offered on the welcome screen until the
+  // person either takes it or throws it away.
+  const saved = useSyncExternalStore(
+    subscribeSession,
+    getSessionSnapshot,
+    getServerSessionSnapshot,
+  );
 
   const hasMedical = answers.conditions.hasMedicalMeasures === true;
   const oneAtATime = settings.pace === 'one';
@@ -170,8 +192,7 @@ export default function Home() {
   const setFrequency = (id: string, f: Frequency | undefined) =>
     setAnswers((a) => ({ ...a, frequencies: { ...a.frequencies, [id]: f } }));
 
-  const scored = useMemo(() => scoreIntake(answers), [answers]);
-  const assessment = useMemo(() => assess(scored.raw), [scored]);
+  const { scored, assessment } = useMemo(() => assessIntake(answers), [answers]);
 
   const report = useMemo(() => {
     const claimedMap: Partial<Record<BenefitId, number>> = {};
@@ -198,7 +219,41 @@ export default function Home() {
     setClaimed(new Set());
     setCircumstances({ atHome: true, sharedHousehold: false, wantsHomeAdaptation: false });
     setIndex(0);
+    // Starting again is the only erase control most people will look for, so
+    // it has to be a real erase and not just a cleared screen.
+    discardSession();
   };
+
+  const resumeSaved = () => {
+    if (!saved) return;
+    setAnswers(saved.answers);
+    setCurrentGrade(saved.currentGrade);
+    setBescheidDate(saved.bescheidDate);
+    setClaimed(new Set(saved.claimed));
+    setCircumstances(saved.circumstances);
+    setIndex(saved.index);
+    dismissOffer();
+  };
+
+  /**
+   * Write the intake back as it is given.
+   *
+   * No guard is needed against the first render overwriting a stored session:
+   * `saveSession` declines anything that carries no answers, so an empty
+   * intake never reaches the device. That also means simply opening the page
+   * and closing it again leaves no trace.
+   */
+  useEffect(() => {
+    saveSession({
+      answers,
+      currentGrade,
+      bescheidDate,
+      claimed: [...claimed],
+      circumstances,
+      index,
+      savedAt: new Date().toISOString(),
+    });
+  }, [answers, currentGrade, bescheidDate, claimed, circumstances, index]);
 
   // Moving to a new screen puts focus on its heading and scrolls to the top.
   // Without this, a keyboard or screen-reader user stays focused wherever the
@@ -255,7 +310,22 @@ export default function Home() {
       {/* Focus lands here on every screen change; tabIndex -1 makes it
           focusable without adding it to the tab order. */}
       <div ref={headingRef} tabIndex={-1} className="outline-none">
-        {screen.kind === 'welcome' ? <Welcome onStart={goNext} /> : null}
+        {screen.kind === 'welcome' ? (
+          <Welcome
+            onStart={() => {
+              // Walking past the offer is an answer too. Stop showing it, but
+              // leave the file alone: nothing is deleted until the first real
+              // answer overwrites it, or until they ask.
+              dismissOffer();
+              goNext();
+            }}
+            resume={
+              saved
+                ? { onContinue: resumeSaved, onDiscard: restart }
+                : undefined
+            }
+          />
+        ) : null}
 
         {screen.kind === 'situation' ? (
           <StepShell

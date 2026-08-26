@@ -41,7 +41,14 @@ const THEME_SWATCH: Record<Theme, { bg: string; fg: string; line: string }> = {
  * preview: a size control that only takes effect on the next page is a control
  * you cannot judge.
  */
-export function Welcome({ onStart }: { onStart: () => void }) {
+export function Welcome({
+  onStart,
+  resume,
+}: {
+  onStart: () => void;
+  /** Present only when this device holds answers from an earlier visit. */
+  resume?: { onContinue: () => void; onDiscard: () => void };
+}) {
   const { settings, set } = useSettings();
   const { t } = useT();
 
@@ -61,6 +68,22 @@ export function Welcome({ onStart }: { onStart: () => void }) {
         </h1>
         <p className="max-w-prose text-xl text-fg-muted">{t('welcomeIntro')}</p>
       </header>
+
+      {/* Above the setup, because someone returning to a half-finished intake
+          is not here to pick a colour scheme. Both options are spelled out:
+          carrying on should not feel like the only door, and discarding has to
+          say that it deletes, since on a shared computer that is the point. */}
+      {resume ? (
+        <Notice tone="info" title={t('resumeTitle')}>
+          <p>{t('resumeBody')}</p>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <Button onClick={resume.onContinue}>{t('resumeContinue')}</Button>
+            <Button variant="secondary" onClick={resume.onDiscard}>
+              {t('resumeFresh')}
+            </Button>
+          </div>
+        </Notice>
+      ) : null}
 
       <section className="flex flex-col gap-5">
         <div>
