@@ -83,13 +83,49 @@ export const UI = {
     pl: 'Rozmawiasz z komputerem',
     ar: 'أنت تتعامل مع برنامج حاسوبي',
   },
+  // "Es gibt kein Konto und keinen Server" stays true and stays first, because
+  // it is the sentence people are actually asking about. But the answers now
+  // outlive the tab, and someone sharing a computer has to be told that in the
+  // same breath rather than discovering it.
   privacyBody: {
-    de: 'Das hier ist ein Programm, kein Mensch. Es ist keine Begutachtung durch den Medizinischen Dienst. Ihre Antworten bleiben auf Ihrem Gerät. Es gibt kein Konto und keinen Server, der etwas speichert. Die kostenlose Pflegeberatung nach § 7a SGB XI steht Ihnen jederzeit zu.',
-    en: 'This is a program, not a person. It is not an assessment by the Medizinischer Dienst. Your answers stay on your device. There is no account and no server storing anything. Free statutory care advice under § 7a SGB XI is available to you at any time.',
-    tr: 'Bu bir programdır, bir insan değil. Medizinischer Dienst tarafından yapılan bir değerlendirme değildir. Cevaplarınız cihazınızda kalır. Hiçbir hesap ve hiçbir sunucu bir şey kaydetmez. § 7a SGB XI uyarınca ücretsiz bakım danışmanlığı her zaman hakkınızdır.',
-    ru: 'Это программа, а не человек. Это не освидетельствование Medizinischer Dienst. Ваши ответы остаются на вашем устройстве. Нет ни учётной записи, ни сервера, который что-либо сохраняет. Бесплатная консультация по уходу согласно § 7a SGB XI доступна вам в любое время.',
-    pl: 'To jest program, a nie człowiek. To nie jest orzeczenie Medizinischer Dienst. Twoje odpowiedzi pozostają na Twoim urządzeniu. Nie ma konta ani serwera, który cokolwiek zapisuje. Bezpłatne doradztwo opiekuńcze zgodnie z § 7a SGB XI przysługuje Ci w każdej chwili.',
-    ar: 'هذا برنامج وليس شخصًا. وهو ليس تقييمًا من Medizinischer Dienst. تبقى إجاباتك على جهازك. لا يوجد حساب ولا خادم يحفظ أي شيء. الاستشارة المجانية بشأن الرعاية وفق § 7a SGB XI متاحة لك في أي وقت.',
+    de: 'Das hier ist ein Programm, kein Mensch. Es ist keine Begutachtung durch den Medizinischen Dienst. Ihre Antworten bleiben auf Ihrem Gerät. Es gibt kein Konto und keinen Server, der etwas speichert. Damit Sie später weitermachen können, werden Ihre Antworten in diesem Browser gespeichert; Sie können sie jederzeit mit einem Tipp löschen. Die kostenlose Pflegeberatung nach § 7a SGB XI steht Ihnen jederzeit zu.',
+    en: 'This is a program, not a person. It is not an assessment by the Medizinischer Dienst. Your answers stay on your device. There is no account and no server storing anything. So that you can carry on later, your answers are kept in this browser; you can delete them at any time with one tap. Free statutory care advice under § 7a SGB XI is available to you at any time.',
+    tr: 'Bu bir programdır, bir insan değil. Medizinischer Dienst tarafından yapılan bir değerlendirme değildir. Cevaplarınız cihazınızda kalır. Hiçbir hesap ve hiçbir sunucu bir şey kaydetmez. Daha sonra devam edebilmeniz için cevaplarınız bu tarayıcıda saklanır; istediğiniz zaman tek dokunuşla silebilirsiniz. § 7a SGB XI uyarınca ücretsiz bakım danışmanlığı her zaman hakkınızdır.',
+    ru: 'Это программа, а не человек. Это не освидетельствование Medizinischer Dienst. Ваши ответы остаются на вашем устройстве. Нет ни учётной записи, ни сервера, который что-либо сохраняет. Чтобы вы могли продолжить позже, ваши ответы сохраняются в этом браузере; вы можете удалить их в любой момент одним нажатием. Бесплатная консультация по уходу согласно § 7a SGB XI доступна вам в любое время.',
+    pl: 'To jest program, a nie człowiek. To nie jest orzeczenie Medizinischer Dienst. Twoje odpowiedzi pozostają na Twoim urządzeniu. Nie ma konta ani serwera, który cokolwiek zapisuje. Abyś mógł kontynuować później, Twoje odpowiedzi są zapisywane w tej przeglądarce; możesz je usunąć w każdej chwili jednym dotknięciem. Bezpłatne doradztwo opiekuńcze zgodnie z § 7a SGB XI przysługuje Ci w każdej chwili.',
+    ar: 'هذا برنامج وليس شخصًا. وهو ليس تقييمًا من Medizinischer Dienst. تبقى إجاباتك على جهازك. لا يوجد حساب ولا خادم يحفظ أي شيء. ولكي تتمكن من المتابعة لاحقًا، تُحفظ إجاباتك في هذا المتصفح؛ ويمكنك حذفها في أي وقت بضغطة واحدة. الاستشارة المجانية بشأن الرعاية وفق § 7a SGB XI متاحة لك في أي وقت.',
+  },
+  resumeTitle: {
+    de: 'Sie haben hier schon einmal angefangen',
+    en: 'You started this here before',
+    tr: 'Buraya daha önce başlamıştınız',
+    ru: 'Вы уже начинали здесь',
+    pl: 'Zacząłeś już tutaj wcześniej',
+    ar: 'لقد بدأت هنا من قبل',
+  },
+  resumeBody: {
+    de: 'Auf diesem Gerät sind Antworten von einem früheren Mal gespeichert. Sie können weitermachen oder neu anfangen. Beim Neuanfang werden die gespeicherten Antworten gelöscht.',
+    en: 'Answers from an earlier visit are saved on this device. You can carry on, or start fresh. Starting fresh deletes the saved answers.',
+    tr: 'Bu cihazda önceki bir ziyaretten kalan cevaplar kayıtlı. Devam edebilir veya yeniden başlayabilirsiniz. Yeniden başlamak kayıtlı cevapları siler.',
+    ru: 'На этом устройстве сохранены ответы с прошлого раза. Вы можете продолжить или начать заново. Если начать заново, сохранённые ответы будут удалены.',
+    pl: 'Na tym urządzeniu zapisano odpowiedzi z wcześniejszej wizyty. Możesz kontynuować albo zacząć od nowa. Rozpoczęcie od nowa usuwa zapisane odpowiedzi.',
+    ar: 'توجد إجابات محفوظة على هذا الجهاز من زيارة سابقة. يمكنك المتابعة أو البدء من جديد. البدء من جديد يحذف الإجابات المحفوظة.',
+  },
+  resumeContinue: {
+    de: 'Weitermachen',
+    en: 'Carry on',
+    tr: 'Devam et',
+    ru: 'Продолжить',
+    pl: 'Kontynuuj',
+    ar: 'المتابعة',
+  },
+  resumeFresh: {
+    de: 'Neu anfangen und Antworten löschen',
+    en: 'Start fresh and delete the answers',
+    tr: 'Yeniden başla ve cevapları sil',
+    ru: 'Начать заново и удалить ответы',
+    pl: 'Zacznij od nowa i usuń odpowiedzi',
+    ar: 'ابدأ من جديد واحذف الإجابات',
   },
 
   // ------------------------------------------------------- accessibility

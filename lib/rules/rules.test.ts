@@ -230,10 +230,13 @@ describe('gap analysis', () => {
   it('totals only certain, recurring, unclaimed money', () => {
     const report = analyse(profile());
 
-    // Entlastungsbetrag 131 + Pflegehilfsmittel 42 + Jahresbetrag 3539/12.
-    const expected = euro(131) + euro(42) + Math.round(euro(3539) / 12);
+    // Entlastungsbetrag 131 + Pflegehilfsmittel 42 + the Jahresbetrag at the
+    // figure a household covered by a nahe Angehörige can actually draw, which
+    // is twice the Pflegegeld and not the full pooled 3.539 €.
+    const expected =
+      euro(131) + euro(42) + Math.round(VERHINDERUNGSPFLEGE_BY_RELATIVE[3] / 12);
     expect(report.monthlyGapTotal).toBe(expected);
-    expect(formatEuro(report.monthlyGapTotal)).toContain('467');
+    expect(formatEuro(report.monthlyGapTotal)).toContain('272');
   });
 
   it('holds conditional benefits back for checking rather than counting them', () => {
@@ -332,6 +335,65 @@ describe('gap analysis', () => {
   });
 });
 
+describe('besondere Bedarfskonstellation (§ 15 Abs. 4 SGB XI)', () => {
+  // A household nowhere near 90 points: without the constellation this is a
+  // low grade, with it the statute says Pflegegrad 5.
+  const modest = raw({ m1: 4, m2: 6, m4: 8, m5: 2, m6: 4 });
+
+  it('awards Pflegegrad 5 however far short the points fall', () => {
+    const withoutIt = assess(modest);
+    const withIt = assess(modest, { limbUnusability: true });
+
+    expect(withoutIt.grade).toBeLessThan(5);
+    expect(withIt.grade).toBe(5);
+    expect(withIt.totalWeighted).toBeLessThan(90);
+  });
+
+  it('keeps the arithmetic answer visible and flags that it was overridden', () => {
+    const a = assess(modest, { limbUnusability: true });
+
+    // The points shown will not explain the grade, so the report has to be able
+    // to say why. Silently printing "Pflegegrad 5" beside 27 points would look
+    // like a bug to the one reader who checks.
+    expect(a.viaBedarfskonstellation).toBe(true);
+    expect(a.gradeFromPoints).toBe(assess(modest).grade);
+    expect(a.gradeFromPoints).toBeLessThan(a.grade);
+    expect(a.source).toBe('bedarfskonstellation');
+  });
+
+  it('does not claim a next grade once the constellation carries it', () => {
+    const a = assess(modest, { limbUnusability: true });
+    expect(a.nextGrade).toBeNull();
+    expect(a.pointsToNextGrade).toBeNull();
+  });
+
+  it('changes nothing when the points already reach Pflegegrad 5', () => {
+    const high = raw({ m1: 15, m2: 33, m3: 65, m4: 54, m5: 15, m6: 18 });
+    const a = assess(high, { limbUnusability: true });
+
+    expect(a.grade).toBe(5);
+    // Reached on the points, so it is not an override and must not be labelled
+    // as one: the provenance shown to the user has to match how it was decided.
+    expect(a.viaBedarfskonstellation).toBe(false);
+    expect(a.source).toBe('nbaAssessment');
+  });
+
+  it('leaves every ordinary assessment untouched', () => {
+    const a = assess(modest);
+    expect(a.viaBedarfskonstellation).toBe(false);
+    expect(a.gradeFromPoints).toBe(a.grade);
+    expect(a.source).toBe('nbaAssessment');
+  });
+
+  it('cites § 15 Abs. 4 and says the assignment is not automatic', () => {
+    const s = SOURCES.bedarfskonstellation;
+    expect(s.law).toBe('§ 15 Abs. 4 SGB XI');
+    // "können ... zugeordnet werden": a pflegefachliche decision, not a
+    // guarantee. If that ever gets written up as a certainty, this fails.
+    expect(s.note).toMatch(/pflegefachliche/);
+  });
+});
+
 describe('Verhinderungspflege when a relative provides the cover', () => {
   it('is capped at exactly twice the Pflegegeld', () => {
     // Not a coincidence to be re-typed if Pflegegeld changes: § 39 SGB XI
@@ -355,6 +417,27 @@ describe('Verhinderungspflege when a relative provides the cover', () => {
     }
     expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[2]).toBe(euro(694));
     expect(VERHINDERUNGSPFLEGE_BY_RELATIVE[5]).toBe(euro(1980));
+  });
+
+  it('is the figure the headline counts, not the pooled budget', () => {
+    // The regression this guards against: the cap existed as a constant and as
+    // caveat prose, while the headline went on counting the full 3.539 €. The
+    // prose carried the truth and the number did not, and the number is what a
+    // family repeats at the Pflegekasse.
+    const report = analyse({
+      currentGrade: 3,
+      assessment: assess(raw({ m1: 4, m2: 6, m4: 8, m5: 2, m6: 4 })),
+      claimed: { pflegegeld: euro(599) },
+      circumstances: atHomeOnly,
+    });
+
+    const row = report.gaps.find((g) => g.benefit.id === 'gemeinsamerJahresbetrag')!;
+    expect(row.entitled).toBe(VERHINDERUNGSPFLEGE_BY_RELATIVE[3]);
+    expect(row.fullEntitled).toBe(entitlement('gemeinsamerJahresbetrag', 3));
+
+    // The uncapped version of this headline was 467 €. Roughly half of it was
+    // money the household could not draw the way the figure reads.
+    expect(report.monthlyGapTotal).toBeLessThan(euro(300));
   });
 
   it('says so in both languages wherever the benefit is shown', () => {

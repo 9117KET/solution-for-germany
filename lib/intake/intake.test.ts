@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { CRITERIA, criteriaFor, type ConditionId } from './criteria';
 import {
+  assessIntake,
   scoreIntake,
   scoreModule5,
   scoreM5Daily,
@@ -20,6 +21,10 @@ const allConditions: Record<ConditionId, boolean> = {
   hasStomaOrCatheter: true,
   hasTubeFeeding: true,
   hasMedicalMeasures: true,
+  // Deliberately false. This one gates no criterion, so it does not widen the
+  // intake; it short-circuits the grade instead. Turning it on here would make
+  // every maximum-intake assertion pass for the wrong reason.
+  hasLimbUnusability: false,
 };
 
 /** Every applicable criterion answered at its most dependent level. */
@@ -294,5 +299,30 @@ describe('criterion 4.13 (tube feeding)', () => {
 
     a.levels['4.13'] = 0;
     expect(scoreIntake(a).raw.m4).toBe(0);
+  });
+});
+
+describe('assessIntake carries the besondere Bedarfskonstellation', () => {
+  it('reaches Pflegegrad 5 from the gating answer alone', () => {
+    // Nothing else answered: without the constellation this is no Pflegegrad at
+    // all, which is what makes the wiring worth a test of its own.
+    const a = emptyIntake();
+    expect(assessIntake(a).assessment.grade).toBe(0);
+
+    a.conditions.hasLimbUnusability = true;
+    const { assessment } = assessIntake(a);
+    expect(assessment.grade).toBe(5);
+    expect(assessment.viaBedarfskonstellation).toBe(true);
+    expect(assessment.gradeFromPoints).toBe(0);
+  });
+
+  it('agrees with assess() called by hand, which is the drift this guards', () => {
+    const a = emptyIntake();
+    a.conditions.hasLimbUnusability = true;
+    a.levels['1.5'] = 3;
+
+    const viaHelper = assessIntake(a).assessment;
+    const viaParts = assess(scoreIntake(a).raw, { limbUnusability: true });
+    expect(viaHelper).toEqual(viaParts);
   });
 });

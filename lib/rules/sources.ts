@@ -116,6 +116,20 @@ export const SOURCES = {
     checkedOn: '2026-08-18',
     validFrom: '2017-01-01',
   },
+  bedarfskonstellation: {
+    law: '§ 15 Abs. 4 SGB XI',
+    covers:
+      'Besondere Bedarfskonstellation: Pflegegrad 5 irrespective of the point ' +
+      'total. The Begutachtungs-Richtlinien name exactly one such constellation, ' +
+      'the Gebrauchsunfähigkeit beider Arme und beider Beine.',
+    url: 'https://www.aok.de/gp/pflegebeduerftigkeit/besondere-bedarfskonstellation',
+    checkedOn: '2026-08-26',
+    validFrom: '2017-01-01',
+    note:
+      'The statute says Pflegebedürftige "können ... zugeordnet werden", so the ' +
+      'assignment is a pflegefachliche decision by the Medizinischer Dienst and ' +
+      'not automatic. Only one constellation is currently recognised.',
+  },
   pflegeberatung: {
     law: '§ 7a SGB XI',
     covers:

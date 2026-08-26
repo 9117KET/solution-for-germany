@@ -9,7 +9,9 @@ the household already receives, and lists what to do about the difference, in or
 with the statutory basis for each step.
 
 Everything runs in the browser. There is no account, no server, and no analytics;
-answers never leave the device.
+answers never leave the device. They are kept *on* the device, in this browser, so a
+half-finished intake survives a closed tab: the next visit offers to carry on or to
+delete the lot. Nothing is written until something has actually been answered.
 
 > **This is an estimate, not an assessment.** It reproduces the arithmetic of the
 > *Neues Begutachtungsassessment* exactly, but from answers typed by a family rather
@@ -92,7 +94,7 @@ npm run build
 | Path | What lives there |
 | --- | --- |
 | `lib/rules/` | The entitlement engine: statute figures, the NBA conversion tables, gap analysis |
-| `lib/intake/` | Assessment criteria, scoring, and the plain-language overlay |
+| `lib/intake/` | Assessment criteria, scoring, the plain-language overlay, and the saved session |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
 | `components/` | Interface |

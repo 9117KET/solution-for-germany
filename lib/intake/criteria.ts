@@ -55,7 +55,8 @@ export type ConditionId =
   | 'hasIncontinence'
   | 'hasStomaOrCatheter'
   | 'hasTubeFeeding'
-  | 'hasMedicalMeasures';
+  | 'hasMedicalMeasures'
+  | 'hasLimbUnusability';
 
 export const CONDITIONS: Record<ConditionId, { de: string; en: string }> = {
   hasIncontinence: {
@@ -73,6 +74,23 @@ export const CONDITIONS: Record<ConditionId, { de: string; en: string }> = {
   hasMedicalMeasures: {
     de: 'Sind regelmäßig ärztlich verordnete Maßnahmen nötig: Medikamente, Verbände, Spritzen, Therapien?',
     en: 'Are prescribed medical measures needed regularly: medication, dressings, injections, therapies?',
+  },
+  // Not a scoring criterion. This is the one besondere Bedarfskonstellation the
+  // Begutachtungs-Richtlinien recognise, and it decides the grade on its own
+  // (§ 15 Abs. 4 SGB XI). The wording keeps the official residual-mobility
+  // clause, because families read "gebrauchsunfähig" as "no movement at all"
+  // and would answer no where the rule says yes.
+  hasLimbUnusability: {
+    de:
+      'Sind beide Arme und beide Beine nicht mehr gebrauchsfähig, also Greifen, ' +
+      'Stehen und Gehen vollständig verloren und nicht durch Hilfsmittel ' +
+      'auszugleichen? Das gilt auch bei minimaler Restbeweglichkeit, etwa wenn ' +
+      'ein Rollstuhl-Joystick noch mit dem Ellenbogen bedient werden kann.',
+    en:
+      'Are both arms and both legs unusable, meaning grasping, standing and ' +
+      'walking are completely lost and cannot be compensated by assistive ' +
+      'devices? This still applies where minimal residual movement remains, for ' +
+      'example operating a wheelchair joystick with the elbow.',
   },
 };
 
