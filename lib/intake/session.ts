@@ -29,6 +29,7 @@
  */
 
 import { CRITERIA, CONDITIONS, type ConditionId } from './criteria';
+import { askableId, fullPlan } from './adaptive';
 import { M5_CRITERIA, type Frequency, type IntakeAnswers, type Per } from './score';
 import { BENEFITS, type BenefitId } from '../rules/benefits';
 import type { Circumstances } from '../rules/gap';
@@ -42,6 +43,16 @@ export interface SavedSession {
   bescheidDate: string;
   claimed: BenefitId[];
   circumstances: Circumstances;
+  /**
+   * Question ids in the order they were first answered.
+   *
+   * The intake is adaptive, so the list of questions is derived from the
+   * answers rather than fixed. That makes a bare screen number useless on its
+   * own: it indexes a sequence that only exists once the order the person
+   * actually took is known. Restoring without this would drop someone into a
+   * question they had already answered, or past one they had not.
+   */
+  order: string[];
   /** Screen the person was last on, so they resume where they stopped. */
   index: number;
   /** ISO timestamp of the write, shown when offering the session back. */
@@ -49,6 +60,7 @@ export interface SavedSession {
 }
 
 const CRITERION_BY_ID = new Map(CRITERIA.map((c) => [c.id, c]));
+const ASKABLE_IDS = new Set(fullPlan().map(askableId));
 const M5_IDS = new Set(M5_CRITERIA.map((c) => c.id));
 const CONDITION_IDS = new Set(Object.keys(CONDITIONS) as ConditionId[]);
 const BENEFIT_IDS = new Set(BENEFITS.map((b) => b.id));
@@ -184,6 +196,12 @@ export function loadSession(): SavedSession | null {
           )
         : [],
       circumstances: parseCircumstances(raw.circumstances),
+      // Unknown ids are dropped rather than kept: a question id from an older
+      // version no longer resolves to anything, and carrying it would leave a
+      // hole in the restored sequence.
+      order: Array.isArray(raw.order)
+        ? raw.order.filter((id): id is string => typeof id === 'string' && ASKABLE_IDS.has(id))
+        : [],
       index:
         typeof raw.index === 'number' && Number.isInteger(raw.index) && raw.index >= 0
           ? raw.index

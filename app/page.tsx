@@ -8,22 +8,23 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react';
+import type { ConditionId } from '@/lib/intake/criteria';
 import {
-  CONDITIONS,
-  criteriaFor,
-  type ConditionId,
-  type Criterion,
-} from '@/lib/intake/criteria';
-import {
-  M5_CRITERIA,
   assessIntake,
   emptyIntake,
-  isApplicable,
-  isM5Applicable,
-  type Frequency,
   type IntakeAnswers,
-  type M5Criterion,
 } from '@/lib/intake/score';
+import {
+  askableId,
+  coverageOf,
+  fullPlan,
+  gradeBounds,
+  isAnswered,
+  isAskable,
+  remainingAskables,
+  SCREENING,
+  type Askable,
+} from '@/lib/intake/adaptive';
 import { saveSession } from '@/lib/intake/session';
 import {
   discardSession,
@@ -32,13 +33,7 @@ import {
   getSessionSnapshot,
   subscribeSession,
 } from '@/lib/intake/session-store';
-import {
-  conditionLabel,
-  criterionLabel,
-  criterionOptions,
-  m5Label,
-  scaleOptions,
-} from '@/lib/intake/readable';
+import { conditionLabel } from '@/lib/intake/readable';
 import {
   BENEFITS,
   analyse,
@@ -48,10 +43,11 @@ import {
   type ModuleId,
   type Pflegegrad,
 } from '@/lib/rules';
-import { Button, Card, Choice, FrequencyRow, Notice, Progress, StepShell, YesNo } from '@/components/ui';
+import { Button, Card, Notice, Progress, StepShell, YesNo } from '@/components/ui';
+import { BandQuestion, DietQuestion, GroupQuestion } from '@/components/question';
 import { Report } from '@/components/report';
 import { Welcome } from '@/components/welcome';
-import { ReadScreenAloud, VoiceControls } from '@/components/voice';
+import { VoiceControls } from '@/components/voice';
 import { useSettings, useT } from '@/components/settings';
 import type { UiKey } from '@/lib/i18n/strings';
 
@@ -64,35 +60,33 @@ const MODULE_COPY: Record<ModuleId, { eyebrow: UiKey; title: UiKey; intro: UiKey
   m6: { eyebrow: 'm6Eyebrow', title: 'm6Title', intro: 'm6Intro' },
 };
 
+const SCREENING_SET = new Set<string>(SCREENING);
+
 /**
- * One screen in the flow.
+ * Which heading a question sits under.
  *
- * Modelling the flow as a flat list of screens rather than as nested steps is
- * what makes "one question at a time" and "a whole section at a time" the same
- * code path. Only the list differs; navigation, progress and the voice controls
- * do not care which shape they are walking.
+ * Also the unit the "a section at a time" pace groups by, which is why it is a
+ * function of the askable rather than a field on it: the screening questions
+ * are one section regardless of what they gate, and tube feeding belongs with
+ * self-care because that is the module it opens up.
  */
-type Screen =
-  | { kind: 'welcome' }
-  | { kind: 'situation' }
-  | { kind: 'conditions' }
-  /** A single gating question, on its own, so voice mode can drive it. */
-  | { kind: 'condition'; id: ConditionId }
-  /** A single scored criterion, on its own. */
-  | { kind: 'criterion'; module: ModuleId; criterion: Criterion }
-  /** Every criterion of one module together. */
-  | { kind: 'module'; module: ModuleId }
-  /** A single module 5 frequency row. */
-  | { kind: 'm5-row'; criterion: M5Criterion }
-  /** The module 5 diet question, which is scored on a scale, not a frequency. */
-  | { kind: 'm5-diet' }
-  /** Every module 5 row together. */
-  | { kind: 'm5' }
-  | { kind: 'report' };
+function sectionOf(a: Askable): string {
+  if (a.kind === 'condition') return SCREENING_SET.has(a.id) ? 'screening' : 'm4';
+  if (a.kind === 'group') return a.group.module;
+  return 'm5';
+}
+
+function sectionCopy(section: string): { eyebrow: UiKey; title: UiKey; intro?: UiKey } {
+  if (section === 'screening') {
+    return { eyebrow: 'conditionsEyebrow', title: 'conditionsTitle', intro: 'conditionsIntro' };
+  }
+  const copy = MODULE_COPY[section as ModuleId];
+  return { eyebrow: copy.eyebrow, title: copy.title, intro: copy.intro };
+}
 
 export default function Home() {
   const { settings } = useSettings();
-  const { t, r, sub, s, contentLang } = useT();
+  const { t, r, sub, contentLang, plainWords } = useT();
 
   const [answers, setAnswers] = useState<IntakeAnswers>(emptyIntake);
   const [currentGrade, setCurrentGrade] = useState<Pflegegrad>(0);
@@ -103,96 +97,96 @@ export default function Home() {
     sharedHousehold: false,
     wantsHomeAdaptation: false,
   });
-  const [index, setIndex] = useState(0);
+  /**
+   * Questions in the order they were first answered.
+   *
+   * The intake is no longer a fixed list, so "where am I" cannot be an index
+   * into one. What has been asked is history and what is left is recomputed
+   * from the answers on every render; this is the first half, and it is what
+   * keeps Back working after an answer changes which questions exist.
+   */
+  const [order, setOrder] = useState<string[]>([]);
+  const [step, setStep] = useState(0);
+  /**
+   * Whether answers may still be written to this device.
+   *
+   * Turned off by the erase control on the report and left off until the
+   * person starts again. Without it, erasing and then ticking one box on the
+   * report would quietly write the file back while the page still said
+   * "Erased.", which would make the promise false at the exact moment somebody
+   * had asked us to keep it.
+   */
+  const [persist, setPersist] = useState(true);
 
-  // A session found on this device, offered on the welcome screen until the
-  // person either takes it or throws it away.
   const saved = useSyncExternalStore(
     subscribeSession,
     getSessionSnapshot,
     getServerSessionSnapshot,
   );
 
-  const hasMedical = answers.conditions.hasMedicalMeasures === true;
   const oneAtATime = settings.pace === 'one';
 
-  const dietCriterion = useMemo(
-    () => M5_CRITERIA.find((c) => c.group === 'diet')!,
-    [],
-  );
+  const byId = useMemo(() => new Map(fullPlan().map((a) => [askableId(a), a])), []);
 
   /**
-   * The screens, rebuilt whenever a gating answer changes.
+   * Everything answered so far, then everything still worth asking.
    *
-   * Criteria that do not apply never become screens, so a household is not
-   * walked past questions about a stoma it does not have.
+   * The second half shrinks as answers come in, and empties the moment the
+   * grade is settled, which is what ends the intake early. It can also grow: a
+   * yes to a screening question opens a module that was not there before.
    */
-  const screens = useMemo<Screen[]>(() => {
-    const out: Screen[] = [{ kind: 'welcome' }, { kind: 'situation' }];
+  const questions = useMemo<Askable[]>(() => {
+    const done = order
+      .map((id) => byId.get(id))
+      .filter((a): a is Askable => a !== undefined)
+      .filter((a) => isAskable(a, answers) && isAnswered(a, answers));
+    return [...done, ...remainingAskables(answers)];
+  }, [order, byId, answers]);
 
-    // The gating questions are the first real questions anyone meets. Left as
-    // one grouped screen they were silent in voice mode, which made the whole
-    // feature look broken before a single assessment question appeared.
-    if (oneAtATime) {
-      for (const id of Object.keys(CONDITIONS) as ConditionId[]) {
-        out.push({ kind: 'condition', id });
-      }
-    } else {
-      out.push({ kind: 'conditions' });
+  /**
+   * How many questions are still open, and where the open ones start.
+   *
+   * Zero remaining is the end of the intake, whether that came from answering
+   * everything or from the grade settling early. Where it is not zero, the
+   * report offers to carry on, and this is the screen it jumps back to.
+   */
+  const remaining = useMemo(() => remainingAskables(answers).length, [answers]);
+  const answeredCount = questions.length - remaining;
+
+  /** Screens, as chunks of questions: one per screen, or a section per screen. */
+  const chunks = useMemo<Askable[][]>(() => {
+    if (oneAtATime) return questions.map((a) => [a]);
+    const out: Askable[][] = [];
+    for (const a of questions) {
+      const last = out[out.length - 1];
+      if (last && sectionOf(last[0]) === sectionOf(a)) last.push(a);
+      else out.push([a]);
     }
-
-    const pushModule = (module: ModuleId) => {
-      if (oneAtATime) {
-        for (const criterion of criteriaFor(module)) {
-          if (isApplicable(criterion, answers.conditions)) {
-            out.push({ kind: 'criterion', module, criterion });
-          }
-        }
-      } else {
-        out.push({ kind: 'module', module });
-      }
-    };
-
-    // m1–m4 come first, then module 5 where it applies, then m6, the order the
-    // official instrument uses.
-    pushModule('m1');
-    pushModule('m2');
-    pushModule('m3');
-    pushModule('m4');
-
-    if (hasMedical) {
-      if (oneAtATime) {
-        for (const criterion of M5_CRITERIA) {
-          if (criterion.group === 'diet') continue;
-          if (isM5Applicable(criterion, answers.conditions)) {
-            out.push({ kind: 'm5-row', criterion });
-          }
-        }
-        out.push({ kind: 'm5-diet' });
-      } else {
-        out.push({ kind: 'm5' });
-      }
-    }
-
-    pushModule('m6');
-    out.push({ kind: 'report' });
     return out;
-  }, [answers.conditions, hasMedical, oneAtATime]);
+  }, [questions, oneAtATime]);
 
-  // Clamp rather than reset: changing a gating answer can shorten the flow out
-  // from under the current position, and dropping someone back to the start
-  // would lose everything they had answered.
-  const position = Math.min(index, screens.length - 1);
-  const screen = screens[position];
+  // welcome, situation, one screen per chunk, report.
+  const total = chunks.length + 3;
+  const position = Math.min(Math.max(step, 0), total - 1);
+  const chunkIndex = position - 2;
+  const chunk = chunkIndex >= 0 && chunkIndex < chunks.length ? chunks[chunkIndex] : null;
+  const onReport = position === total - 1;
+  const onWelcome = position === 0;
+  const onSituation = position === 1;
 
-  const setLevel = (id: string, v: number) =>
-    setAnswers((a) => ({ ...a, levels: { ...a.levels, [id]: v } }));
-  const setCondition = (id: ConditionId, v: boolean) =>
+  const note = useCallback((a: Askable) => {
+    const id = askableId(a);
+    setOrder((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
+  const setCondition = (id: ConditionId, v: boolean) => {
     setAnswers((a) => ({ ...a, conditions: { ...a.conditions, [id]: v } }));
-  const setFrequency = (id: string, f: Frequency | undefined) =>
-    setAnswers((a) => ({ ...a, frequencies: { ...a.frequencies, [id]: f } }));
+    note({ kind: 'condition', id });
+  };
 
-  const { scored, assessment } = useMemo(() => assessIntake(answers), [answers]);
+  const { assessment } = useMemo(() => assessIntake(answers), [answers]);
+  const bounds = useMemo(() => gradeBounds(answers), [answers]);
+  const coverage = useMemo(() => coverageOf(answers), [answers]);
 
   const report = useMemo(() => {
     const claimedMap: Partial<Record<BenefitId, number>> = {};
@@ -206,11 +200,8 @@ export default function Home() {
     });
   }, [claimed, currentGrade, assessment, circumstances, bescheidDate]);
 
-  const goNext = useCallback(
-    () => setIndex((i) => Math.min(screens.length - 1, i + 1)),
-    [screens.length],
-  );
-  const goBack = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
+  const goNext = useCallback(() => setStep((i) => i + 1), []);
+  const goBack = useCallback(() => setStep((i) => Math.max(0, i - 1)), []);
 
   const restart = () => {
     setAnswers(emptyIntake());
@@ -218,9 +209,9 @@ export default function Home() {
     setBescheidDate('');
     setClaimed(new Set());
     setCircumstances({ atHome: true, sharedHousehold: false, wantsHomeAdaptation: false });
-    setIndex(0);
-    // Starting again is the only erase control most people will look for, so
-    // it has to be a real erase and not just a cleared screen.
+    setOrder([]);
+    setStep(0);
+    setPersist(true);
     discardSession();
   };
 
@@ -231,112 +222,168 @@ export default function Home() {
     setBescheidDate(saved.bescheidDate);
     setClaimed(new Set(saved.claimed));
     setCircumstances(saved.circumstances);
-    setIndex(saved.index);
+    setOrder(saved.order ?? []);
+    setStep(saved.index);
     dismissOffer();
   };
 
-  /**
-   * Write the intake back as it is given.
-   *
-   * No guard is needed against the first render overwriting a stored session:
-   * `saveSession` declines anything that carries no answers, so an empty
-   * intake never reaches the device. That also means simply opening the page
-   * and closing it again leaves no trace.
-   */
   useEffect(() => {
+    if (!persist) return;
     saveSession({
       answers,
       currentGrade,
       bescheidDate,
       claimed: [...claimed],
       circumstances,
-      index,
+      order,
+      index: step,
       savedAt: new Date().toISOString(),
     });
-  }, [answers, currentGrade, bescheidDate, claimed, circumstances, index]);
+  }, [answers, currentGrade, bescheidDate, claimed, circumstances, order, step, persist]);
 
-  // Moving to a new screen puts focus on its heading and scrolls to the top.
-  // Without this, a keyboard or screen-reader user stays focused wherever the
-  // old button was and gets no announcement that the question changed.
+  // Focus lands on the heading of every new screen and the page scrolls up.
+  // Without it a keyboard or screen-reader user stays focused where the old
+  // button was and gets no announcement that the question changed.
   const headingRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
     headingRef.current?.focus();
   }, [position]);
 
-  /**
-   * Where we are, counted in the same units as the label claims.
-   *
-   * On a question screen this counts questions, not screens: telling someone
-   * they are on "question 2" while showing them the first question is a small
-   * lie that makes the number useless. Everywhere else it counts steps.
-   */
-  const isQuestionScreen = (sc: Screen) =>
-    sc.kind === 'criterion' ||
-    sc.kind === 'm5-row' ||
-    sc.kind === 'm5-diet' ||
-    sc.kind === 'condition';
-
-  const progress = (() => {
-    if (isQuestionScreen(screen)) {
-      const questions = screens.filter(isQuestionScreen);
-      return {
-        key: 'questionOf' as const,
-        n: questions.indexOf(screen) + 1,
-        total: questions.length,
-      };
+  const renderAskable = (a: Askable, alone: boolean) => {
+    switch (a.kind) {
+      case 'condition': {
+        const label = conditionLabel(a.id);
+        return (
+          <div key={askableId(a)} className="flex flex-col gap-4">
+            <YesNo
+              size={alone ? 'large' : 'normal'}
+              label={r(label)}
+              sub={sub(label)}
+              labelLang={contentLang}
+              value={answers.conditions[a.id]}
+              onChange={(v) => {
+                setCondition(a.id, v);
+                // Never skip past the warning that saying no here caps the
+                // estimate a whole grade low.
+                if (
+                  alone &&
+                  settings.answerMode === 'voice' &&
+                  !(a.id === 'hasMedicalMeasures' && !v)
+                ) {
+                  setTimeout(goNext, 600);
+                }
+              }}
+              numbered={alone && settings.answerMode === 'voice'}
+            />
+            {alone ? (
+              <VoiceControls
+                q={{
+                  id: a.id,
+                  question: r(label),
+                  options: [t('yes'), t('no')],
+                  optionsAreChrome: true,
+                }}
+                onPick={(i: number) => setCondition(a.id, i === 0)}
+                onNext={goNext}
+                onBack={goBack}
+              />
+            ) : null}
+            {a.id === 'hasMedicalMeasures' && answers.conditions.hasMedicalMeasures === false ? (
+              <Notice tone="warn" title={t('m5CapTitle')}>
+                {t('m5CapBody')}
+              </Notice>
+            ) : null}
+          </div>
+        );
+      }
+      case 'group':
+        return (
+          <GroupQuestion
+            key={askableId(a)}
+            group={a.group}
+            levels={answers.levels}
+            onChange={(levels) => {
+              setAnswers((prev) => ({ ...prev, levels }));
+              note(a);
+            }}
+            onNext={goNext}
+            onBack={goBack}
+          />
+        );
+      case 'm5band':
+        return (
+          <BandQuestion
+            key={askableId(a)}
+            id={a.id}
+            value={answers.m5?.[a.id]}
+            onChange={(band) => {
+              setAnswers((prev) => ({ ...prev, m5: { ...prev.m5, [a.id]: band } }));
+              note(a);
+            }}
+            onNext={goNext}
+            onBack={goBack}
+          />
+        );
+      case 'm5diet':
+        return (
+          <DietQuestion
+            key={askableId(a)}
+            value={answers.dietLevel}
+            onChange={(v) => {
+              setAnswers((prev) => ({ ...prev, dietLevel: v }));
+              note(a);
+            }}
+            onNext={goNext}
+            onBack={goBack}
+          />
+        );
     }
-    // Steps, excluding the welcome screen and the report.
-    const steps: Screen[] = screens.filter(
-      (sc) => sc.kind !== 'welcome' && sc.kind !== 'report',
-    );
-    return {
-      key: 'stepOf' as const,
-      n: Math.max(1, steps.indexOf(screen) + 1),
-      total: steps.length,
-    };
-  })();
+  };
+
+  const section = chunk ? sectionOf(chunk[0]) : null;
+  const copy = section ? sectionCopy(section) : null;
+  const nextIsReport = position === total - 2;
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 pb-4 pt-5 sm:pb-10 sm:pt-10">
-      {screen.kind !== 'welcome' && screen.kind !== 'report' ? (
+      {!onWelcome && !onReport ? (
         <Progress
-          current={progress.n}
-          total={progress.total}
-          label={t(progress.key, { n: progress.n, total: progress.total })}
+          current={position - 1}
+          total={total - 2}
+          label={t(oneAtATime && chunk ? 'questionOf' : 'stepOf', {
+            n: position - 1,
+            total: total - 2,
+          })}
         />
       ) : null}
 
-      {/* Focus lands here on every screen change; tabIndex -1 makes it
-          focusable without adding it to the tab order. */}
       <div ref={headingRef} tabIndex={-1} className="outline-none">
-        {screen.kind === 'welcome' ? (
+        {onWelcome ? (
           <Welcome
             onStart={() => {
-              // Walking past the offer is an answer too. Stop showing it, but
-              // leave the file alone: nothing is deleted until the first real
-              // answer overwrites it, or until they ask.
               dismissOffer();
               goNext();
             }}
-            resume={
-              saved
-                ? { onContinue: resumeSaved, onDiscard: restart }
-                : undefined
-            }
+            resume={saved ? { onContinue: resumeSaved, onDiscard: restart } : undefined}
           />
         ) : null}
 
-        {screen.kind === 'situation' ? (
+        {onSituation ? (
           <StepShell
             eyebrow={t('situationEyebrow')}
             title={t('situationTitle')}
             intro={t('situationIntro')}
           >
-            <ReadScreenAloud
-              id="situation"
-              text={`${t('situationTitle')}. ${t('situationIntro')} ${t('currentGradeQ')}`}
-            />
+            {/*
+             * Two questions, where this screen used to carry as many as twelve.
+             * The Bescheid date, the benefits already being drawn and the two
+             * household circumstances all moved to the report, where they are
+             * offered as a refinement to a result the person can already see.
+             * Asking them here meant asking a family to inventory its paperwork
+             * before it had any reason to believe the tool was worth the
+             * trouble, and it was the single longest screen in the flow.
+             */}
             <Card>
               <p className="text-lg font-semibold">{t('currentGradeQ')}</p>
               <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -358,254 +405,56 @@ export default function Home() {
               </div>
             </Card>
 
-            {currentGrade > 0 ? (
-              <>
-                <Card>
-                  <label className="text-lg font-semibold" htmlFor="bescheid">
-                    {t('bescheidQ')}
-                  </label>
-                  <p className="mt-1 text-base text-fg-muted">{t('bescheidHint')}</p>
-                  <input
-                    id="bescheid"
-                    type="date"
-                    value={bescheidDate}
-                    onChange={(e) => setBescheidDate(e.target.value)}
-                    className="bordered target mt-3 rounded-md bg-surface px-3 text-lg"
-                  />
-                </Card>
-
-                <Card>
-                  <p className="text-lg font-semibold">{t('claimedQ')}</p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    {BENEFITS.filter((b) => b.amounts[currentGrade] > 0).map((b) => (
-                      <label
-                        key={b.id}
-                        className="target bordered flex cursor-pointer items-start gap-3 rounded-lg bg-surface px-4 py-3 hover:bg-surface-2"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={claimed.has(b.id)}
-                          onChange={(e) =>
-                            setClaimed((prev) => {
-                              const next = new Set(prev);
-                              if (e.target.checked) next.add(b.id);
-                              else next.delete(b.id);
-                              return next;
-                            })
-                          }
-                          className="mt-1 size-5 shrink-0 accent-accent"
-                        />
-                        <span>
-                          <span lang={contentLang} dir="ltr" className="block text-lg font-medium">
-                            {s(b.name)}
-                          </span>
-                          <span
-                            lang={contentLang}
-                            dir="ltr"
-                            className="mt-0.5 block text-base text-fg-muted"
-                          >
-                            {s(b.what)}
-                          </span>
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </Card>
-              </>
-            ) : null}
-
             <YesNo
               label={t('atHomeQ')}
               value={circumstances.atHome}
               onChange={(v) => setCircumstances((c) => ({ ...c, atHome: v }))}
             />
-            <YesNo
-              label={t('sharedQ')}
-              hint={t('sharedHint')}
-              value={circumstances.sharedHousehold}
-              onChange={(v) => setCircumstances((c) => ({ ...c, sharedHousehold: v }))}
-            />
-            <YesNo
-              label={t('adaptQ')}
-              hint={t('adaptHint')}
-              value={circumstances.wantsHomeAdaptation}
-              onChange={(v) => setCircumstances((c) => ({ ...c, wantsHomeAdaptation: v }))}
-            />
           </StepShell>
         ) : null}
 
-        {screen.kind === 'conditions' ? (
+        {chunk && copy ? (
           <StepShell
-            eyebrow={t('conditionsEyebrow')}
-            title={t('conditionsTitle')}
-            intro={t('conditionsIntro')}
+            eyebrow={t(copy.eyebrow)}
+            title={t(copy.title)}
+            intro={copy.intro && chunk.length > 1 ? t(copy.intro) : undefined}
           >
-            {(Object.keys(CONDITIONS) as ConditionId[]).map((id) => {
-              const label = conditionLabel(id);
-              return (
-                <YesNo
-                  key={id}
-                  label={r(label)}
-                  sub={sub(label)}
-                  labelLang={contentLang}
-                  value={answers.conditions[id]}
-                  onChange={(v) => setCondition(id, v)}
-                />
-              );
-            })}
-            {answers.conditions.hasMedicalMeasures === false ? (
-              <Notice tone="warn" title={t('m5CapTitle')}>
-                {t('m5CapBody')}
-              </Notice>
-            ) : null}
+            {chunk.map((a) => renderAskable(a, chunk.length === 1))}
           </StepShell>
         ) : null}
 
-        {screen.kind === 'condition' ? (
-          <SingleCondition
-            id={screen.id}
-            value={answers.conditions[screen.id]}
-            onPick={(v) => setCondition(screen.id, v)}
-            onNext={goNext}
-            onBack={goBack}
-            showM5Warning={
-              screen.id === 'hasMedicalMeasures' &&
-              answers.conditions.hasMedicalMeasures === false
-            }
-          />
-        ) : null}
-
-        {screen.kind === 'criterion' ? (
-          <SingleCriterion
-            module={screen.module}
-            criterion={screen.criterion}
-            value={answers.levels[screen.criterion.id]}
-            onPick={(v) => setLevel(screen.criterion.id, v)}
-            onNext={goNext}
-            onBack={goBack}
-          />
-        ) : null}
-
-        {screen.kind === 'module' ? (
-          <StepShell
-            eyebrow={t(MODULE_COPY[screen.module].eyebrow)}
-            title={t(MODULE_COPY[screen.module].title)}
-            intro={t(MODULE_COPY[screen.module].intro)}
-          >
-            {criteriaFor(screen.module)
-              .filter((c) => isApplicable(c, answers.conditions))
-              .map((c) => {
-                const label = criterionLabel(c);
-                return (
-                  <Choice
-                    key={c.id}
-                    label={r(label)}
-                    sub={sub(label)}
-                    hint={c.hint ? s(c.hint) : undefined}
-                    options={criterionOptions(c).map((o) => ({ text: r(o), sub: sub(o) }))}
-                    labelLang={contentLang}
-                    optionLang={contentLang}
-                    value={answers.levels[c.id]}
-                    onChange={(v) => setLevel(c.id, v)}
-                  />
-                );
-              })}
-          </StepShell>
-        ) : null}
-
-        {screen.kind === 'm5-row' ? (
-          <StepShell
-            eyebrow={t(MODULE_COPY.m5.eyebrow)}
-            title={t('howOften')}
-            intro={t(MODULE_COPY.m5.intro)}
-          >
-            <FrequencyRow
-              label={r(m5Label(screen.criterion))}
-              sub={sub(m5Label(screen.criterion))}
-              labelLang={contentLang}
-              value={answers.frequencies[screen.criterion.id]}
-              onChange={(f) => setFrequency(screen.criterion.id, f)}
-            />
-          </StepShell>
-        ) : null}
-
-        {screen.kind === 'm5-diet' ? (
-          <SingleDiet
-            criterion={dietCriterion}
-            value={answers.dietLevel}
-            onPick={(v) => setAnswers((a) => ({ ...a, dietLevel: v }))}
-            onNext={goNext}
-            onBack={goBack}
-          />
-        ) : null}
-
-        {screen.kind === 'm5' ? (
-          <StepShell
-            eyebrow={t(MODULE_COPY.m5.eyebrow)}
-            title={t(MODULE_COPY.m5.title)}
-            intro={t(MODULE_COPY.m5.intro)}
-          >
-            {(['daily', 'weekly', 'intensive'] as const).map((group) => {
-              const rows = M5_CRITERIA.filter(
-                (c) => c.group === group && isM5Applicable(c, answers.conditions),
-              );
-              if (rows.length === 0) return null;
-              return (
-                <div key={group} className="flex flex-col gap-2">
-                  <h3 className="mt-2 text-lg font-bold">
-                    {t(
-                      group === 'daily'
-                        ? 'm5GroupDaily'
-                        : group === 'weekly'
-                          ? 'm5GroupWeekly'
-                          : 'm5GroupIntensive',
-                    )}
-                  </h3>
-                  {rows.map((c) => (
-                    <FrequencyRow
-                      key={c.id}
-                      label={r(m5Label(c))}
-                      sub={sub(m5Label(c))}
-                      labelLang={contentLang}
-                      value={answers.frequencies[c.id]}
-                      onChange={(f) => setFrequency(c.id, f)}
-                    />
-                  ))}
-                </div>
-              );
-            })}
-            <Choice
-              label={r(m5Label(dietCriterion))}
-              sub={sub(m5Label(dietCriterion))}
-              options={scaleOptions('independence').map((o) => ({ text: r(o), sub: sub(o) }))}
-              labelLang={contentLang}
-              optionLang={contentLang}
-              value={answers.dietLevel}
-              onChange={(v) => setAnswers((a) => ({ ...a, dietLevel: v }))}
-            />
-          </StepShell>
-        ) : null}
-
-        {screen.kind === 'report' ? (
+        {onReport ? (
           <Report
             report={report}
             assessment={assessment}
-            completeness={scored.completeness}
-            m5Skipped={!hasMedical}
+            answers={answers}
+            bounds={bounds}
+            coverage={coverage}
+            m5Skipped={answers.conditions.hasMedicalMeasures === false}
+            contentLang={contentLang}
+            plainWords={plainWords}
+            currentGrade={currentGrade}
+            bescheidDate={bescheidDate}
+            claimed={claimed}
+            circumstances={circumstances}
+            benefits={BENEFITS}
+            onBescheidDate={setBescheidDate}
+            onClaimed={setClaimed}
+            onCircumstances={setCircumstances}
+            onErase={() => setPersist(false)}
+            onRefine={remaining > 0 ? () => setStep(2 + answeredCount) : undefined}
+            remaining={remaining}
             onRestart={restart}
           />
         ) : null}
       </div>
 
-      {screen.kind !== 'welcome' && screen.kind !== 'report' ? (
+      {!onWelcome && !onReport ? (
         /*
-         * Pinned to the bottom of the screen on a phone.
-         *
-         * A question with four answers and its official wording underneath is
-         * taller than a phone, so a nav that sits at the end of the document
-         * puts "Continue" below the fold on every single question, forty-nine
-         * scrolls to the end for someone who is already finding this hard.
-         * From `sm:` up there is room, so it returns to the flow.
+         * Pinned to the bottom of the screen on a phone. A question with four
+         * answers and its official wording underneath is taller than a phone,
+         * so a nav at the end of the document puts Continue below the fold on
+         * every question.
          */
         <nav
           className="no-print sticky bottom-0 -mx-4 mt-auto flex items-center justify-between gap-3 border-t border-line bg-bg px-4 py-3 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-5"
@@ -615,186 +464,43 @@ export default function Home() {
             ← {t('back')}
           </Button>
           <Button onClick={goNext}>
-            {screens[position + 1]?.kind === 'report' ? t('seeResult') : t('next')} →
+            {nextIsReport ? t('seeResult') : t('next')} →
           </Button>
         </nav>
       ) : null}
-    </main>
-  );
-}
 
-/**
- * One criterion on a screen of its own.
- *
- * In voice mode an answer advances by itself, because someone answering by
- * voice has no comfortable way to then reach for a Continue button. In tap mode
- * it does not: an accidental touch is common with a tremor, and a screen that
- * moves on by itself takes away the chance to notice and correct it. The
- * Continue button stays in the same place on every screen either way.
- */
-function SingleCriterion({
-  module,
-  criterion,
-  value,
-  onPick,
-  onNext,
-  onBack,
-}: {
-  module: ModuleId;
-  criterion: Criterion;
-  value: number | undefined;
-  onPick: (v: number) => void;
-  onNext: () => void;
-  onBack: () => void;
-}) {
-  const { settings } = useSettings();
-  const { t, r, sub, s, contentLang } = useT();
-  const label = criterionLabel(criterion);
-  const options = criterionOptions(criterion);
-  const optionText = options.map((o) => r(o));
+      {/*
+        * A way out that is not abandonment.
+        *
+        * The intake is short, but "short" is not the same as "short enough for
+        * the person in front of it right now", and the alternative to this
+        * link is a closed tab. Taking it is safe: the report shows a range
+        * wherever the answers do not pin a single grade, and offers the open
+        * questions back. Nothing is lost and nothing is overstated.
+        */}
+      {chunk && !nextIsReport ? (
+        <div className="no-print -mt-2 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setStep(total - 1)}
+            className="target text-base font-semibold text-fg-muted underline underline-offset-4 hover:text-fg"
+          >
+            {t('stopEarly')}
+          </button>
+        </div>
+      ) : null}
 
-  const pick = (v: number) => {
-    onPick(v);
-    if (settings.answerMode === 'voice') setTimeout(onNext, 600);
-  };
-
-  return (
-    <StepShell eyebrow={t(MODULE_COPY[module].eyebrow)} title={t(MODULE_COPY[module].title)}>
-      <Choice
-        size="large"
-        label={r(label)}
-        sub={sub(label)}
-        hint={criterion.hint ? s(criterion.hint) : undefined}
-        options={options.map((o) => ({ text: r(o), sub: sub(o) }))}
-        labelLang={contentLang}
-        optionLang={contentLang}
-        value={value}
-        onChange={pick}
-        numbered={settings.answerMode === 'voice'}
-      />
-      <VoiceControls
-        q={{
-          id: criterion.id,
-          question: r(label),
-          hint: criterion.hint ? s(criterion.hint) : undefined,
-          options: optionText,
-        }}
-        onPick={pick}
-        onNext={onNext}
-        onBack={onBack}
-      />
-    </StepShell>
-  );
-}
-
-/**
- * One gating question on a screen of its own.
- *
- * The question is content and the Yes/No answers are interface copy, so the two
- * are spoken in different voices and only the question carries the content
- * language for direction purposes.
- */
-function SingleCondition({
-  id,
-  value,
-  onPick,
-  onNext,
-  onBack,
-  showM5Warning,
-}: {
-  id: ConditionId;
-  value: boolean | undefined;
-  onPick: (v: boolean) => void;
-  onNext: () => void;
-  onBack: () => void;
-  showM5Warning: boolean;
-}) {
-  const { settings } = useSettings();
-  const { t, r, sub, contentLang } = useT();
-  const label = conditionLabel(id);
-
-  const pick = (v: boolean) => {
-    onPick(v);
-    // Never skip past the warning that this caps the estimate a grade low.
-    if (settings.answerMode === 'voice' && !(id === 'hasMedicalMeasures' && !v)) {
-      setTimeout(onNext, 600);
-    }
-  };
-
-  return (
-    <StepShell eyebrow={t('conditionsEyebrow')} title={t('conditionsTitle')}>
-      <YesNo
-        size="large"
-        label={r(label)}
-        sub={sub(label)}
-        labelLang={contentLang}
-        value={value}
-        onChange={pick}
-        numbered={settings.answerMode === 'voice'}
-      />
-      <VoiceControls
-        q={{
-          id,
-          question: r(label),
-          options: [t('yes'), t('no')],
-          optionsAreChrome: true,
-        }}
-        onPick={(i: number) => pick(i === 0)}
-        onNext={onNext}
-        onBack={onBack}
-      />
-      {showM5Warning ? (
-        <Notice tone="warn" title={t('m5CapTitle')}>
-          {t('m5CapBody')}
+      {/* Said once, on the last question rather than on the report, because it
+          is the moment the intake stops that needs explaining. */}
+      {nextIsReport && bounds.resolved && coverage.skipped > 0 ? (
+        <Notice title={t('enoughTitle')}>
+          {t('enoughBody')}{' '}
+          {t('askedCount', {
+            asked: coverage.asked,
+            total: coverage.officialQuestions,
+          })}
         </Notice>
       ) : null}
-    </StepShell>
-  );
-}
-
-/** The module 5 diet question, which uses a scale rather than a frequency. */
-function SingleDiet({
-  criterion,
-  value,
-  onPick,
-  onNext,
-  onBack,
-}: {
-  criterion: M5Criterion;
-  value: number | undefined;
-  onPick: (v: number) => void;
-  onNext: () => void;
-  onBack: () => void;
-}) {
-  const { settings } = useSettings();
-  const { t, r, sub, contentLang } = useT();
-  const label = m5Label(criterion);
-  const options = scaleOptions('independence');
-
-  const pick = (v: number) => {
-    onPick(v);
-    if (settings.answerMode === 'voice') setTimeout(onNext, 600);
-  };
-
-  return (
-    <StepShell eyebrow={t(MODULE_COPY.m5.eyebrow)} title={t(MODULE_COPY.m5.title)}>
-      <Choice
-        size="large"
-        label={r(label)}
-        sub={sub(label)}
-        options={options.map((o) => ({ text: r(o), sub: sub(o) }))}
-        labelLang={contentLang}
-        optionLang={contentLang}
-        value={value}
-        onChange={pick}
-        numbered={settings.answerMode === 'voice'}
-      />
-      <VoiceControls
-        q={{ id: criterion.id, question: r(label), options: options.map((o) => r(o)) }}
-        onPick={pick}
-        onNext={onNext}
-        onBack={onBack}
-      />
-    </StepShell>
+    </main>
   );
 }

@@ -1,13 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import {
   formatEuro,
   SOURCES,
+  entitlement,
   type Assessment,
+  type Benefit,
+  type BenefitId,
+  type Circumstances,
   type GapReport,
   type GapStatus,
+  type Pflegegrad,
 } from '@/lib/rules';
-import { Button, Card, Notice } from './ui';
+import type { ContentLang } from '@/lib/i18n';
+import type { IntakeAnswers } from '@/lib/intake/score';
+import type { Coverage, GradeBounds } from '@/lib/intake/adaptive';
+import { answerLines } from '@/lib/intake/summary';
+import { downloadReportPdf } from '@/lib/report/pdf';
+import { clearSession } from '@/lib/intake/session';
+import { Button, Card, Notice, YesNo } from './ui';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
 
@@ -33,17 +45,54 @@ const PERIOD: Record<'month' | 'year' | 'once', UiKey> = {
 export function Report({
   report,
   assessment,
-  completeness,
+  answers,
+  bounds,
+  coverage,
   m5Skipped,
+  contentLang: pdfLang,
+  plainWords,
+  currentGrade,
+  bescheidDate,
+  claimed,
+  circumstances,
+  benefits,
+  onBescheidDate,
+  onClaimed,
+  onCircumstances,
+  onRefine,
+  onErase,
+  remaining,
   onRestart,
 }: {
   report: GapReport;
   assessment: Assessment;
-  completeness: number;
+  answers: IntakeAnswers;
+  bounds: GradeBounds;
+  coverage: Coverage;
   m5Skipped: boolean;
+  contentLang: ContentLang;
+  plainWords: boolean;
+  currentGrade: Pflegegrad;
+  bescheidDate: string;
+  claimed: Set<BenefitId>;
+  circumstances: Circumstances;
+  benefits: readonly Benefit[];
+  onBescheidDate: (v: string) => void;
+  onClaimed: (update: (prev: Set<BenefitId>) => Set<BenefitId>) => void;
+  onCircumstances: (update: (prev: Circumstances) => Circumstances) => void;
+  /** Offered only where questions are still open that could move the grade. */
+  onRefine?: () => void;
+  /** Stops this device being written to again until the intake is restarted. */
+  onErase: () => void;
+  remaining: number;
   onRestart: () => void;
 }) {
   const { t, s, numberLocale, contentLang } = useT();
+  const [showAnswers, setShowAnswers] = useState(false);
+  const [showAdjust, setShowAdjust] = useState(false);
+  const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
+  const [erased, setErased] = useState(false);
+  const lines = answerLines(answers, { lang: pdfLang, plain: plainWords });
   // Benefit names and action wording are content, so they keep their own
   // direction inside a right-to-left interface.
   const content = { lang: contentLang, dir: 'ltr' as const };
@@ -87,8 +136,16 @@ export function Report({
           <p className="text-sm font-semibold uppercase tracking-wide text-fg-muted">
             {t('cardEstimated')}
           </p>
+          {/* A settled grade is a number. An unsettled one is a range, and it
+              is shown as a range: picking the low end and calling it the
+              estimate would be the same lie the long intake was built to
+              avoid, just told faster. */}
           <p className="mt-1 text-4xl font-bold tabular-nums">
-            {assessment.grade === 0 ? '–' : assessment.grade}
+            {bounds.resolved
+              ? assessment.grade === 0
+                ? '–'
+                : assessment.grade
+              : `${bounds.low}–${bounds.high}`}
           </p>
           <p className="mt-1 text-base text-fg-muted">
             {t('pointsOf100', { n: assessment.totalWeighted })}
@@ -138,11 +195,17 @@ export function Report({
           <p className="text-sm font-semibold uppercase tracking-wide text-fg-muted">
             {t('cardAnswered')}
           </p>
+          {/* The count is the honest headline for the method, and it is only
+              defensible next to the reason the rest were dropped. Never show
+              one without the other. */}
           <p className="mt-1 text-4xl font-bold tabular-nums">
-            {Math.round(completeness * 100)}%
+            {coverage.asked}
+            <span className="text-2xl font-normal text-fg-muted">
+              /{coverage.officialQuestions}
+            </span>
           </p>
           <p className="mt-1 text-base text-fg-muted">
-            {t('unansweredCountAsIndependent')}
+            {bounds.resolved ? t('enoughBody') : t('unansweredCountAsIndependent')}
           </p>
         </Card>
       </section>
@@ -154,6 +217,23 @@ export function Report({
       {m5Skipped && assessment.grade < 5 ? (
         <Notice tone="warn" title={t('m5SkippedTitle')}>
           {t('m5CapBody')}
+        </Notice>
+      ) : null}
+
+      {/* Where the questions ran out before the grade settled, the range is
+          the result and the way to narrow it is offered here rather than left
+          for the reader to go looking for. */}
+      {!bounds.resolved ? (
+        <Notice
+          tone="warn"
+          title={t('rangeTitle', { low: bounds.low, high: bounds.high })}
+        >
+          <p>{t('rangeBody')}</p>
+          {onRefine && remaining > 0 ? (
+            <p className="no-print mt-3">
+              <Button onClick={onRefine}>{t('refineButton', { n: remaining })}</Button>
+            </p>
+          ) : null}
         </Notice>
       ) : null}
 
@@ -369,17 +449,197 @@ export function Report({
         </section>
       ) : null}
 
+      {/* ---- refine the money, after the money has been shown ---- */}
+      <section className="no-print flex flex-col gap-3">
+        <h3 className="text-2xl font-bold tracking-tight">{t('alreadyGettingTitle')}</h3>
+        <p className="max-w-prose text-lg text-fg-muted">{t('alreadyGettingBody')}</p>
+        {showAdjust ? (
+          <div className="flex flex-col gap-3">
+            {currentGrade > 0 ? (
+              <>
+                <Card>
+                  <label className="text-lg font-semibold" htmlFor="bescheid">
+                    {t('bescheidQ')}
+                  </label>
+                  <p className="mt-1 text-base text-fg-muted">{t('bescheidHint')}</p>
+                  <input
+                    id="bescheid"
+                    type="date"
+                    value={bescheidDate}
+                    onChange={(e) => onBescheidDate(e.target.value)}
+                    className="bordered target mt-3 rounded-md bg-surface px-3 text-lg"
+                  />
+                </Card>
+                <Card>
+                  <p className="text-lg font-semibold">{t('claimedQ')}</p>
+                  <div className="mt-3 flex flex-col gap-2">
+                    {benefits
+                      .filter((b) => b.amounts[currentGrade] > 0)
+                      .map((b) => (
+                        <label
+                          key={b.id}
+                          className="target bordered flex cursor-pointer items-start gap-3 rounded-lg bg-surface px-4 py-3 hover:bg-surface-2"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={claimed.has(b.id)}
+                            onChange={(e) =>
+                              onClaimed((prev) => {
+                                const next = new Set(prev);
+                                if (e.target.checked) next.add(b.id);
+                                else next.delete(b.id);
+                                return next;
+                              })
+                            }
+                            className="mt-1 size-5 shrink-0 accent-accent"
+                          />
+                          <span>
+                            <span {...content} className="block text-lg font-medium">
+                              {s(b.name)}
+                            </span>
+                            <span {...content} className="mt-0.5 block text-base text-fg-muted">
+                              {s(b.what)}{' '}
+                              {entitlement(b.id, currentGrade) > 0
+                                ? money(entitlement(b.id, currentGrade))
+                                : ''}
+                            </span>
+                          </span>
+                        </label>
+                      ))}
+                  </div>
+                </Card>
+              </>
+            ) : null}
+            <YesNo
+              label={t('sharedQ')}
+              hint={t('sharedHint')}
+              value={circumstances.sharedHousehold}
+              onChange={(v) => onCircumstances((c) => ({ ...c, sharedHousehold: v }))}
+            />
+            <YesNo
+              label={t('adaptQ')}
+              hint={t('adaptHint')}
+              value={circumstances.wantsHomeAdaptation}
+              onChange={(v) => onCircumstances((c) => ({ ...c, wantsHomeAdaptation: v }))}
+            />
+          </div>
+        ) : (
+          <div>
+            <Button variant="secondary" onClick={() => setShowAdjust(true)}>
+              {t('adjust')}
+            </Button>
+          </div>
+        )}
+      </section>
+
+      {/* ---- what was actually said ---- */}
+      {lines.length > 0 ? (
+        <section className="flex flex-col gap-3">
+          <h3 className="text-2xl font-bold tracking-tight">{t('yourAnswersTitle')}</h3>
+          <p className="max-w-prose text-lg text-fg-muted">{t('yourAnswersBody')}</p>
+          <div className="no-print">
+            <Button variant="secondary" onClick={() => setShowAnswers((v) => !v)}>
+              {showAnswers ? t('hideAnswers') : t('showAnswers')}
+            </Button>
+          </div>
+          {/* Always in the document when printed, whatever the toggle says: a
+              printed result that omits the answers is not much use at an
+              appointment, and nobody prints a page to hide half of it. */}
+          <dl
+            className={`flex flex-col gap-3 print:!flex ${showAnswers ? 'flex' : 'hidden'}`}
+          >
+            {lines.map((line, i) => (
+              <div key={`${line.question}-${i}`} className="border-t border-line pt-2">
+                <dt {...content} className="text-base text-fg-muted">
+                  {line.question}
+                </dt>
+                <dd {...content} className="text-lg font-semibold">
+                  {line.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
+
       <footer className="flex flex-col gap-4 border-t border-line pt-6">
         <p className="max-w-prose text-base text-fg-muted">
           <span {...content}>{s(report.disclaimer)}</span> {t('disclaimerExtra')}
         </p>
-        <div className="no-print flex flex-wrap gap-3">
-          <Button variant="secondary" onClick={() => window.print()}>
-            {t('printPage')}
-          </Button>
-          <Button variant="ghost" onClick={onRestart}>
-            ← {t('restart')}
-          </Button>
+        <div className="no-print flex flex-col gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={async () => {
+                setPdf('working');
+                try {
+                  const name = await downloadReportPdf({
+                    lang: pdfLang,
+                    report,
+                    assessment,
+                    bounds,
+                    answers: lines,
+                    asked: coverage.asked,
+                    officialQuestions: coverage.officialQuestions,
+                  });
+                  setPdf(name);
+                } catch {
+                  // Nothing here reaches the network, so a failure is a
+                  // browser refusing the download or running out of memory.
+                  // Printing still works, and the message says so.
+                  setPdf('failed');
+                }
+              }}
+              disabled={pdf === 'working'}
+            >
+              {pdf === 'working' ? t('pdfWorking') : t('downloadPdf')}
+            </Button>
+            <Button variant="secondary" onClick={() => window.print()}>
+              {t('printPage')}
+            </Button>
+            <Button variant="ghost" onClick={onRestart}>
+              ← {t('restart')}
+            </Button>
+          </div>
+          <p className="max-w-prose text-base text-fg-muted">
+            {t('pdfLanguageNote')} {t('pdfPrivacyNote')}
+          </p>
+          {pdf === 'failed' ? (
+            <p role="status" className="text-base font-semibold text-warn-fg">
+              {t('pdfFailed')}
+            </p>
+          ) : null}
+          {pdf !== 'idle' && pdf !== 'working' && pdf !== 'failed' ? (
+            <p role="status" className="text-base font-semibold">
+              {t('pdfSaved', { name: pdf })}
+            </p>
+          ) : null}
+        </div>
+
+        {/* Erasing is the other half of "your answers stay on your device".
+            Storage that cannot be emptied on request is not a promise, it is a
+            filing cabinet, so the control sits on the result page rather than
+            behind Start again, which people read as navigation. */}
+        <div className="no-print flex flex-col gap-2 border-t border-line pt-4">
+          <p className="text-lg font-semibold">{t('privacyEraseTitle')}</p>
+          <p className="max-w-prose text-base text-fg-muted">{t('privacyEraseBody')}</p>
+          {erased ? (
+            <p role="status" className="text-base font-semibold">
+              {t('erased')}
+            </p>
+          ) : (
+            <div>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  clearSession();
+                  onErase();
+                  setErased(true);
+                }}
+              >
+                {t('erase')}
+              </Button>
+            </div>
+          )}
         </div>
       </footer>
     </div>

@@ -34,6 +34,7 @@ const base = (over: Partial<SavedSession> = {}): SavedSession => ({
   bescheidDate: '',
   claimed: [],
   circumstances: { atHome: true, sharedHousehold: false, wantsHomeAdaptation: false },
+  order: [],
   index: 0,
   savedAt: '2026-08-26T10:00:00.000Z',
   ...over,
@@ -108,7 +109,9 @@ describe('a stored file that cannot be trusted', () => {
     write(
       base({
         answers: {
-          conditions: {},
+          // Module 2 is gated, so the gate has to be on for the one honest
+          // answer below to reach the score at all.
+          conditions: { hasCognitiveIssues: true },
           // One honest answer so the file still counts as a session at all,
           // and five impossible ones that must contribute nothing.
           levels: { '2.1': 1, '1.1': 99, '1.2': 99, '1.3': 99, '1.4': 99, '1.5': 99 },
