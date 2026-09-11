@@ -153,6 +153,25 @@ export const PLAIN_M5: Record<string, Localised> = {
 
 /** Gating question → everyday wording. */
 export const PLAIN_CONDITIONS: Record<ConditionId, Localised> = {
+  // These two open or close a whole module each, so they are written wide on
+  // purpose. A family that answers no here is never asked those questions, and
+  // the cost of a wrongly narrow question is a module scored at zero.
+  hasCognitiveIssues: {
+    de:
+      'Vergisst die Person viel, ist sie verwirrt, oder versteht sie Gespräche ' +
+      'und Erklärungen schlecht?',
+    en:
+      'Does the person forget a lot, get confused, or struggle to follow ' +
+      'conversations and explanations?',
+  },
+  hasBehaviourIssues: {
+    de:
+      'Ist die Person nachts unruhig, läuft sie weg, wird sie laut oder ' +
+      'aggressiv, hat sie große Angst, oder wehrt sie Hilfe ab?',
+    en:
+      'Is the person restless at night, do they wander off, get loud or ' +
+      'aggressive, get very frightened, or fight off help?',
+  },
   hasIncontinence: {
     de: 'Geht manchmal Urin oder Stuhl ab, ohne dass die Person es will?',
     en: 'Does urine or stool sometimes come away without the person meaning it to?',

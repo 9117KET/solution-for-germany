@@ -97,9 +97,40 @@ export function scoreM5Intensive(points: number): number {
 
 // ------------------------------------------------------------ Intake shape
 
+/**
+ * Module 5 answered at the level the module is actually scored at.
+ *
+ * Module 5 never scores a criterion. It pools occurrences across three groups
+ * and converts each group total to a 0–3 band (0–6 for the intensive group).
+ * Asking sixteen separate "how often?" rows therefore collects far more
+ * precision than the arithmetic can use: every row inside a group is summed and
+ * then thrown away against four thresholds.
+ *
+ * So the intake asks the pooled question directly, once per group, with the
+ * options written as the thresholds themselves. Four questions replace sixteen
+ * and the resulting module score is not an approximation of the long form: it
+ * is the same number, because the band is all the long form ever produced.
+ *
+ * `scoreModule5` still honours per-row frequencies where they are present, so a
+ * session saved by an earlier version keeps scoring the way it was answered.
+ */
+export interface M5Bands {
+  /** Group A, 5.1–5.7: pooled measures per day. 0–3. */
+  daily?: number;
+  /** Group B, 5.8–5.11: pooled wound, stoma, catheter and therapy care. 0–3. */
+  weekly?: number;
+  /** Group C, 5.12–5.15: appointments and equipment-intensive care. 0–3, or 6. */
+  intensive?: number;
+}
+
+/** The band values the intensive group can take, in option order. */
+export const M5_INTENSIVE_BANDS = [0, 1, 2, 3, 6] as const;
+
 export interface IntakeAnswers {
   /** Gating answers, established once up front. */
   conditions: Partial<Record<ConditionId, boolean>>;
+  /** Module 5 answered as pooled bands rather than as sixteen frequencies. */
+  m5?: M5Bands;
   /**
    * Criterion id → chosen level index (0–3, or 0–2 for criterion 4.13).
    * Absent means unanswered, which scores zero.
@@ -183,6 +214,7 @@ export function scoreIntake(answers: IntakeAnswers): ScoredIntake {
   const m5Applicable = answers.conditions.hasMedicalMeasures === true ? 1 : 0;
   const m5Answered =
     Object.values(answers.frequencies).some((f) => f !== undefined) ||
+    Object.values(answers.m5 ?? {}).some((b) => b !== undefined) ||
     answers.dietLevel !== undefined
       ? 1
       : 0;
@@ -244,10 +276,17 @@ export function scoreModule5(answers: IntakeAnswers): number {
 
   const diet = answers.dietLevel === undefined ? 0 : Math.max(0, Math.min(3, Math.round(answers.dietLevel)));
 
+  // A band answered directly wins over the pooled frequencies, which is what
+  // makes the four-question form and the sixteen-row form one code path. Each
+  // band is clamped to what its group can actually produce, so a hand-edited
+  // stored session cannot lift module 5 past its own maximum.
+  const band = (v: number | undefined, max: number, fallback: number) =>
+    v === undefined ? fallback : Math.max(0, Math.min(max, Math.round(v)));
+
   const total =
-    scoreM5Daily(dailyTotal) +
-    scoreM5Weekly(weeklyTotal) +
-    scoreM5Intensive(intensivePoints) +
+    band(answers.m5?.daily, 3, scoreM5Daily(dailyTotal)) +
+    band(answers.m5?.weekly, 3, scoreM5Weekly(weeklyTotal)) +
+    band(answers.m5?.intensive, 6, scoreM5Intensive(intensivePoints)) +
     diet;
 
   // The conversion table for module 5 tops out at 15; scoring above that is

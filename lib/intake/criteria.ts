@@ -52,6 +52,8 @@ export interface Criterion {
 
 /** Gating conditions the intake establishes once, up front. */
 export type ConditionId =
+  | 'hasCognitiveIssues'
+  | 'hasBehaviourIssues'
   | 'hasIncontinence'
   | 'hasStomaOrCatheter'
   | 'hasTubeFeeding'
@@ -59,6 +61,32 @@ export type ConditionId =
   | 'hasLimbUnusability';
 
 export const CONDITIONS: Record<ConditionId, { de: string; en: string }> = {
+  // Modules 2 and 3 are 24 of the instrument's 48 criteria and compete for a
+  // single 15-point slot, so for a household with neither cognitive nor
+  // behavioural impairment they are 24 questions that provably cannot move the
+  // grade. Each is gated behind one screening question. A "no" scores the whole
+  // module at zero, which is what answering every one of its criteria at the
+  // unimpaired level would have produced anyway.
+  hasCognitiveIssues: {
+    de:
+      'Gibt es Probleme mit dem Denken, dem Gedächtnis oder der Orientierung? ' +
+      'Zum Beispiel Vergesslichkeit, Verwirrtheit, eine Demenz, oder Mühe, ' +
+      'Gesprächen und Erklärungen zu folgen.',
+    en:
+      'Are there problems with thinking, memory or orientation? For example ' +
+      'forgetfulness, confusion, dementia, or difficulty following ' +
+      'conversations and explanations.',
+  },
+  hasBehaviourIssues: {
+    de:
+      'Gibt es auffälliges Verhalten oder seelische Probleme? Zum Beispiel ' +
+      'nächtliche Unruhe, Umherlaufen, Aggression, Ängste, Wahnvorstellungen ' +
+      'oder Abwehr gegen Pflege.',
+    en:
+      'Is there difficult behaviour or are there psychological problems? For ' +
+      'example restlessness at night, wandering, aggression, anxiety, ' +
+      'delusions, or resisting care.',
+  },
   hasIncontinence: {
     de: 'Gibt es Probleme mit dem Wasserlassen oder dem Stuhlgang?',
     en: 'Are there problems with bladder or bowel control?',
@@ -159,6 +187,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.2',
@@ -170,6 +199,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.3',
@@ -177,6 +207,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Zeitliche Orientierung', en: 'Orientation to time' },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.4',
@@ -187,6 +218,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.5',
@@ -201,6 +233,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.6',
@@ -211,6 +244,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.7',
@@ -221,6 +255,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.8',
@@ -232,6 +267,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.9',
@@ -242,6 +278,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.10',
@@ -249,6 +286,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Verstehen von Aufforderungen', en: 'Understanding requests' },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
   {
     id: '2.11',
@@ -256,6 +294,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Beteiligen an einem Gespräch', en: 'Taking part in a conversation' },
     scale: 'ability',
     points: IND,
+    dependsOn: 'hasCognitiveIssues',
   },
 
   // ---------------------------------------------------------------- Modul 3
@@ -272,6 +311,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.2',
@@ -279,6 +319,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Nächtliche Unruhe', en: 'Restlessness at night' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.3',
@@ -289,6 +330,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.4',
@@ -296,6 +338,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Beschädigen von Gegenständen', en: 'Damaging objects' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.5',
@@ -306,6 +349,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.6',
@@ -313,6 +357,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Verbale Aggression', en: 'Verbal aggression' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.7',
@@ -327,6 +372,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.8',
@@ -337,6 +383,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.9',
@@ -344,6 +391,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Wahnvorstellungen', en: 'Delusions' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.10',
@@ -351,6 +399,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Ängste', en: 'Anxiety' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.11',
@@ -361,6 +410,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.12',
@@ -368,6 +418,7 @@ export const CRITERIA: readonly Criterion[] = [
     label: { de: 'Sozial inadäquate Verhaltensweisen', en: 'Socially inappropriate behaviour' },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
   {
     id: '3.13',
@@ -378,6 +429,7 @@ export const CRITERIA: readonly Criterion[] = [
     },
     scale: 'frequency',
     points: FREQ,
+    dependsOn: 'hasBehaviourIssues',
   },
 
   // ---------------------------------------------------------------- Modul 4

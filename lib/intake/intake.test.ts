@@ -17,6 +17,10 @@ import {
 import { MODULES, assess, type ModuleId } from '../rules/nba';
 
 const allConditions: Record<ConditionId, boolean> = {
+  // Modules 2 and 3 are gated behind one screening question each, so a maximum
+  // intake has to open them or half the instrument scores zero.
+  hasCognitiveIssues: true,
+  hasBehaviourIssues: true,
   hasIncontinence: true,
   hasStomaOrCatheter: true,
   hasTubeFeeding: true,
@@ -160,9 +164,12 @@ describe('conditional criteria', () => {
 
   it('lists only unanswered, in-scope criteria as remaining', () => {
     const a = emptyIntake();
-    expect(remainingCriteria(a)).toHaveLength(CRITERIA.length - 3);
+    // Out of scope until their gates are answered: the two incontinence
+    // criteria, tube feeding, and the whole of modules 2 and 3.
+    const gated = 3 + criteriaFor('m2').length + criteriaFor('m3').length;
+    expect(remainingCriteria(a)).toHaveLength(CRITERIA.length - gated);
     a.conditions.hasIncontinence = true;
-    expect(remainingCriteria(a)).toHaveLength(CRITERIA.length - 1);
+    expect(remainingCriteria(a)).toHaveLength(CRITERIA.length - gated + 2);
   });
 
   it('gates the module 5 rows that presuppose a stoma, catheter or incontinence', () => {
