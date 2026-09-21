@@ -29,9 +29,7 @@ export default function Datenschutz() {
         <p>
           Kinlo Ephriam Tangiri
           <br />
-          [STRASSE UND HAUSNUMMER]
-          <br />
-          [PLZ] Bremen, Deutschland
+          28757 Bremen, Deutschland
           <br />
           <a
             className="target text-accent underline underline-offset-4"

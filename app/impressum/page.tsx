@@ -12,17 +12,16 @@ export default function Impressum() {
       <Section title="Angaben gemäß § 5 DDG">
         <p>
           {/*
-            FILL IN BEFORE DEPLOYING. § 5 DDG requires a name and a postal
-            address at which the provider can actually be reached; a PO box is
-            not sufficient. If you would rather not publish a home address,
-            a c/o or a service address is the usual answer — replace the whole
-            block, do not delete it.
+            INCOMPLETE ON PURPOSE, AND KNOWN TO BE.
+            § 5 DDG wants a ladungsfähige Anschrift — a street and house number
+            at which the provider can actually be served. Postcode and city
+            alone does not meet that, and nor would a Postfach. This is what the
+            owner chose to publish for now; the fix is to add the street here,
+            or to switch the whole block to a c/o or a service address.
           */}
           Kinlo Ephriam Tangiri
           <br />
-          [STRASSE UND HAUSNUMMER]
-          <br />
-          [PLZ] Bremen
+          28757 Bremen
           <br />
           Deutschland
         </p>
