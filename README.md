@@ -14,7 +14,10 @@ official instrument contains, and the answer is the same one the long version wo
 have produced. How that is possible is the next section.
 
 Everything runs in the browser. There is no account, no server, and no analytics;
-answers never leave the device. They are kept *on* the device, in this browser, so a
+tapped and typed answers never leave the device. Spoken answers are the one
+exception, and the exception is real: the Web Speech API in Chrome and Edge sends
+the audio to the browser vendor for recognition. Every question stays fully
+answerable by tap, and `/datenschutz` says all of this plainly. They are kept *on* the device, in this browser, so a
 half-finished intake survives a closed tab: the next visit offers to carry on or to
 delete the lot. Nothing is written until something has actually been answered.
 
@@ -28,8 +31,11 @@ delete the lot. Nothing is written until something has actually been answered.
 Care benefits in Germany are not paid automatically. They have to be applied for,
 separately, in language most families do not speak. Money that has already been
 awarded routinely goes uncollected (the *Entlastungsbetrag* alone is famously
-under-claimed) and the assessment itself is frequently wrong: of the reports that
-get checked again, roughly 29 in 100 are corrected.
+under-claimed) and the assessment is often revised on challenge: of the 185,494
+reports re-examined after an objection in 2022, roughly 29 in 100 were changed
+(Medizinischer Dienst Bund, November 2023; `lib/rules/sources.ts`). Note what that
+figure does *not* say — changed is not the same as wrong, and the denominator is
+reports that were challenged, not all assessments.
 
 The people who lose most from this are the ones least equipped to fight it: the very
 old, the very tired, and families doing the paperwork in a second language.
@@ -178,6 +184,10 @@ the transcription is never edited for readability.
   before this is put in front of real families.
 - Speech recognition needs a browser that supports it (Chrome and Edge do) and a
   microphone the person grants. Where it is missing, voice mode is not offered.
+- **Speech recognition is not local.** Chrome and Edge implement the Web Speech
+  API by uploading the audio to the vendor. The app does not yet say so at the
+  point where voice is chosen — only in `/datenschutz`. Saying it in the
+  interface, in the reader's own language, is the obvious next change.
 - Reading a full question aloud takes around 20 seconds, so a complete run in voice
   mode is long.
 - Browser machine translation is disabled, because it silently overrode the language
@@ -191,4 +201,5 @@ the transcription is never edited for readability.
 
 ## Licence
 
-Not yet chosen.
+[GNU AGPL-3.0](LICENSE). Anyone who runs a modified version as a network
+service has to publish their changes under the same licence (§ 13).

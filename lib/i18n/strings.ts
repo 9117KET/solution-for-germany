@@ -993,12 +993,12 @@ export const UI = {
     ar: 'التقدير أعلى من درجتك الحالية',
   },
   estimateHigherBody: {
-    de: 'Von den nachgeprüften Gutachten waren etwa 29 von 100 falsch und wurden geändert. Der erste Punkt in der Liste unten ist der wichtigste.',
-    en: 'Of the reports that were checked again, about 29 in 100 were wrong and were changed. The first item in the list below is the one that matters.',
-    tr: 'Yeniden incelenen raporların yaklaşık 100’de 29’u yanlış çıktı ve düzeltildi. Aşağıdaki listedeki ilk madde en önemlisidir.',
-    ru: 'Из перепроверенных заключений около 29 из 100 оказались неверными и были исправлены. Первый пункт в списке ниже – самый важный.',
-    pl: 'Spośród ponownie sprawdzonych orzeczeń około 29 na 100 okazało się błędnych i zostało poprawionych. Pierwsza pozycja na liście poniżej jest najważniejsza.',
-    ar: 'من بين التقارير التي أُعيد فحصها، تبيّن أن نحو 29 من كل 100 كانت خاطئة وجرى تصحيحها. البند الأول في القائمة أدناه هو الأهم.',
+    de: 'Von 100 Gutachten, die nach einem Widerspruch noch einmal geprüft wurden, wurden rund 29 geändert. Der erste Punkt in der Liste unten ist der wichtigste.',
+    en: 'Of every 100 reports re-examined after an objection, around 29 were changed. The first item in the list below is the one that matters.',
+    tr: 'İtiraz üzerine yeniden incelenen her 100 rapordan yaklaşık 29’u değiştirildi. Aşağıdaki listedeki ilk madde en önemlisidir.',
+    ru: 'Из каждых 100 заключений, перепроверенных после возражения, около 29 были изменены. Первый пункт в списке ниже – самый важный.',
+    pl: 'Spośród każdych 100 orzeczeń ponownie sprawdzonych po odwołaniu około 29 zostało zmienionych. Pierwsza pozycja na liście poniżej jest najważniejsza.',
+    ar: 'من بين كل 100 تقرير أُعيد فحصه بعد اعتراض، جرى تغيير نحو 29 تقريرًا. البند الأول في القائمة أدناه هو الأهم.',
   },
   m5SkippedTitle: {
     de: 'Diese Einschätzung ist einen Pflegegrad zu niedrig',
