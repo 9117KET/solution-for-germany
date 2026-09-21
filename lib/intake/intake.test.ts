@@ -15,6 +15,7 @@ import {
   type IntakeAnswers,
 } from './score';
 import { MODULES, assess, type ModuleId } from '../rules/nba';
+import { answerLines } from './summary';
 
 const allConditions: Record<ConditionId, boolean> = {
   // Modules 2 and 3 are gated behind one screening question each, so a maximum
@@ -331,5 +332,67 @@ describe('assessIntake carries the besondere Bedarfskonstellation', () => {
     const viaHelper = assessIntake(a).assessment;
     const viaParts = assess(scoreIntake(a).raw, { limbUnusability: true });
     expect(viaHelper).toEqual(viaParts);
+  });
+});
+
+describe('the answers read back in the order the Begutachtung works', () => {
+  /**
+   * A full intake, so every module is represented in the output.
+   */
+  const filled = (): IntakeAnswers => {
+    const a = emptyIntake();
+    for (const id of [
+      'hasCognitiveIssues',
+      'hasBehaviourIssues',
+      'hasIncontinence',
+      'hasStomaOrCatheter',
+      'hasTubeFeeding',
+      'hasMedicalMeasures',
+    ] as const) {
+      a.conditions[id] = true;
+    }
+    for (const c of CRITERIA) {
+      if (isApplicable(c, a.conditions)) a.levels[c.id] = 1;
+    }
+    a.m5 = { daily: 2, weekly: 1, intensive: 1 };
+    a.dietLevel = 1;
+    return a;
+  };
+
+  it('walks the modules in numerical order, with module 5 before module 6', () => {
+    const lines = answerLines(filled(), { lang: 'de', plain: false });
+    const seen: string[] = [];
+    for (const l of lines) {
+      if (l.module && seen[seen.length - 1] !== l.module) seen.push(l.module);
+    }
+    expect(seen).toEqual(['m1', 'm2', 'm3', 'm4', 'm5', 'm6']);
+  });
+
+  it('never returns to a module it has already left', () => {
+    const lines = answerLines(filled(), { lang: 'de', plain: false });
+    const order = lines.filter((l) => l.module).map((l) => l.module!);
+    const firstSeen = new Map<string, number>();
+    order.forEach((m, i) => {
+      if (!firstSeen.has(m)) firstSeen.set(m, i);
+    });
+    for (let i = 1; i < order.length; i++) {
+      if (order[i] === order[i - 1]) continue;
+      expect(firstSeen.get(order[i])).toBe(i);
+    }
+  });
+
+  it('names every module it tags, in the reader’s language', () => {
+    for (const lang of ['de', 'en'] as const) {
+      for (const l of answerLines(filled(), { lang, plain: false })) {
+        if (l.module) expect(l.moduleName, `${l.module} in ${lang}`).toBeTruthy();
+      }
+    }
+  });
+
+  it('leaves the gating questions untagged, ahead of module 1', () => {
+    const lines = answerLines(filled(), { lang: 'de', plain: false });
+    const firstTagged = lines.findIndex((l) => l.module);
+    expect(firstTagged).toBeGreaterThan(0);
+    expect(lines.slice(0, firstTagged).every((l) => l.module === undefined)).toBe(true);
   });
 });

@@ -28,19 +28,24 @@ import type { ContentLang, Localised } from '../i18n';
 import { formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
 import { asOfMonth } from '../rules/freshness';
 import type { GradeBounds } from '../intake/adaptive';
+import type { AnswerLine as AnswerLineType } from '../intake/summary';
 
-/** One answered question, as the report lists it back. */
-export interface AnswerLine {
-  question: string;
-  answer: string;
-}
+/**
+ * One answered question, as the report lists it back.
+ *
+ * Re-exported from `summary.ts` rather than declared again here. Two
+ * structurally identical interfaces in two files drifted apart the moment the
+ * answers gained a module tag, and the duplicate is what let the PDF silently
+ * fall behind the thing that feeds it.
+ */
+export type { AnswerLine } from '../intake/summary';
 
 export interface PdfInput {
   lang: ContentLang;
   report: GapReport;
   assessment: Assessment;
   bounds: GradeBounds;
-  answers: readonly AnswerLine[];
+  answers: readonly AnswerLineType[];
   /** Questions asked, against the number the official instrument contains. */
   asked: number;
   officialQuestions: number;
@@ -294,10 +299,32 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
   if (input.answers.length > 0) {
     heading(t('yourAnswers'));
     text(t('answersIntro'), { size: SIZE.small, colour: '#555555', gap: 8 });
+
+    // Under module headings, in the order the Begutachtung works through them.
+    // The assessor announces the module out loud; a family that can find the
+    // matching heading on the page can follow along, which is the entire point
+    // of printing the answers in the first place.
+    let currentModule: string | undefined;
     for (const a of input.answers) {
+      if (a.moduleName && a.moduleName !== currentModule) {
+        currentModule = a.moduleName;
+        room(34);
+        text(`${a.module?.toUpperCase().replace('M', 'Modul ')}: ${a.moduleName}`, {
+          size: SIZE.small,
+          bold: true,
+          colour: '#111111',
+          gap: 4,
+        });
+      }
       room(28);
-      text(a.question, { size: SIZE.small, gap: 0 });
-      text(a.answer, { size: SIZE.small, bold: true, indent: 14, colour: '#333333', gap: 6 });
+      text(a.question, { size: SIZE.small, gap: 0, indent: a.moduleName ? 8 : 0 });
+      text(a.answer, {
+        size: SIZE.small,
+        bold: true,
+        indent: a.moduleName ? 22 : 14,
+        colour: '#333333',
+        gap: 6,
+      });
     }
   }
 

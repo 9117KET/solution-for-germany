@@ -21,6 +21,48 @@
  */
 
 import { chromium } from 'playwright';
+import { readFile } from 'node:fs/promises';
+import zlib from 'node:zlib';
+
+/**
+ * The text out of a PDF, without a parser dependency.
+ *
+ * Enough for assertions, not a general extractor: it pulls the literals out of
+ * the content streams, inflating them first where they are compressed. If this
+ * ever stops finding text that is plainly in the document, reach for a real
+ * parser rather than making the regex cleverer.
+ */
+function pdfText(bytes) {
+  const chunks = [];
+  const raw = bytes.toString('latin1');
+
+  for (const m of raw.matchAll(/stream\r?\n([\s\S]*?)\r?\nendstream/g)) {
+    const body = Buffer.from(m[1], 'latin1');
+    let out = body;
+    try {
+      out = zlib.inflateSync(body);
+    } catch {
+      /* not compressed; use as-is */
+    }
+    chunks.push(out.toString('latin1'));
+  }
+
+  const content = chunks.join('\n') || raw;
+  const pieces = [];
+  for (const m of content.matchAll(/\((?:\\.|[^\\)])*\)/g)) {
+    pieces.push(
+      m[0]
+        .slice(1, -1)
+        .replace(/\\([()\\])/g, '$1')
+        .replace(/\\(\d{3})/g, (_, o) => String.fromCharCode(parseInt(o, 8))),
+    );
+  }
+  // Already latin1-decoded above: jsPDF's standard fonts write WinAnsi, whose
+  // printable range matches ISO-8859-1 for everything this document uses.
+  // Re-encoding through utf8 here is what turned every ä into a replacement
+  // character and hid the § signs the assertions look for.
+  return pieces.join(' ');
+}
 
 const BASE = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3000';
 const EXECUTABLE = process.env.CHROMIUM_PATH || undefined;
@@ -132,18 +174,69 @@ async function main() {
     if (await start.count()) await start.click();
     await page.waitForTimeout(250);
 
+    // Answer, rather than click Weiter past everything.
+    //
+    // The first version of this walk advanced through the whole intake without
+    // touching an answer and still reached the report -- which is correct
+    // behaviour, and made the PDF assertions below vacuous: the document said
+    // "0 Fragen beantwortet" and had no answers section to check. The controls
+    // are radio inputs inside labels, so that is what to drive.
+    //
+    // Yes to every gate, and otherwise the last option on the scale, which is
+    // the most dependent one. That opens every module and produces a document
+    // with something in it.
     let reached = false;
-    for (let i = 0; i < 80 && !reached; i++) {
+    let answered = 0;
+    for (let i = 0; i < 120 && !reached; i++) {
       if ((await page.textContent('body')).includes('Beträge zuletzt geprüft')) {
         reached = true;
         break;
       }
-      const opts = page.locator('button[aria-pressed]');
-      if (await opts.count()) await opts.first().click().catch(() => {});
-      const next = page.getByRole('button', { name: /Weiter|Ergebnis/i }).first();
+
+      const screen = await page.textContent('body');
+      // The limb question is § 15 Abs. 4: a yes settles the grade at 5 on the
+      // spot and correctly ends the intake. Answering yes to everything was
+      // therefore a five-question run, which is the engine working and a
+      // useless walk. Say no to that one only.
+      const isLimbGate = /beide Arme und beide Beine/.test(screen);
+
+      const radios = page.locator('input[type=radio]');
+      const n = await radios.count();
+      if (n) {
+        const labels = await radios.evaluateAll((els) =>
+          els.map((el) => (el.closest('label')?.textContent ?? '').trim()),
+        );
+        const yes = labels.findIndex((l) => /^Ja\b/.test(l));
+        const no = labels.findIndex((l) => /^Nein\b/.test(l));
+
+        let choice;
+        if (yes !== -1 || no !== -1) {
+          // A gate: yes opens a module, except the one that ends the intake.
+          choice = isLimbGate ? no : yes;
+        } else {
+          // A scale: the last option is the most dependent, which keeps every
+          // module in play and gives the document something to say.
+          choice = n - 1;
+        }
+        if (choice !== undefined && choice >= 0) {
+          await radios.nth(choice).check({ force: true }).catch(() => {});
+          answered += 1;
+        }
+      }
+
+      const grade = page.locator('button[aria-pressed]');
+      if (!n && (await grade.count())) await grade.first().click().catch(() => {});
+
+      // Scoped to the nav strip on purpose. Matching /Ergebnis/ anywhere also
+      // hits "Ergebnis jetzt schon anzeigen", the stop-early link, which ended
+      // the walk after the five gating questions -- none of which belong to a
+      // module, so the PDF had no headings to check and the assertion below
+      // failed for the wrong reason entirely.
+      const next = page.locator('nav').getByRole('button').last();
       if (await next.count()) await next.click().catch(() => {});
-      await page.waitForTimeout(120);
+      await page.waitForTimeout(110);
     }
+    check('the walk answered a real intake', answered > 12, `${answered} screens answered`);
 
     const report = await page.textContent('body');
     check('an intake reaches the report', reached);
@@ -154,6 +247,46 @@ async function main() {
     check('no stale warning while the figures are fresh',
       !report.includes('länger nicht geprüft'));
     check('the intake raises no page errors', errors.length === 0, errors.slice(0, 2).join(' | '));
+
+    // ---------------------------------------------------- the PDF, actually opened
+    //
+    // The document is the deliverable: it is what gets carried across a desk at
+    // the Pflegekasse. Reaching the button proves nothing about what is in the
+    // file, so this downloads it and reads the text out of it.
+    if (reached) {
+      const pdfButton = page.getByRole('button', { name: /PDF/i }).first();
+      if (await pdfButton.count()) {
+        const waitDownload = page.waitForEvent('download', { timeout: 30000 }).catch(() => null);
+        await pdfButton.click();
+        const download = await waitDownload;
+        check('the PDF downloads', Boolean(download), download ? await download.suggestedFilename() : '');
+
+        if (download) {
+          const file = await download.path();
+          const bytes = await readFile(file);
+          check('it is a real PDF', bytes.subarray(0, 5).toString() === '%PDF-');
+          check('it is not an empty shell', bytes.length > 4000, `${(bytes.length / 1024).toFixed(0)} kB`);
+
+          const text = pdfText(bytes);
+          check('it names the estimated Pflegegrad', /Pflegegrad/.test(text));
+          check('it carries the date the figures were checked',
+            /Betr.{0,3}ge zuletzt gepr.{0,3}ft/.test(text));
+          check('it reproduces the answers that were given', /Ihre Antworten/.test(text));
+          check('and did not record an empty intake',
+            !/\b0 Fragen beantwortet/.test(text),
+            (text.match(/\d+ Fragen beantwortet[^\n]{0,22}/) ?? [''])[0]);
+          check('it puts the answers under module headings', /Modul\s*1/.test(text),
+            (text.match(/Modul\s*\d[^\n]{0,24}/g) ?? []).slice(0, 3).join(' | '));
+          check('module 5 is printed before module 6',
+            text.indexOf('Modul 5') === -1 || text.indexOf('Modul 6') === -1 ||
+            text.indexOf('Modul 5') < text.indexOf('Modul 6'));
+          check('it says it is an estimate, not an assessment',
+            /Einsch.{0,3}tzung/.test(text) && /§ 7a/.test(text));
+        }
+      } else {
+        check('PDF button reachable', false, '(button not found)');
+      }
+    }
     await ctx.close();
   }
 
