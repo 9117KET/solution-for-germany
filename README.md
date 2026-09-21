@@ -14,7 +14,10 @@ official instrument contains, and the answer is the same one the long version wo
 have produced. How that is possible is the next section.
 
 Everything runs in the browser. There is no account, no server, and no analytics;
-answers never leave the device. They are kept *on* the device, in this browser, so a
+tapped and typed answers never leave the device. Spoken answers are the one
+exception, and the exception is real: the Web Speech API in Chrome and Edge sends
+the audio to the browser vendor for recognition. Every question stays fully
+answerable by tap, and `/datenschutz` says all of this plainly. They are kept *on* the device, in this browser, so a
 half-finished intake survives a closed tab: the next visit offers to carry on or to
 delete the lot. Nothing is written until something has actually been answered.
 
@@ -28,8 +31,11 @@ delete the lot. Nothing is written until something has actually been answered.
 Care benefits in Germany are not paid automatically. They have to be applied for,
 separately, in language most families do not speak. Money that has already been
 awarded routinely goes uncollected (the *Entlastungsbetrag* alone is famously
-under-claimed) and the assessment itself is frequently wrong: of the reports that
-get checked again, roughly 29 in 100 are corrected.
+under-claimed) and the assessment is often revised on challenge: of the 185,494
+reports re-examined after an objection in 2022, roughly 29 in 100 were changed
+(Medizinischer Dienst Bund, November 2023; `lib/rules/sources.ts`). Note what that
+figure does *not* say — changed is not the same as wrong, and the denominator is
+reports that were challenged, not all assessments.
 
 The people who lose most from this are the ones least equipped to fight it: the very
 old, the very tired, and families doing the paperwork in a second language.
@@ -154,6 +160,16 @@ npm run lint
 npm run build
 ```
 
+```bash
+npm run build && npm start &   # then, against the running build:
+npm run test:e2e               # browser checks: legal pages, voice notice, the report
+```
+
+`npm test` includes a check that fails once the statutory figures have gone
+unverified for 180 days. That is a deadman's switch rather than a bug: see
+[`MAINTENANCE.md`](MAINTENANCE.md), which also carries the January routine for
+re-checking the amounts.
+
 ## Layout
 
 | Path | What lives there |
@@ -165,11 +181,35 @@ npm run build
 | `lib/report/pdf.ts` | The downloadable PDF, assembled on the device |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
+| `lib/rules/freshness.ts` | How old the figures are, and the build failure that enforces it |
+| `lib/rules/fixtures/` | Assessments with known outcomes, from outside this codebase |
+| `lib/intake/monotonicity.test.ts` | The property the short intake depends on |
+| `e2e/smoke.mjs` | Browser checks for the things a unit test cannot see |
 | `components/` | Interface |
 
 `lib/intake/criteria.ts` is a transcription of the official instrument and is meant to
 stay verifiable line by line against it. Rewording lives in `lib/intake/plain.ts` so
 the transcription is never edited for readability.
+
+## Non-goals
+
+Written down because each of these will look like a reasonable next step later,
+and every one of them destroys the property that makes this worth trusting.
+
+- **No account, and no server that sees an answer.** This is the whole basis on
+  which an advice centre can try it without involving a lawyer. It is not a
+  feature to be traded for a convenience.
+- **No analytics.** Including the privacy-preserving kind. The claim has to be
+  unqualified to be worth making. Measurement comes from partners reporting what
+  they saw, not from instrumenting families.
+- **No model in the estimate path.** `sources.ts` already says the model never
+  produces figures. A hallucinated euro amount with a statutory citation beside
+  it is the worst object this codebase could emit.
+- **No referrals, no lead generation, no commission.** That is the business model
+  of the tools this one exists to be an alternative to, and the first thing a
+  funder or a Pflegekasse will ask whether it is doing.
+- **No unreviewed translation of statutory text.** The four interface languages
+  already carry that debt; the questions and the amounts must not.
 
 ## Known limits
 
@@ -178,11 +218,19 @@ the transcription is never edited for readability.
   before this is put in front of real families.
 - Speech recognition needs a browser that supports it (Chrome and Edge do) and a
   microphone the person grants. Where it is missing, voice mode is not offered.
+- **Speech recognition is not local.** Chrome and Edge implement the Web Speech
+  API by uploading the audio to the vendor. The app does not yet say so at the
+  point where voice is chosen — only in `/datenschutz`. Saying it in the
+  interface, in the reader's own language, is the obvious next change.
 - Reading a full question aloud takes around 20 seconds, so a complete run in voice
   mode is long.
 - Browser machine translation is disabled, because it silently overrode the language
   picker and machine-translated statutory text. That costs speakers of unsupported
   languages a fallback; it is one line in `app/layout.tsx` to reverse.
+- **No assessment with a known outcome has ever been run through this.** Every
+  test checks the model against itself, which cannot catch a misreading of the
+  instrument. `lib/rules/fixtures/` is the harness; it is empty. This is the
+  largest open question about whether the estimates are right.
 - Grouped questions trade a little fidelity for a much shorter intake. Where a
   household differs across the criteria in a group, the group has to be opened up by
   hand; nothing detects that automatically.
@@ -191,4 +239,5 @@ the transcription is never edited for readability.
 
 ## Licence
 
-Not yet chosen.
+[GNU AGPL-3.0](LICENSE). Anyone who runs a modified version as a network
+service has to publish their changes under the same licence (§ 13).

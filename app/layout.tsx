@@ -99,6 +99,32 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div id="content" className="flex flex-1 flex-col">
             {children}
           </div>
+          {/*
+           * Reachable from every screen, and printed nowhere.
+           *
+           * A German organisation looks for these two links before it reads
+           * anything else, and § 5 DDG wants the Impressum easily findable
+           * rather than buried. Plain anchors rather than next/link: this is a
+           * footer on a client-heavy page, and a full navigation is both fine
+           * and cheaper than dragging the router into the root layout.
+           */}
+          <footer className="no-print mt-auto border-t border-line px-4 py-4 text-center">
+            <a
+              className="target text-fg-muted underline underline-offset-4 hover:text-fg"
+              href="/impressum"
+            >
+              Impressum
+            </a>
+            <span className="px-2 text-fg-muted" aria-hidden="true">
+              ·
+            </span>
+            <a
+              className="target text-fg-muted underline underline-offset-4 hover:text-fg"
+              href="/datenschutz"
+            >
+              Datenschutz
+            </a>
+          </footer>
         </SettingsProvider>
       </body>
     </html>
