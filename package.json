@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "node e2e/smoke.mjs",
-    "test:a11y": "node e2e/a11y.mjs"
+    "test:a11y": "node e2e/a11y.mjs",
+    "test:compat": "node e2e/compat.mjs"
   },
   "dependencies": {
     "jspdf": "^4.2.1",

@@ -162,7 +162,9 @@ npm run build
 
 ```bash
 npm run build && npm start &   # then, against the running build:
-npm run test:e2e               # browser checks: legal pages, voice notice, the report
+npm run test:e2e               # browser checks: legal pages, voice notice, the report, the PDF
+npm run test:a11y              # axe-core at the largest text size and highest contrast
+npm run test:compat            # the oldest browser this build still works on
 ```
 
 `npm test` includes a check that fails once the statutory figures have gone
@@ -185,6 +187,8 @@ re-checking the amounts.
 | `lib/rules/fixtures/` | Assessments with known outcomes, from outside this codebase |
 | `lib/intake/monotonicity.test.ts` | The property the short intake depends on |
 | `e2e/smoke.mjs` | Browser checks for the things a unit test cannot see |
+| `e2e/a11y.mjs` | axe-core, run at the display extremes rather than the defaults |
+| `e2e/compat.mjs` | The browser floor, and a guard against it moving by accident |
 | `components/` | Interface |
 
 `lib/intake/criteria.ts` is a transcription of the official instrument and is meant to
@@ -227,6 +231,14 @@ and every one of them destroys the property that makes this worth trusting.
 - Browser machine translation is disabled, because it silently overrode the language
   picker and machine-translated statutory text. That costs speakers of unsupported
   languages a fallback; it is one line in `app/layout.tsx` to reverse.
+- **It needs Safari 16.4, Chrome 111 or Firefox 128.** Tailwind v4 depends on
+  `@property` and `color-mix()` and
+  [says plainly](https://tailwindcss.com/docs/compatibility) that it will not work
+  in older browsers. Safari 16.4 is March 2023, so an iPhone 7 — which stops at
+  iOS 15.8, and whose owner is exactly the person who needs the largest text
+  setting — gets an unstyled page. `npm run test:compat` proves nothing in this
+  app raises that floor further, but the floor itself is a real exclusion, and
+  the only way down from it is Tailwind 3.4.
 - **No assessment with a known outcome has ever been run through this.** Every
   test checks the model against itself, which cannot catch a misreading of the
   instrument. `lib/rules/fixtures/` is the harness; it is empty. This is the

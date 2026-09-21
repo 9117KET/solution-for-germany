@@ -68,7 +68,9 @@ Roughly three hundred tests pass. Know what that does and does not buy:
 | `monotonicity.test.ts` | The bounds bracket every completion, and the early stop is sound |
 | `a11y.test.ts`, `contrast.test.ts` | Every theme pair meets WCAG AAA |
 | `fixtures/` | **Nothing yet.** See below |
-| `e2e/smoke.mjs` | That the pages render, the voice notice fires, the report is dated |
+| `e2e/smoke.mjs` | That the pages render, the voice notice fires, the report is dated, the PDF says what it should |
+| `e2e/a11y.mjs` | No serious axe violations, and no clipped text, at the display extremes |
+| `e2e/compat.mjs` | That nothing has quietly raised the minimum browser version |
 
 Everything above the last row checks the model **against itself**. Both scoring
 paths read the same `criteria.ts`, so a misreading of the official instrument —
@@ -87,6 +89,8 @@ labelled case. Ask for it, with consent, and keep only the numbers.
 npm test && npm run typecheck && npm run lint && npm run build
 npm start &                      # serve the build
 npm run test:e2e                 # then drive it in a real browser
+npm run test:a11y                # largest text, highest contrast, 360px wide
+npm run test:compat              # does not need the server
 ```
 
 `test:e2e` uses Playwright. The first run downloads a browser (`npx playwright
@@ -97,7 +101,13 @@ Then, by hand, because even the browser suite does not cover it:
 
 - Download the PDF and read it. The e2e run reaches the report but does not
   open the file.
-- Try it once at the largest text size and once on yellow-on-black.
+- Try it once at the largest text size and once on yellow-on-black. `test:a11y`
+  checks for clipping and axe violations there, but it cannot tell you whether
+  the result is *pleasant*, and three real layout faults lived in that
+  configuration until somebody looked.
+- **On a real old phone, if you can borrow one.** The floor is Safari 16.4 —
+  below that the page is unstyled, and no amount of testing in a current
+  Chromium will show you that.
 - If anything about voice, storage or hosting changed, `/datenschutz` is now
   wrong until you fix it. Treat that as part of the change, not as follow-up.
 
