@@ -26,6 +26,7 @@
 
 import type { ContentLang, Localised } from '../i18n';
 import { formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
+import { asOfMonth } from '../rules/freshness';
 import type { GradeBounds } from '../intake/adaptive';
 
 /** One answered question, as the report lists it back. */
@@ -99,6 +100,7 @@ const L = {
       'things, and having the answers to hand means forgetting less on the day.',
   },
   privacy: { de: 'Datenschutz', en: 'Data protection' },
+  figuresAsOf: { de: 'Beträge zuletzt geprüft: ', en: 'Figures last checked: ' },
   privacyBody: {
     de:
       'Diese Datei wurde auf Ihrem Gerät erstellt. Ihre Antworten wurden nicht ' +
@@ -303,6 +305,16 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
   heading(t('privacy'));
   text(t('privacyBody'), { size: SIZE.small, colour: '#333333' });
   text(t('advice'), { size: SIZE.small, colour: '#333333' });
+
+  // When the amounts were last checked against the statute.
+  //
+  // This matters more on paper than on the screen. The page can be corrected;
+  // a printout carried to an appointment cannot, and it may be read weeks
+  // later by somebody who has no idea how old it is. Saying so costs one line.
+  text(`${t('figuresAsOf')}${asOfMonth(lang)}`, {
+    size: SIZE.small,
+    colour: '#333333',
+  });
 
   // Page numbers last, once the page count is known.
   const pages = doc.getNumberOfPages();

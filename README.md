@@ -160,6 +160,11 @@ npm run lint
 npm run build
 ```
 
+`npm test` includes a check that fails once the statutory figures have gone
+unverified for 180 days. That is a deadman's switch rather than a bug: see
+[`MAINTENANCE.md`](MAINTENANCE.md), which also carries the January routine for
+re-checking the amounts.
+
 ## Layout
 
 | Path | What lives there |
@@ -171,11 +176,34 @@ npm run build
 | `lib/report/pdf.ts` | The downloadable PDF, assembled on the device |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
+| `lib/rules/freshness.ts` | How old the figures are, and the build failure that enforces it |
+| `lib/rules/fixtures/` | Assessments with known outcomes, from outside this codebase |
+| `lib/intake/monotonicity.test.ts` | The property the short intake depends on |
 | `components/` | Interface |
 
 `lib/intake/criteria.ts` is a transcription of the official instrument and is meant to
 stay verifiable line by line against it. Rewording lives in `lib/intake/plain.ts` so
 the transcription is never edited for readability.
+
+## Non-goals
+
+Written down because each of these will look like a reasonable next step later,
+and every one of them destroys the property that makes this worth trusting.
+
+- **No account, and no server that sees an answer.** This is the whole basis on
+  which an advice centre can try it without involving a lawyer. It is not a
+  feature to be traded for a convenience.
+- **No analytics.** Including the privacy-preserving kind. The claim has to be
+  unqualified to be worth making. Measurement comes from partners reporting what
+  they saw, not from instrumenting families.
+- **No model in the estimate path.** `sources.ts` already says the model never
+  produces figures. A hallucinated euro amount with a statutory citation beside
+  it is the worst object this codebase could emit.
+- **No referrals, no lead generation, no commission.** That is the business model
+  of the tools this one exists to be an alternative to, and the first thing a
+  funder or a Pflegekasse will ask whether it is doing.
+- **No unreviewed translation of statutory text.** The four interface languages
+  already carry that debt; the questions and the amounts must not.
 
 ## Known limits
 
@@ -193,6 +221,10 @@ the transcription is never edited for readability.
 - Browser machine translation is disabled, because it silently overrode the language
   picker and machine-translated statutory text. That costs speakers of unsupported
   languages a fallback; it is one line in `app/layout.tsx` to reverse.
+- **No assessment with a known outcome has ever been run through this.** Every
+  test checks the model against itself, which cannot catch a misreading of the
+  instrument. `lib/rules/fixtures/` is the harness; it is empty. This is the
+  largest open question about whether the estimates are right.
 - Grouped questions trade a little fidelity for a much shorter intake. Where a
   household differs across the criteria in a group, the group has to be opened up by
   hand; nothing detects that automatically.

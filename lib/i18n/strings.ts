@@ -1404,6 +1404,52 @@ export const UI = {
     pl: 'Ile dnia osoba potrafi ułożyć bez pomocy?',
     ar: 'كم من اليوم يستطيع الشخص تنظيمه دون مساعدة؟',
   },
+
+  // ------------------------------------------------- how old the figures are
+  //
+  // `lib/rules/freshness.ts` explains why these exist. Short version: the
+  // amounts are only as good as the last time a human checked them, and the
+  // reader is entitled to know when that was without taking it on trust.
+  figuresAsOf: {
+    de: 'Beträge zuletzt geprüft: {date}',
+    en: 'Figures last checked: {date}',
+    tr: 'Tutarlar en son kontrol edildi: {date}',
+    ru: 'Суммы последний раз проверены: {date}',
+    pl: 'Kwoty ostatnio sprawdzone: {date}',
+    ar: 'آخر تحقق من المبالغ: {date}',
+  },
+  figuresStaleTitle: {
+    de: 'Diese Beträge wurden länger nicht geprüft',
+    en: 'These figures have not been checked for a while',
+    tr: 'Bu tutarlar bir süredir kontrol edilmedi',
+    ru: 'Эти суммы давно не проверялись',
+    pl: 'Te kwoty nie były od dawna sprawdzane',
+    ar: 'لم يجرِ التحقق من هذه المبالغ منذ فترة',
+  },
+  figuresStaleBody: {
+    de: 'Zuletzt geprüft: {date}. Beträge und Grenzwerte ändern sich meist zum Jahreswechsel. Bitte bestätigen Sie die Zahlen bei Ihrer Pflegekasse oder im Pflegestützpunkt.',
+    en: 'Last checked: {date}. Amounts and thresholds usually change at the turn of the year. Please confirm the figures with your care insurer or at a Pflegestützpunkt.',
+    tr: 'En son kontrol: {date}. Tutarlar ve eşik değerleri genellikle yıl başında değişir. Lütfen rakamları bakım sigortanızdan veya bir Pflegestützpunkt’tan teyit edin.',
+    ru: 'Последняя проверка: {date}. Суммы и пороговые значения обычно меняются в начале года. Пожалуйста, уточните цифры в вашей кассе по уходу или в Pflegestützpunkt.',
+    pl: 'Ostatnie sprawdzenie: {date}. Kwoty i progi zmieniają się zwykle z początkiem roku. Prosimy potwierdzić dane w swojej kasie opiekuńczej lub w Pflegestützpunkt.',
+    ar: 'آخر تحقق: {date}. عادةً ما تتغير المبالغ والحدود مع بداية العام. يُرجى تأكيد الأرقام لدى صندوق الرعاية التابع لك أو في أحد مراكز Pflegestützpunkt.',
+  },
+
+  // --------------------------------------------------------- voice and audio
+  //
+  // Said where voice is chosen, not only in the privacy notice. The product
+  // claims answers do not leave the device, and for tapping and typing that is
+  // true; speech recognition in Chrome and Edge uploads the audio. Someone
+  // choosing voice is choosing that, and should be told at the moment of
+  // choosing rather than left to find it in a footer.
+  voicePrivacyNotice: {
+    de: 'Hinweis zur Spracheingabe: Chrome und Edge werten die Tonaufnahme auf Servern ihres Herstellers aus. Angetippte und getippte Antworten bleiben auf dem Gerät. Jede Frage lässt sich auch antippen.',
+    en: 'A note on answering by voice: Chrome and Edge send the recording to their maker’s servers. Answers you tap or type stay on the device. Every question can be tapped instead.',
+    tr: 'Sesli yanıt hakkında: Chrome ve Edge ses kaydını üreticinin sunucularında işler. Dokunarak veya yazarak verdiğiniz yanıtlar cihazda kalır. Her soru dokunarak da yanıtlanabilir.',
+    ru: 'О голосовом ответе: Chrome и Edge обрабатывают аудиозапись на серверах своего производителя. Ответы, введённые касанием или с клавиатуры, остаются на устройстве. На любой вопрос можно ответить касанием.',
+    pl: 'O odpowiadaniu głosem: Chrome i Edge przetwarzają nagranie na serwerach swojego producenta. Odpowiedzi udzielone dotknięciem lub wpisane pozostają na urządzeniu. Na każde pytanie można odpowiedzieć również dotknięciem.',
+    ar: 'ملاحظة بشأن الإجابة الصوتية: يعالج Chrome وEdge التسجيل الصوتي على خوادم الشركة المطوِّرة. أما الإجابات التي تدخلها باللمس أو بالكتابة فتبقى على جهازك. ويمكن الإجابة عن كل سؤال باللمس أيضًا.',
+  },
 } as const satisfies Record<string, ChromeText>;
 
 export type UiKey = keyof typeof UI;
