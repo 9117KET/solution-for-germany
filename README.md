@@ -160,6 +160,11 @@ npm run lint
 npm run build
 ```
 
+```bash
+npm run build && npm start &   # then, against the running build:
+npm run test:e2e               # browser checks: legal pages, voice notice, the report
+```
+
 `npm test` includes a check that fails once the statutory figures have gone
 unverified for 180 days. That is a deadman's switch rather than a bug: see
 [`MAINTENANCE.md`](MAINTENANCE.md), which also carries the January routine for
@@ -179,6 +184,7 @@ re-checking the amounts.
 | `lib/rules/freshness.ts` | How old the figures are, and the build failure that enforces it |
 | `lib/rules/fixtures/` | Assessments with known outcomes, from outside this codebase |
 | `lib/intake/monotonicity.test.ts` | The property the short intake depends on |
+| `e2e/smoke.mjs` | Browser checks for the things a unit test cannot see |
 | `components/` | Interface |
 
 `lib/intake/criteria.ts` is a transcription of the official instrument and is meant to

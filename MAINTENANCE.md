@@ -68,6 +68,7 @@ Roughly three hundred tests pass. Know what that does and does not buy:
 | `monotonicity.test.ts` | The bounds bracket every completion, and the early stop is sound |
 | `a11y.test.ts`, `contrast.test.ts` | Every theme pair meets WCAG AAA |
 | `fixtures/` | **Nothing yet.** See below |
+| `e2e/smoke.mjs` | That the pages render, the voice notice fires, the report is dated |
 
 Everything above the last row checks the model **against itself**. Both scoring
 paths read the same `criteria.ts`, so a misreading of the official instrument —
@@ -84,12 +85,19 @@ labelled case. Ask for it, with consent, and keep only the numbers.
 
 ```bash
 npm test && npm run typecheck && npm run lint && npm run build
+npm start &                      # serve the build
+npm run test:e2e                 # then drive it in a real browser
 ```
 
-Then, by hand, because none of the above can see it:
+`test:e2e` uses Playwright. The first run downloads a browser (`npx playwright
+install chromium`); in a sandbox that already has one, point `CHROMIUM_PATH` at
+it instead. It needs a server on :3000 and says so if there is none.
 
-- Walk one intake end to end and download the PDF.
-- Check `/impressum` and `/datenschutz` still load and still say true things.
+Then, by hand, because even the browser suite does not cover it:
+
+- Download the PDF and read it. The e2e run reaches the report but does not
+  open the file.
+- Try it once at the largest text size and once on yellow-on-black.
 - If anything about voice, storage or hosting changed, `/datenschutz` is now
   wrong until you fix it. Treat that as part of the change, not as follow-up.
 
