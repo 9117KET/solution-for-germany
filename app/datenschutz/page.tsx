@@ -35,9 +35,9 @@ export default function Datenschutz() {
           <br />
           <a
             className="target text-accent underline underline-offset-4"
-            href="mailto:kinlotangiri@gmail.com"
+            href="mailto:kinlotangiri1@gmail.com"
           >
-            kinlotangiri@gmail.com
+            kinlotangiri1@gmail.com
           </a>
         </p>
       </Section>

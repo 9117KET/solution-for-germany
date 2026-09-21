@@ -31,9 +31,9 @@ export default function Impressum() {
           E-Mail:{' '}
           <a
             className="target text-accent underline underline-offset-4"
-            href="mailto:kinlotangiri@gmail.com"
+            href="mailto:kinlotangiri1@gmail.com"
           >
-            kinlotangiri@gmail.com
+            kinlotangiri1@gmail.com
           </a>
           <br />
           Telefon: +49 176 27522943
