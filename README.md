@@ -231,6 +231,13 @@ and every one of them destroys the property that makes this worth trusting.
 - Browser machine translation is disabled, because it silently overrode the language
   picker and machine-translated statutory text. That costs speakers of unsupported
   languages a fallback; it is one line in `app/layout.tsx` to reverse.
+- **Whether this counts as a Rechtsdienstleistung under the RDG is unresolved.**
+  The case law points both ways: a document generator working from a decision
+  tree is not one (BGH I ZR 113/20), but a calculator that works out what a
+  named person is owed was treated as one (BGH VIII ZR 285/18). The exposure is
+  the computed objection deadline and the individualised gap analysis, not the
+  estimate. [`docs/rdg-briefing.md`](docs/rdg-briefing.md) is the groundwork for
+  asking a lawyer; nobody has asked one yet.
 - **It needs Safari 16.4, Chrome 111 or Firefox 128.** Tailwind v4 depends on
   `@property` and `color-mix()` and
   [says plainly](https://tailwindcss.com/docs/compatibility) that it will not work
