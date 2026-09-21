@@ -29,13 +29,15 @@ export default function Datenschutz() {
         <p>
           Kinlo Ephriam Tangiri
           <br />
+          Alhardstraße 19
+          <br />
           28757 Bremen, Deutschland
           <br />
           <a
             className="target text-accent underline underline-offset-4"
-            href="mailto:kinlotangiri911@gmail.com"
+            href="mailto:kinlotangiri@gmail.com"
           >
-            kinlotangiri911@gmail.com
+            kinlotangiri@gmail.com
           </a>
         </p>
       </Section>

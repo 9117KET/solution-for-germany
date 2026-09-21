@@ -12,14 +12,13 @@ export default function Impressum() {
       <Section title="Angaben gemäß § 5 DDG">
         <p>
           {/*
-            INCOMPLETE ON PURPOSE, AND KNOWN TO BE.
-            § 5 DDG wants a ladungsfähige Anschrift — a street and house number
-            at which the provider can actually be served. Postcode and city
-            alone does not meet that, and nor would a Postfach. This is what the
-            owner chose to publish for now; the fix is to add the street here,
-            or to switch the whole block to a c/o or a service address.
+            A ladungsfähige Anschrift, as § 5 DDG requires: an address at which
+            the provider can actually be served. A Postfach would not do, and
+            nor would postcode and city on their own.
           */}
           Kinlo Ephriam Tangiri
+          <br />
+          Alhardstraße 19
           <br />
           28757 Bremen
           <br />
@@ -32,9 +31,9 @@ export default function Impressum() {
           E-Mail:{' '}
           <a
             className="target text-accent underline underline-offset-4"
-            href="mailto:kinlotangiri911@gmail.com"
+            href="mailto:kinlotangiri@gmail.com"
           >
-            kinlotangiri911@gmail.com
+            kinlotangiri@gmail.com
           </a>
           <br />
           Telefon: +49 176 27522943
