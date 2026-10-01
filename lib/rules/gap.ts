@@ -337,10 +337,18 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
             de: `Höherstufung beantragen: die Einschätzung ergibt Pflegegrad ${estimated}`,
             en: `Request a reassessment: the estimate indicates Pflegegrad ${estimated}`,
           },
-      why: {
-        de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
-        en: 'Around 29% of reassessed reports turned out to be wrong and were corrected. A reasoned objection succeeds far more often than an unreasoned one.',
-      },
+      // The correction rate is about objections, so it only backs the appeal.
+      // A Höherstufung is a new application, and its case is that it costs
+      // nothing and has no deadline.
+      why: withinAppealWindow
+        ? {
+            de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
+            en: 'Around 29% of reassessed reports turned out to be wrong and were corrected. A reasoned objection succeeds far more often than an unreasoned one.',
+          }
+        : {
+            de: 'Ein Antrag auf Höherstufung ist jederzeit möglich, ohne Frist und ohne Kosten. Die Pflegekasse lässt dann neu begutachten. Ist Ihr Bescheid jünger als einen Monat, ist stattdessen ein Widerspruch möglich; mit dem Datum des Bescheids zeigt Ihnen die Auswertung die Frist.',
+            en: 'A request for a higher grade can be made at any time, with no deadline and no cost. The insurer then arranges a new assessment. If your decision letter is less than a month old, an objection is possible instead; given the date of the letter, the report shows the deadline.',
+          },
       monthlyValue: uplift > 0 ? uplift : null,
       onceValue: null,
       effort: 'medium',

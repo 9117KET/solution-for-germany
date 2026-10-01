@@ -637,12 +637,14 @@ export const UI = {
     ar: 'قبل أن نبدأ',
   },
   conditionsTitle: {
-    de: 'Vier kurze Fragen',
-    en: 'Four short questions',
-    tr: 'Dört kısa soru',
-    ru: 'Четыре коротких вопроса',
-    pl: 'Cztery krótkie pytania',
-    ar: 'أربعة أسئلة قصيرة',
+    // Not a number: how many appear depends on the answers (the
+    // Gebrauchsunfähigkeit question joins them), so a count would be wrong.
+    de: 'Ein paar kurze Fragen',
+    en: 'A few short questions',
+    tr: 'Birkaç kısa soru',
+    ru: 'Несколько коротких вопросов',
+    pl: 'Kilka krótkich pytań',
+    ar: 'بضعة أسئلة قصيرة',
   },
   conditionsIntro: {
     de: 'Damit können wir ganze Abschnitte weglassen, die bei Ihnen nicht vorkommen.',
