@@ -25,7 +25,7 @@
  */
 
 import type { ContentLang, Localised } from '../i18n';
-import { formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
+import { formatDate, formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
 import type { GradeBounds } from '../intake/adaptive';
 
 /** One answered question, as the report lists it back. */
@@ -247,7 +247,9 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
           : '';
     text(`${i + 1}. ${a.title[lang]}${value}`, { bold: true, gap: 1 });
     text(a.why[lang], { size: SIZE.small, indent: 14, gap: 1, colour: '#333333' });
-    const deadline = a.deadline ? ` · ${t('deadline')}: ${a.deadline}` : '';
+    const deadline = a.deadline
+      ? ` · ${t('deadline')}: ${formatDate(a.deadline, lang === 'de' ? 'de-DE' : 'en-GB')}`
+      : '';
     text(`${SOURCES[a.source].law}${deadline}`, {
       size: SIZE.small,
       indent: 14,
