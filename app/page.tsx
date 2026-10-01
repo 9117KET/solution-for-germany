@@ -247,7 +247,9 @@ export default function Home() {
   const headingRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
-    headingRef.current?.focus();
+    // preventScroll: focusing a tall step would scroll it back into view and
+    // tuck its heading under the sticky settings bar.
+    headingRef.current?.focus({ preventScroll: true });
   }, [position]);
 
   const renderAskable = (a: Askable, alone: boolean) => {
