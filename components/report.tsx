@@ -21,6 +21,7 @@ import { downloadReportPdf } from '@/lib/report/pdf';
 import { clearSession } from '@/lib/intake/session';
 import { formatDate, localToday } from '@/lib/rules/gap';
 import { Button, Card, Notice, YesNo } from './ui';
+import { LetterPanel } from './letter';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
 
@@ -90,6 +91,8 @@ export function Report({
 }) {
   const { t, s, numberLocale, contentLang } = useT();
   const [showAnswers, setShowAnswers] = useState(false);
+  // Which action's letter is open, by index. One at a time keeps the page short.
+  const [letterFor, setLetterFor] = useState<number | null>(null);
   const [showAdjust, setShowAdjust] = useState(false);
   const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
   const [erased, setErased] = useState(false);
@@ -317,7 +320,32 @@ export function Report({
                     </div>
                   ) : null}
                 </div>
+                {a.generates ? (
+                  <div className="no-print mt-3">
+                    <Button
+                      variant="secondary"
+                      expanded={letterFor === i}
+                      onClick={() => setLetterFor(letterFor === i ? null : i)}
+                    >
+                      {t('letterButton')}
+                    </Button>
+                  </div>
+                ) : null}
               </Card>
+              {a.generates && letterFor === i ? (
+                <div className="no-print mt-2">
+                  <LetterPanel
+                    kind={a.generates}
+                    deadline={a.deadline}
+                    bescheidDate={bescheidDate}
+                    currentGrade={report.currentGrade}
+                    estimatedGrade={likelyGrade}
+                    atLeast={!bounds.resolved}
+                    atHome={circumstances.atHome}
+                    answers={answers}
+                  />
+                </div>
+              ) : null}
             </li>
           ))}
         </ol>

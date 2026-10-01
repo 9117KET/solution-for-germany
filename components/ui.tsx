@@ -36,6 +36,7 @@ export function Button({
   disabled,
   type = 'button',
   wide,
+  expanded,
 }: {
   children: ReactNode;
   onClick?: () => void;
@@ -43,6 +44,8 @@ export function Button({
   disabled?: boolean;
   type?: 'button' | 'submit';
   wide?: boolean;
+  /** For a button that opens a panel: announced as expanded or collapsed. */
+  expanded?: boolean;
 }) {
   const styles: Record<string, string> = {
     primary: 'bg-accent text-accent-fg border-accent-line font-bold',
@@ -54,6 +57,7 @@ export function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      aria-expanded={expanded}
       className={`target rounded-lg border-[length:var(--line-width)] px-6 py-3 text-lg disabled:opacity-40 disabled:cursor-not-allowed ${
         styles[variant]
       } ${wide ? 'w-full' : ''}`}

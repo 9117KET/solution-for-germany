@@ -125,6 +125,27 @@ print it: the Begutachtung is an interview asking the same things, and a family 
 walks in with its own answers written down does not have to remember, on the spot,
 how often the nights are bad.
 
+## The letter
+
+The first step on the report is usually a letter: an objection to a Bescheid, a
+request for a higher grade, or a first application. Telling a family to "lodge an
+objection within a month" is where most of them stop, because the next thing it asks
+for is a formal German letter. So the step writes it.
+
+The letter is filled in on the report, previewed as it is typed, and downloaded as a
+PDF or copied as text. It is always German, because it goes to the Pflegekasse. It
+names the Bescheid and the grade awarded, states the estimate as an estimate under
+§ 15 SGB XI ("mindestens" where the intake stopped at a range), and cites the
+household's own answers in the instrument's wording, only those that describe a
+need. It carries no euro figure: it asks for a grade, not an amount. The objection
+also asks for the full Gutachten and a confirmation of receipt, and the screen says
+how to send it so that it counts (the deadline, registered post or fax, and that a
+plain email is not enough).
+
+Name, insurance number and addresses live only in the form and in the downloaded
+file. They are never written to the device. A detail left out stays a visible
+`[placeholder]`, so a printed letter can be finished by hand. See `lib/report/letter.ts`.
+
 ## The numbers are traceable
 
 Every euro figure and every threshold carries a `SourceId` pointing at the statute it
@@ -163,6 +184,7 @@ npm run build
 | `lib/intake/adaptive.ts` | Grade bounds, and the rule that ends the intake early |
 | `lib/intake/groups.ts` | Which criteria are asked as one question, and how a group opens up |
 | `lib/report/pdf.ts` | The downloadable PDF, assembled on the device |
+| `lib/report/letter.ts` | The objection, upgrade and application letters, and their PDF |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
 | `components/` | Interface |
@@ -172,6 +194,10 @@ stay verifiable line by line against it. Rewording lives in `lib/intake/plain.ts
 the transcription is never edited for readability.
 
 ## Known limits
+
+- The letter templates have **not been reviewed by a lawyer or a care adviser**. They
+  are deliberately plain and claim nothing the answers do not support, but should be
+  checked before families rely on them.
 
 - The Turkish, Russian, Polish and Arabic interface copy has **not been reviewed by a
   native speaker**. A few strings carry statutory substance and should be checked
