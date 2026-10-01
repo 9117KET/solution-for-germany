@@ -150,6 +150,16 @@ export function Report({
           <p className="mt-1 text-base text-fg-muted">
             {t('pointsOf100', { n: assessment.totalWeighted })}
           </p>
+          {/* Distance from the estimate, so it sits with the estimate. A range
+              has no single next grade, so it is left out there. */}
+          {bounds.resolved && assessment.pointsToNextGrade !== null ? (
+            <p className="mt-1 text-base text-fg-muted">
+              {t('pointsToNext', {
+                n: assessment.pointsToNextGrade,
+                grade: String(assessment.nextGrade),
+              })}
+            </p>
+          ) : null}
           {/* The grade came from § 15 Abs. 4, not from the points above it, so
               the points would otherwise read as a contradiction. Say which rule
               produced the number, and that the Medizinischer Dienst decides it:
@@ -182,14 +192,6 @@ export function Report({
           <p className="mt-1 text-4xl font-bold tabular-nums">
             {report.currentGrade === 0 ? t('none') : report.currentGrade}
           </p>
-          {assessment.pointsToNextGrade !== null ? (
-            <p className="mt-1 text-base text-fg-muted">
-              {t('pointsToNext', {
-                n: assessment.pointsToNextGrade,
-                grade: String(assessment.nextGrade),
-              })}
-            </p>
-          ) : null}
         </Card>
         <Card>
           <p className="text-sm font-semibold uppercase tracking-wide text-fg-muted">
