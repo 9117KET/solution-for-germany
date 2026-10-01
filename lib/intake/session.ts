@@ -49,6 +49,12 @@ export interface SavedSession {
   currentGrade: Pflegegrad;
   bescheidDate: string;
   claimed: BenefitId[];
+  /**
+   * The answer to "Pflegegeld or a care service already?" on the situation
+   * screen. Absent until asked; while absent, the report assumes yes rather
+   * than counting a whole Pflegegeld as unclaimed.
+   */
+  careProvision?: boolean;
   circumstances: Circumstances;
   /**
    * Question ids in the order they were first answered.
@@ -218,6 +224,7 @@ export function loadSession(): SavedSession | null {
             (id): id is BenefitId => typeof id === 'string' && BENEFIT_IDS.has(id as BenefitId),
           )
         : [],
+      ...(typeof raw.careProvision === 'boolean' ? { careProvision: raw.careProvision } : {}),
       circumstances: parseCircumstances(raw.circumstances),
       // Unknown ids are dropped rather than kept: a question id from an older
       // version no longer resolves to anything, and carrying it would leave a

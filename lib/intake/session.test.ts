@@ -78,6 +78,14 @@ describe('round trip', () => {
     expect(globalThis.localStorage.getItem(KEY)).not.toBeNull();
   });
 
+  it('keeps the answer about Pflegegeld, and only as a yes or no', () => {
+    const s = base({ currentGrade: 2, careProvision: false });
+    saveSession(s);
+    expect(loadSession()).toEqual(s);
+    write({ ...base({ currentGrade: 2 }), careProvision: 'ja' });
+    expect(loadSession()!.careProvision).toBeUndefined();
+  });
+
   it('leaves no trace when nothing has been answered', () => {
     // Opening the page and closing it again must not write anything: on a
     // shared computer the absence of a file is itself the privacy promise.

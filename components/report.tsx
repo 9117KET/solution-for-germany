@@ -19,6 +19,7 @@ import type { Coverage, GradeBounds } from '@/lib/intake/adaptive';
 import { answerLines } from '@/lib/intake/summary';
 import { downloadReportPdf } from '@/lib/report/pdf';
 import { clearSession } from '@/lib/intake/session';
+import { formatDate, localToday } from '@/lib/rules/gap';
 import { Button, Card, Notice, YesNo } from './ui';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
@@ -101,6 +102,10 @@ export function Report({
   // Money follows the interface language, not the content language: the
   // separators someone reads fluently are the ones of the language they chose.
   const money = (c: number) => formatEuro(c, numberLocale);
+  // The grade a household without one would most likely be awarded: the
+  // estimate, or the bottom of the range while it is still open.
+  const likelyGrade = (bounds.resolved ? assessment.grade : bounds.low) as Pflegegrad;
+  const likelyMoney = circumstances.atHome ? entitlement('pflegegeld', likelyGrade) : 0;
 
   return (
     <div className="flex flex-col gap-8">
@@ -109,7 +114,26 @@ export function Report({
         <p className="text-sm font-semibold uppercase tracking-wide text-accent">
           {t('resultEyebrow')}
         </p>
-        {monthlyGapTotal > 0 ? (
+        {/* With no grade there is no unclaimed money by definition, and saying
+            so would bury the one thing this person needs to hear. Lead with
+            the grade instead, at the low end of a range, and with an example
+            figure only where it reaches the family. */}
+        {report.currentGrade === 0 && likelyGrade > 0 ? (
+          <>
+            <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
+              {t('headlineGrade', {
+                grade: bounds.resolved
+                  ? t('gradeN', { n: likelyGrade })
+                  : `${t('gradeN', { n: bounds.low })}–${bounds.high}`,
+              })}
+            </h2>
+            <p className="text-xl text-fg-muted">
+              {likelyMoney > 0
+                ? t('headlineGradeMoney', { amount: money(likelyMoney) })
+                : t('headlineGradeNext')}
+            </p>
+          </>
+        ) : monthlyGapTotal > 0 ? (
           <>
             <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
               {t('headlineMoney', { amount: money(monthlyGapTotal) })}
@@ -245,6 +269,20 @@ export function Report({
         </Notice>
       ) : null}
 
+      {/* Silence here would read as "nothing to worry about", and the obvious
+          next step, asking for a reassessment, can cost the family a grade. */}
+      {report.estimateBelowCurrent ? (
+        <Notice tone="warn" title={t('estimateLowerTitle')}>
+          {t('estimateLowerBody')}
+        </Notice>
+      ) : null}
+
+      {!circumstances.atHome ? (
+        <Notice tone="info" title={t('residentialTitle')}>
+          {t('residentialBody')}
+        </Notice>
+      ) : null}
+
       {/* ---- actions ---- */}
       <section className="flex flex-col gap-3">
         <h3 className="text-2xl font-bold tracking-tight">{t('whatToDo')}</h3>
@@ -265,7 +303,7 @@ export function Report({
                     </p>
                     <p className="mt-2 font-mono text-sm text-fg-muted">
                       {SOURCES[a.source].law}
-                      {a.deadline ? ` · ${t('deadlineLabel')} ${a.deadline}` : ''}
+                      {a.deadline ? ` · ${t('deadlineLabel')} ${formatDate(a.deadline, numberLocale)}` : ''}
                     </p>
                   </div>
                   {a.monthlyValue || a.onceValue ? (
@@ -423,7 +461,9 @@ export function Report({
               </tbody>
             </table>
           </div>
-          <p className="text-base text-fg-muted">{t('exclusiveNote')}</p>
+          {circumstances.atHome ? (
+            <p className="text-base text-fg-muted">{t('exclusiveNote')}</p>
+          ) : null}
         </section>
       ) : (
         <Notice title={t('nothingToCompareTitle')}>{t('nothingToCompareBody')}</Notice>
@@ -468,6 +508,7 @@ export function Report({
                     id="bescheid"
                     type="date"
                     value={bescheidDate}
+                    max={localToday()}
                     onChange={(e) => onBescheidDate(e.target.value)}
                     className="bordered target mt-3 rounded-md bg-surface px-3 text-lg"
                   />
