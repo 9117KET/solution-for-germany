@@ -63,6 +63,21 @@ describe('round trip', () => {
     expect(loadSession()).toEqual(s);
   });
 
+  it('keeps the pooled module 5 bands', () => {
+    // These were once dropped on restore, which reopened module 5 and asked
+    // three answered questions again.
+    const s = base({
+      answers: { ...emptyIntake(), m5: { daily: 1, weekly: 1, intensive: 6 } },
+    });
+    saveSession(s);
+    expect(loadSession()).toEqual(s);
+  });
+
+  it('writes a session where only the module 5 bands are answered', () => {
+    saveSession(base({ answers: { ...emptyIntake(), m5: { weekly: 2 } } }));
+    expect(globalThis.localStorage.getItem(KEY)).not.toBeNull();
+  });
+
   it('leaves no trace when nothing has been answered', () => {
     // Opening the page and closing it again must not write anything: on a
     // shared computer the absence of a file is itself the privacy promise.
@@ -147,6 +162,14 @@ describe('a stored file that cannot be trusted', () => {
     expect(f['5.99']).toBeUndefined();
     expect(f['5.3']).toBeUndefined();
     expect(f['5.4']).toBeUndefined();
+  });
+
+  it('drops module 5 bands outside the thresholds', () => {
+    // 4 and 5 are not bands of the intensive group; 6 is, the others are not.
+    write(base({ answers: { ...emptyIntake(), levels: { '1.1': 1 }, m5: { daily: 6, weekly: 2.5, intensive: 4 } } }));
+    expect(loadSession()!.answers.m5).toBeUndefined();
+    write(base({ answers: { ...emptyIntake(), levels: { '1.1': 1 }, m5: { daily: 3, intensive: 9 } } }));
+    expect(loadSession()!.answers.m5).toEqual({ daily: 3 });
   });
 
   it('drops unknown conditions and benefits', () => {

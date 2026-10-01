@@ -30,7 +30,14 @@
 
 import { CRITERIA, CONDITIONS, type ConditionId } from './criteria';
 import { askableId, fullPlan } from './adaptive';
-import { M5_CRITERIA, type Frequency, type IntakeAnswers, type Per } from './score';
+import {
+  M5_CRITERIA,
+  M5_INTENSIVE_BANDS,
+  type Frequency,
+  type IntakeAnswers,
+  type M5Bands,
+  type Per,
+} from './score';
 import { BENEFITS, type BenefitId } from '../rules/benefits';
 import type { Circumstances } from '../rules/gap';
 import type { Pflegegrad } from '../rules/nba';
@@ -118,6 +125,21 @@ function parseAnswers(raw: unknown): IntakeAnswers {
     }
   }
 
+  // The pooled module 5 bands. Without these a restore silently forgot three
+  // answers, reopened module 5 and asked them again.
+  if (isRecord(raw.m5)) {
+    const m5: M5Bands = {};
+    const band = (v: unknown, allowed: readonly number[]) =>
+      typeof v === 'number' && allowed.includes(v) ? v : undefined;
+    const daily = band(raw.m5.daily, [0, 1, 2, 3]);
+    const weekly = band(raw.m5.weekly, [0, 1, 2, 3]);
+    const intensive = band(raw.m5.intensive, M5_INTENSIVE_BANDS);
+    if (daily !== undefined) m5.daily = daily;
+    if (weekly !== undefined) m5.weekly = weekly;
+    if (intensive !== undefined) m5.intensive = intensive;
+    if (Object.keys(m5).length > 0) out.m5 = m5;
+  }
+
   if (typeof raw.dietLevel === 'number' && Number.isInteger(raw.dietLevel)) {
     if (raw.dietLevel >= 0 && raw.dietLevel <= 3) out.dietLevel = raw.dietLevel;
   }
@@ -162,13 +184,14 @@ function parseCircumstances(raw: unknown): Circumstances {
 export function hasContent(
   s: Pick<SavedSession, 'answers' | 'claimed' | 'currentGrade' | 'bescheidDate' | 'circumstances'>,
 ): boolean {
-  const { conditions, levels, frequencies, dietLevel } = s.answers;
+  const { conditions, levels, frequencies, dietLevel, m5 } = s.answers;
   const { atHome, sharedHousehold, wantsHomeAdaptation } = s.circumstances;
   return (
     Object.keys(levels).length > 0 ||
     Object.keys(frequencies).length > 0 ||
     Object.values(conditions).some((v) => v !== undefined) ||
     dietLevel !== undefined ||
+    (m5 !== undefined && Object.values(m5).some((v) => v !== undefined)) ||
     s.claimed.length > 0 ||
     s.currentGrade !== 0 ||
     s.bescheidDate !== '' ||
