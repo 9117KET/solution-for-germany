@@ -27,6 +27,8 @@
 import type { ContentLang, Localised } from '../i18n';
 import { formatDate, formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
 import type { GradeBounds } from '../intake/adaptive';
+import { translate } from '../i18n/strings';
+import { PREP_TIPS, assessmentAhead } from './prep';
 
 /** One answered question, as the report lists it back. */
 export interface AnswerLine {
@@ -88,6 +90,7 @@ const L = {
   colEntitled: { de: 'Zusteht', en: 'Entitled' },
   colClaimed: { de: 'Bezogen', en: 'Claimed' },
   colGap: { de: 'Differenz', en: 'Difference' },
+  check: { de: 'bitte prüfen', en: 'please check' },
   yourAnswers: { de: 'Ihre Antworten', en: 'Your answers' },
   answersIntro: {
     de:
@@ -219,6 +222,9 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
   // --------------------------------------------------------------- money
   heading(t('money'));
   if (input.report.monthlyGapTotal > 0) {
+    // Text is drawn on its baseline, so a figure this large would otherwise
+    // sit on the heading's rule.
+    y += 8;
     text(`${money(input.report.monthlyGapTotal)} ${t('perMonth')}`, {
       size: 18,
       bold: true,
@@ -258,6 +264,13 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
     });
   });
 
+  // --------------------------------------------------------- preparation
+  if (assessmentAhead(input.report)) {
+    heading(translate('prepTitle', lang));
+    text(translate('prepIntro', lang), { size: SIZE.small, colour: '#333333' });
+    for (const k of PREP_TIPS) text(`•  ${translate(k, lang)}`, { indent: 6, gap: 2 });
+  }
+
   // ----------------------------------------------------------- breakdown
   const rows = input.report.gaps.filter((g) => g.status !== 'ineligible');
   if (rows.length > 0) {
@@ -284,8 +297,15 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
       doc.text(name, cols[0], y);
       doc.text(money(g.entitled), cols[1], y);
       doc.text(money(g.claimed), cols[2], y);
-      doc.setFont('helvetica', 'bold');
-      doc.text(g.gap > 0 ? money(g.gap) : '-', cols[3], y);
+      // A benefit that depends on a circumstance nobody confirmed is not a
+      // gap; the screen says "please check" and so must the paper.
+      if (g.status === 'check') {
+        doc.setTextColor('#555555');
+        doc.text(t('check'), cols[3], y);
+      } else {
+        doc.setFont('helvetica', 'bold');
+        doc.text(g.gap > 0 ? money(g.gap) : '-', cols[3], y);
+      }
       y += Math.max(name.length, 1) * 11 + 6;
     }
   }

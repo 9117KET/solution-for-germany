@@ -22,6 +22,8 @@ import { clearSession } from '@/lib/intake/session';
 import { formatDate, localToday } from '@/lib/rules/gap';
 import { Button, Card, Notice, YesNo } from './ui';
 import { LetterPanel } from './letter';
+import { downloadDeadlineIcs } from '@/lib/report/calendar';
+import { PREP_TIPS, assessmentAhead } from '@/lib/report/prep';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
 
@@ -320,16 +322,30 @@ export function Report({
                     </div>
                   ) : null}
                 </div>
-                {a.generates ? (
-                  <div className="no-print mt-3">
-                    <Button
-                      variant="secondary"
-                      expanded={letterFor === i}
-                      onClick={() => setLetterFor(letterFor === i ? null : i)}
-                    >
-                      {t('letterButton')}
-                    </Button>
+                {a.generates || a.deadline ? (
+                  <div className="no-print mt-3 flex flex-wrap gap-3">
+                    {a.generates ? (
+                      <Button
+                        variant="secondary"
+                        expanded={letterFor === i}
+                        onClick={() => setLetterFor(letterFor === i ? null : i)}
+                      >
+                        {t('letterButton')}
+                      </Button>
+                    ) : null}
+                    {/* The calendar file is in the content language, like the PDF. */}
+                    {a.deadline ? (
+                      <Button
+                        variant="secondary"
+                        onClick={() => downloadDeadlineIcs(a.deadline!, contentLang)}
+                      >
+                        {t('calendarButton')}
+                      </Button>
+                    ) : null}
                   </div>
+                ) : null}
+                {a.deadline ? (
+                  <p className="no-print mt-2 text-sm text-fg-muted">{t('calendarHint')}</p>
                 ) : null}
               </Card>
               {a.generates && letterFor === i ? (
@@ -350,6 +366,21 @@ export function Report({
           ))}
         </ol>
       </section>
+
+      {/* The estimate holds only if the assessment hears the same things. */}
+      {assessmentAhead(report) ? (
+        <section className="flex flex-col gap-3">
+          <h3 className="text-2xl font-bold tracking-tight">{t('prepTitle')}</h3>
+          <p className="max-w-prose text-lg text-fg-muted">{t('prepIntro')}</p>
+          <Card>
+            <ul className="flex list-disc flex-col gap-2 ps-6 text-lg">
+              {PREP_TIPS.map((k) => (
+                <li key={k}>{t(k)}</li>
+              ))}
+            </ul>
+          </Card>
+        </section>
+      ) : null}
 
       {/* ---- where the number comes from ---- */}
       {relevant.length > 0 ? (

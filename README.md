@@ -146,6 +146,13 @@ Name, insurance number and addresses live only in the form and in the downloaded
 file. They are never written to the device. A detail left out stays a visible
 `[placeholder]`, so a printed letter can be finished by hand. See `lib/report/letter.ts`.
 
+Where the step has a deadline, a second button saves it as a calendar entry
+(`lib/report/calendar.ts`): an all-day event with reminders a week and three days
+ahead, and no name or health detail in it, because calendars sync and are shared.
+Whenever a step leads to an assessment, the report and the PDF add a short checklist
+for the visit itself: keep a care diary, have the documents ready, be there, describe
+a bad day, bring an interpreter, and read the Gutachten when it comes.
+
 ## The numbers are traceable
 
 Every euro figure and every threshold carries a `SourceId` pointing at the statute it
@@ -185,6 +192,7 @@ npm run build
 | `lib/intake/groups.ts` | Which criteria are asked as one question, and how a group opens up |
 | `lib/report/pdf.ts` | The downloadable PDF, assembled on the device |
 | `lib/report/letter.ts` | The objection, upgrade and application letters, and their PDF |
+| `lib/report/calendar.ts`, `prep.ts` | The deadline reminder, and the checklist for the assessment visit |
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
 | `components/` | Interface |
