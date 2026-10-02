@@ -92,6 +92,8 @@ export default function Home() {
   const [currentGrade, setCurrentGrade] = useState<Pflegegrad>(0);
   const [bescheidDate, setBescheidDate] = useState('');
   const [claimed, setClaimed] = useState<Set<BenefitId>>(new Set());
+  /** "Pflegegeld or a care service already?", asked only once a grade is held. */
+  const [careProvision, setCareProvision] = useState<boolean | undefined>(undefined);
   const [circumstances, setCircumstances] = useState<Circumstances>({
     atHome: true,
     sharedHousehold: false,
@@ -188,9 +190,49 @@ export default function Home() {
   const bounds = useMemo(() => gradeBounds(answers), [answers]);
   const coverage = useMemo(() => coverageOf(answers), [answers]);
 
+  /**
+   * What the household draws, as the report counts it.
+   *
+   * Nearly every household that holds a grade at home draws Pflegegeld or a
+   * care service. Until someone says otherwise, that is assumed: counting a
+   * whole Pflegegeld as unclaimed would make the headline wrong for almost
+   * everyone it is shown to, and wrong in the direction that costs trust.
+   */
+  const effectiveClaimed = useMemo(() => {
+    const assume =
+      currentGrade > 0 &&
+      circumstances.atHome &&
+      careProvision !== false &&
+      !claimed.has('pflegegeld') &&
+      !claimed.has('pflegesachleistung');
+    return assume ? new Set<BenefitId>([...claimed, 'pflegegeld']) : claimed;
+  }, [claimed, currentGrade, circumstances.atHome, careProvision]);
+
+  const answerCareProvision = (v: boolean) => {
+    setCareProvision(v);
+    setClaimed((prev) => {
+      const next = new Set(prev);
+      if (v) {
+        if (!next.has('pflegesachleistung')) next.add('pflegegeld');
+      } else {
+        next.delete('pflegegeld');
+        next.delete('pflegesachleistung');
+      }
+      return next;
+    });
+  };
+
+  // The checkboxes on the report and the question on the situation screen are
+  // the same fact, so ticking either keeps the other in step.
+  const updateClaimed = (update: (prev: Set<BenefitId>) => Set<BenefitId>) => {
+    const next = update(effectiveClaimed);
+    setClaimed(next);
+    setCareProvision(next.has('pflegegeld') || next.has('pflegesachleistung'));
+  };
+
   const report = useMemo(() => {
     const claimedMap: Partial<Record<BenefitId, number>> = {};
-    for (const id of claimed) claimedMap[id] = entitlement(id, currentGrade);
+    for (const id of effectiveClaimed) claimedMap[id] = entitlement(id, currentGrade);
     return analyse({
       currentGrade,
       assessment,
@@ -198,7 +240,7 @@ export default function Home() {
       circumstances,
       bescheidDate: bescheidDate || undefined,
     });
-  }, [claimed, currentGrade, assessment, circumstances, bescheidDate]);
+  }, [effectiveClaimed, currentGrade, assessment, circumstances, bescheidDate]);
 
   const goNext = useCallback(() => setStep((i) => i + 1), []);
   const goBack = useCallback(() => setStep((i) => Math.max(0, i - 1)), []);
@@ -208,6 +250,7 @@ export default function Home() {
     setCurrentGrade(0);
     setBescheidDate('');
     setClaimed(new Set());
+    setCareProvision(undefined);
     setCircumstances({ atHome: true, sharedHousehold: false, wantsHomeAdaptation: false });
     setOrder([]);
     setStep(0);
@@ -221,6 +264,7 @@ export default function Home() {
     setCurrentGrade(saved.currentGrade);
     setBescheidDate(saved.bescheidDate);
     setClaimed(new Set(saved.claimed));
+    setCareProvision(saved.careProvision);
     setCircumstances(saved.circumstances);
     setOrder(saved.order ?? []);
     setStep(saved.index);
@@ -234,12 +278,13 @@ export default function Home() {
       currentGrade,
       bescheidDate,
       claimed: [...claimed],
+      ...(careProvision === undefined ? {} : { careProvision }),
       circumstances,
       order,
       index: step,
       savedAt: new Date().toISOString(),
     });
-  }, [answers, currentGrade, bescheidDate, claimed, circumstances, order, step, persist]);
+  }, [answers, currentGrade, bescheidDate, claimed, careProvision, circumstances, order, step, persist]);
 
   // Focus lands on the heading of every new screen and the page scrolls up.
   // Without it a keyboard or screen-reader user stays focused where the old
@@ -247,7 +292,9 @@ export default function Home() {
   const headingRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
-    headingRef.current?.focus();
+    // preventScroll: focusing a tall step would scroll it back into view and
+    // tuck its heading under the sticky settings bar.
+    headingRef.current?.focus({ preventScroll: true });
   }, [position]);
 
   const renderAskable = (a: Askable, alone: boolean) => {
@@ -376,13 +423,19 @@ export default function Home() {
             intro={t('situationIntro')}
           >
             {/*
-             * Two questions, where this screen used to carry as many as twelve.
-             * The Bescheid date, the benefits already being drawn and the two
-             * household circumstances all moved to the report, where they are
-             * offered as a refinement to a result the person can already see.
-             * Asking them here meant asking a family to inventory its paperwork
-             * before it had any reason to believe the tool was worth the
-             * trouble, and it was the single longest screen in the flow.
+             * Two questions, three once a grade is held, where this screen used
+             * to carry as many as twelve. The Bescheid date, the full list of
+             * benefits drawn and the two household circumstances live on the
+             * report, offered as a refinement to a result the person can
+             * already see. Asking them here meant asking a family to inventory
+             * its paperwork before it had any reason to believe the tool was
+             * worth the trouble.
+             *
+             * The one exception is Pflegegeld. It is the largest figure in the
+             * headline and nearly everyone with a grade already draws it, so
+             * leaving it to the report meant showing almost every such family
+             * a headline several hundred euros too high before they could
+             * correct it.
              */}
             <Card>
               <p className="text-lg font-semibold">{t('currentGradeQ')}</p>
@@ -410,6 +463,15 @@ export default function Home() {
               value={circumstances.atHome}
               onChange={(v) => setCircumstances((c) => ({ ...c, atHome: v }))}
             />
+
+            {currentGrade > 0 && circumstances.atHome ? (
+              <YesNo
+                label={t('careProvisionQ')}
+                hint={t('careProvisionHint')}
+                value={careProvision}
+                onChange={answerCareProvision}
+              />
+            ) : null}
           </StepShell>
         ) : null}
 
@@ -435,11 +497,11 @@ export default function Home() {
             plainWords={plainWords}
             currentGrade={currentGrade}
             bescheidDate={bescheidDate}
-            claimed={claimed}
+            claimed={effectiveClaimed}
             circumstances={circumstances}
             benefits={BENEFITS}
             onBescheidDate={setBescheidDate}
-            onClaimed={setClaimed}
+            onClaimed={updateClaimed}
             onCircumstances={setCircumstances}
             onErase={() => setPersist(false)}
             onRefine={remaining > 0 ? () => setStep(2 + answeredCount) : undefined}

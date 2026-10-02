@@ -116,6 +116,12 @@ export interface GapReport {
   estimatedGrade: Pflegegrad;
   /** True where the estimate exceeds the awarded grade. */
   estimateExceedsCurrent: boolean;
+  /**
+   * True where a grade is awarded and the estimate comes out lower. A request
+   * for reassessment can lower a grade as well as raise it, so the report says
+   * so rather than staying silent.
+   */
+  estimateBelowCurrent: boolean;
   gaps: BenefitGap[];
   /** Sum of certain, recurring, unclaimed money per month. The headline. */
   monthlyGapTotal: Cents;
@@ -156,17 +162,23 @@ function headlineEntitlement(
   return capped > 0 && capped < full ? { entitled: capped, full } : { entitled: full };
 }
 
-/** Does this benefit apply at all, given the household's circumstances? */
+/**
+ * Does this benefit apply at all, given the household's circumstances?
+ *
+ * Everything here except the Wohngruppenzuschlag is a benefit of home care
+ * (§§ 37, 40, 42a, 45b SGB XI). In a care home the Pflegekasse pays the home
+ * under § 43 instead, which this tool does not model, so counting any of them
+ * would put money in the headline that does not exist.
+ */
 function circumstantiallyEligible(b: Benefit, c: Circumstances): boolean | 'unknown' {
   switch (b.id) {
-    case 'pflegehilfsmittel':
-      return c.atHome;
     case 'wohngruppenzuschlag':
       return c.sharedHousehold ? true : 'unknown';
     case 'wohnumfeldverbesserung':
+      if (!c.atHome) return false;
       return c.wantsHomeAdaptation ? true : 'unknown';
     default:
-      return true;
+      return c.atHome;
   }
 }
 
@@ -234,8 +246,8 @@ export function analyse(profile: CareProfile): GapReport {
     });
   }
 
-  // The care-provision slot, handled once.
-  const cpEntitled = careProvisionEntitlement(grade);
+  // The care-provision slot, handled once. Pflegegeld is a home-care benefit.
+  const cpEntitled = circumstances.atHome ? careProvisionEntitlement(grade) : 0;
   const cpClaimed = careProvisionClaimed(claimed);
   const cpGap = Math.max(0, cpEntitled - cpClaimed);
   if (cpEntitled > 0) {
@@ -264,6 +276,7 @@ export function analyse(profile: CareProfile): GapReport {
     currentGrade,
     estimatedGrade,
     estimateExceedsCurrent: estimatedGrade > currentGrade,
+    estimateBelowCurrent: currentGrade > 0 && estimatedGrade < currentGrade,
     gaps,
     monthlyGapTotal,
     onceGapTotal,
@@ -282,13 +295,44 @@ export function analyse(profile: CareProfile): GapReport {
   };
 }
 
-/** One month from the decision letter, per § 84 SGG. */
-function appealDeadline(bescheidDate?: string): string | undefined {
-  if (!bescheidDate) return undefined;
-  const d = new Date(bescheidDate);
-  if (Number.isNaN(d.getTime())) return undefined;
-  d.setMonth(d.getMonth() + 1);
-  return d.toISOString().slice(0, 10);
+/**
+ * One month from the decision letter, per § 84 SGG, as an ISO date.
+ *
+ * Counted from the date on the letter rather than from when it arrived, which
+ * can only make the deadline earlier, never later. A month that has no such
+ * day ends on its last day (§ 64 Abs. 2 SGG): 31 January gives 28 February,
+ * not 3 March. A date in the future is a typo, not a decision, and is ignored.
+ */
+export function appealDeadline(bescheidDate?: string, today: string = localToday()): string | undefined {
+  const m = bescheidDate?.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m || !bescheidDate || bescheidDate > today) return undefined;
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const ny = mo === 12 ? y + 1 : y;
+  const nm = mo === 12 ? 1 : mo + 1;
+  const last = new Date(Date.UTC(ny, nm, 0)).getUTCDate();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${ny}-${pad(nm)}-${pad(Math.min(d, last))}`;
+}
+
+/**
+ * An ISO date the way the reader writes dates: 21.10.2026, not 2026-10-21.
+ * Read as a calendar date, so no time zone can move it by a day.
+ */
+export function formatDate(iso: string, locale: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(y, m - 1, d)));
+}
+
+/** Today in the person's own time zone, as an ISO date. */
+export function localToday(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
 function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[] {
@@ -310,7 +354,12 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
         de: 'Ohne Pflegegrad besteht kein Anspruch auf die übrigen Leistungen. Dieser Antrag schaltet alles Weitere frei.',
         en: 'Without a Pflegegrad none of the other benefits can be claimed. This application unlocks everything else.',
       },
-      monthlyValue: unlocked > 0 ? unlocked : benefit('entlastungsbetrag').amounts[estimated],
+      // In a care home neither figure reaches the family, so no value is shown.
+      monthlyValue: !profile.circumstances.atHome
+        ? null
+        : unlocked > 0
+          ? unlocked
+          : benefit('entlastungsbetrag').amounts[estimated],
       onceValue: null,
       effort: 'medium',
       generates: 'antrag-pflegegrad',
@@ -322,7 +371,8 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
   // is an objection; after that it is a fresh request for reassessment.
   if (currentGrade > 0 && estimated > currentGrade) {
     const deadline = appealDeadline(bescheidDate);
-    const withinAppealWindow = deadline ? new Date(deadline) >= new Date() : false;
+    // ISO dates compare as strings, and the deadline day itself still counts.
+    const withinAppealWindow = deadline ? deadline >= localToday() : false;
     const uplift =
       benefit('pflegegeld').amounts[estimated] - benefit('pflegegeld').amounts[currentGrade];
 
@@ -337,11 +387,19 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
             de: `Höherstufung beantragen: die Einschätzung ergibt Pflegegrad ${estimated}`,
             en: `Request a reassessment: the estimate indicates Pflegegrad ${estimated}`,
           },
-      why: {
-        de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
-        en: 'Around 29% of reassessed reports turned out to be wrong and were corrected. A reasoned objection succeeds far more often than an unreasoned one.',
-      },
-      monthlyValue: uplift > 0 ? uplift : null,
+      // The correction rate is about objections, so it only backs the appeal.
+      // A Höherstufung is a new application, and its case is that it costs
+      // nothing and has no deadline.
+      why: withinAppealWindow
+        ? {
+            de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
+            en: 'Around 29% of reassessed reports turned out to be wrong and were corrected. A reasoned objection succeeds far more often than an unreasoned one.',
+          }
+        : {
+            de: 'Ein Antrag auf Höherstufung ist jederzeit möglich, ohne Frist und ohne Kosten. Die Pflegekasse lässt dann neu begutachten. Ist Ihr Bescheid jünger als einen Monat, ist stattdessen ein Widerspruch möglich; mit dem Datum des Bescheids zeigt Ihnen die Auswertung die Frist.',
+            en: 'A request for a higher grade can be made at any time, with no deadline and no cost. The insurer then arranges a new assessment. If your decision letter is less than a month old, an objection is possible instead; given the date of the letter, the report shows the deadline.',
+          },
+      monthlyValue: uplift > 0 && profile.circumstances.atHome ? uplift : null,
       onceValue: null,
       effort: 'medium',
       generates: withinAppealWindow ? 'widerspruch-pflegegrad' : 'antrag-hoeherstufung',

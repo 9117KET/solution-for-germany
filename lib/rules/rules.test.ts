@@ -17,7 +17,7 @@ import {
   benefit,
   VERHINDERUNGSPFLEGE_BY_RELATIVE,
 } from './benefits';
-import { analyse, type CareProfile, type Circumstances } from './gap';
+import { analyse, appealDeadline, formatDate, localToday, type CareProfile, type Circumstances } from './gap';
 import { SOURCES } from './sources';
 
 const zero: RawScores = { m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0 };
@@ -258,6 +258,54 @@ describe('gap analysis', () => {
     expect(aids.gap).toBe(0);
   });
 
+  it('counts no home-care money at all for someone in a care home', () => {
+    // Pflegegeld, Entlastungsbetrag, the Jahresbetrag and home adaptations are
+    // all benefits of care at home. In a care home § 43 applies instead, and a
+    // headline built from home-care figures would be money that is not there.
+    const report = analyse(
+      profile({ claimed: {}, circumstances: { ...atHomeOnly, atHome: false } }),
+    );
+    expect(report.monthlyGapTotal).toBe(0);
+    for (const id of [
+      'entlastungsbetrag',
+      'pflegehilfsmittel',
+      'gemeinsamerJahresbetrag',
+      'wohnumfeldverbesserung',
+    ]) {
+      expect(report.gaps.find((g) => g.benefit.id === id)!.status).toBe('ineligible');
+    }
+    expect(report.gaps.find((g) => g.benefit.id === 'pflegegeld')).toBeUndefined();
+  });
+
+  it('still points a care-home resident at a higher grade, without a home-care figure', () => {
+    const report = analyse(
+      profile({
+        currentGrade: 2,
+        assessment: assess(raw({ m1: 6, m2: 11, m4: 19, m5: 4, m6: 7 })),
+        circumstances: { ...atHomeOnly, atHome: false },
+      }),
+    );
+    const upgrade = report.actions.find((a) => a.kind === 'request-upgrade')!;
+    expect(upgrade).toBeDefined();
+    expect(upgrade.monthlyValue).toBeNull();
+  });
+
+  it('flags an estimate below the awarded grade, and suggests no reassessment', () => {
+    const report = analyse(
+      profile({ currentGrade: 4, assessment: assess(raw({ m1: 2, m4: 6 })) }),
+    );
+    expect(report.estimateBelowCurrent).toBe(true);
+    expect(report.estimateExceedsCurrent).toBe(false);
+    expect(
+      report.actions.some((a) => a.kind === 'request-upgrade' || a.kind === 'appeal-grade'),
+    ).toBe(false);
+  });
+
+  it('does not flag a lower estimate when no grade is held', () => {
+    const report = analyse(profile({ currentGrade: 0, claimed: {} }));
+    expect(report.estimateBelowCurrent).toBe(false);
+  });
+
   it('ranks applying for a Pflegegrad above everything when there is none', () => {
     const report = analyse(
       profile({ currentGrade: 0, claimed: {} }),
@@ -303,6 +351,44 @@ describe('gap analysis', () => {
     const upgrade = report.actions.find((a) => a.kind === 'request-upgrade')!;
     expect(upgrade.generates).toBe('antrag-hoeherstufung');
     expect(upgrade.deadline).toBeUndefined();
+  });
+
+  it('still offers the objection on the last day of the month', () => {
+    const today = localToday();
+    const [y, m, d] = today.split('-').map(Number);
+    // A date one month back whose deadline is today.
+    const pm = m === 1 ? 12 : m - 1;
+    const py = m === 1 ? y - 1 : y;
+    const lastOfPrev = new Date(Date.UTC(py, pm, 0)).getUTCDate();
+    if (d > lastOfPrev) return; // e.g. 31 March: no 31 February to count from
+    const bescheid = `${py}-${String(pm).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    expect(appealDeadline(bescheid)).toBe(today);
+
+    const report = analyse(
+      profile({
+        currentGrade: 2,
+        assessment: assess(raw({ m1: 6, m2: 11, m4: 19, m5: 4, m6: 7 })),
+        bescheidDate: bescheid,
+      }),
+    );
+    expect(report.actions.find((a) => a.kind === 'appeal-grade')).toBeDefined();
+  });
+
+  it('ends a month that has no such day on its last day', () => {
+    expect(appealDeadline('2026-01-31', '2026-02-01')).toBe('2026-02-28');
+    expect(appealDeadline('2028-01-31', '2028-02-01')).toBe('2028-02-29');
+    expect(appealDeadline('2026-12-15', '2026-12-20')).toBe('2027-01-15');
+  });
+
+  it('writes a deadline the way the reader writes dates', () => {
+    expect(formatDate('2026-10-21', 'de-DE')).toBe('21.10.2026');
+    expect(formatDate('2026-10-21', 'en-GB')).toBe('21/10/2026');
+  });
+
+  it('ignores a decision date in the future or one that is not a date', () => {
+    expect(appealDeadline('2026-10-02', '2026-10-01')).toBeUndefined();
+    expect(appealDeadline('gestern', '2026-10-01')).toBeUndefined();
+    expect(appealDeadline('', '2026-10-01')).toBeUndefined();
   });
 
   it('does not treat an unawarded higher grade as unclaimed cash', () => {
