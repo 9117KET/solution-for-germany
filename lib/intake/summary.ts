@@ -16,6 +16,7 @@
  * appear separately. That mirrors what the person did.
  */
 
+import { MODULES, type ModuleId } from '../rules/nba';
 import { lead, official, type ContentLang, type Readable } from '../i18n';
 import { CONDITIONS, criterion, type ConditionId } from './criteria';
 import { GROUPS, groupAnswered, groupLevel, membersOf } from './groups';
@@ -27,6 +28,18 @@ import { SCREENING } from './adaptive';
 export interface AnswerLine {
   question: string;
   answer: string;
+  /**
+   * Which module the question belongs to, absent for the gating questions.
+   *
+   * Carried so the PDF can put the answers under module headings. The
+   * Begutachtung is worked module by module and announced that way, and a
+   * family following along on paper should be able to find its place when the
+   * assessor says "Modul 4". A flat run of forty questions cannot be followed
+   * in a room where somebody is talking.
+   */
+  module?: ModuleId;
+  /** The module's name, in the reader's language, for the heading. */
+  moduleName?: string;
 }
 
 const YES: Record<ContentLang, string> = { de: 'Ja', en: 'Yes' };
@@ -57,39 +70,71 @@ export function answerLines(
     out.push({ question: say(conditionLabel(id)), answer: v ? YES[lang] : NO[lang] });
   }
 
-  for (const g of GROUPS) {
-    if (!groupAnswered(g, answers.levels)) continue;
-    const shared = groupLevel(g, answers.levels);
-    const options = scaleOptions(g.scale);
-    if (shared !== undefined) {
-      out.push({ question: both(g.label), answer: say(options[shared]) });
+  /**
+   * Module order, walked explicitly.
+   *
+   * The groups happen to be declared in module order, so iterating GROUPS used
+   * to produce almost the right sequence -- but module 5 is asked as pooled
+   * bands rather than as groups, so it was appended after everything else and
+   * came out *after* module 6. On a document somebody follows during an
+   * interview that is simply wrong, and it is the kind of wrong that makes a
+   * reader lose their place and stop trusting the page.
+   */
+  const MODULE_ORDER: ModuleId[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
+  const name = (m: ModuleId) => MODULES[m].name[lang];
+
+  for (const m of MODULE_ORDER) {
+    if (m === 'm5') {
+      for (const band of M5_BANDS) {
+        const v = answers.m5?.[band.id];
+        if (v === undefined) continue;
+        const index =
+          band.id === 'intensive' ? M5_INTENSIVE_BANDS.indexOf(v as 0 | 1 | 2 | 3 | 6) : v;
+        const option = band.options[index < 0 ? 0 : index];
+        out.push({
+          question: say(band.label),
+          answer: option ? say(option) : String(v),
+          module: 'm5',
+          moduleName: name('m5'),
+        });
+      }
+      if (answers.dietLevel !== undefined) {
+        out.push({
+          question: say(M5_DIET_LABEL),
+          answer: say(scaleOptions('independence')[answers.dietLevel]),
+          module: 'm5',
+          moduleName: name('m5'),
+        });
+      }
       continue;
     }
-    // Opened up and answered unevenly: list the criteria the way they were given.
-    for (const c of membersOf(g)) {
-      const level = answers.levels[c.id];
-      if (level === undefined) continue;
-      out.push({
-        question: both(criterionLabel(c)),
-        answer: say(scaleOptions(c.scale)[level]),
-      });
+
+    for (const g of GROUPS) {
+      if (g.module !== m) continue;
+      if (!groupAnswered(g, answers.levels)) continue;
+      const shared = groupLevel(g, answers.levels);
+      const options = scaleOptions(g.scale);
+      if (shared !== undefined) {
+        out.push({
+          question: both(g.label),
+          answer: say(options[shared]),
+          module: m,
+          moduleName: name(m),
+        });
+        continue;
+      }
+      // Opened up and answered unevenly: list the criteria the way they were given.
+      for (const c of membersOf(g)) {
+        const level = answers.levels[c.id];
+        if (level === undefined) continue;
+        out.push({
+          question: both(criterionLabel(c)),
+          answer: say(scaleOptions(c.scale)[level]),
+          module: m,
+          moduleName: name(m),
+        });
+      }
     }
-  }
-
-  for (const band of M5_BANDS) {
-    const v = answers.m5?.[band.id];
-    if (v === undefined) continue;
-    const index =
-      band.id === 'intensive' ? M5_INTENSIVE_BANDS.indexOf(v as 0 | 1 | 2 | 3 | 6) : v;
-    const option = band.options[index < 0 ? 0 : index];
-    out.push({ question: say(band.label), answer: option ? say(option) : String(v) });
-  }
-
-  if (answers.dietLevel !== undefined) {
-    out.push({
-      question: say(M5_DIET_LABEL),
-      answer: say(scaleOptions('independence')[answers.dietLevel]),
-    });
   }
 
   return out;

@@ -179,6 +179,16 @@ export function Welcome({
           ) : null}
         </Group>
 
+        {/* Shown the moment voice is selected, because that is the moment the
+            promise changes. Tapping and typing stay on the device; speech
+            recognition in Chrome and Edge does not, and someone who would
+            mind deserves to know before they start rather than afterwards. */}
+        {canUseVoice && settings.answerMode === 'voice' ? (
+          <Notice tone="warn" title={t('answerByVoice')}>
+            {t('voicePrivacyNotice')}
+          </Notice>
+        ) : null}
+
         {!canUseVoice ? (
           <p className="text-base text-fg-muted">{t('voiceUnavailable')}</p>
         ) : null}

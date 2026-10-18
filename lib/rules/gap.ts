@@ -338,8 +338,8 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
             en: `Request a reassessment: the estimate indicates Pflegegrad ${estimated}`,
           },
       why: {
-        de: 'Von den überprüften Gutachten erwiesen sich rund 29 Prozent als falsch und wurden korrigiert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
-        en: 'Around 29% of reassessed reports turned out to be wrong and were corrected. A reasoned objection succeeds far more often than an unreasoned one.',
+        de: 'Von 100 Gutachten, die nach einem Widerspruch noch einmal geprüft wurden, wurden 2022 rund 29 geändert. Eine begründete Einwendung lohnt sich deutlich öfter als eine unbegründete.',
+        en: 'Of every 100 reports re-examined after an objection, around 29 were changed in 2022. A reasoned objection succeeds far more often than an unreasoned one.',
       },
       monthlyValue: uplift > 0 ? uplift : null,
       onceValue: null,

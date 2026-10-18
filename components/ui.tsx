@@ -54,7 +54,10 @@ export function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`target rounded-lg border-[length:var(--line-width)] px-6 py-3 text-lg disabled:opacity-40 disabled:cursor-not-allowed ${
+      // `max-w-full` and a softer horizontal padding at the largest scale: a
+      // button whose label is wider than its box does not grow, it clips, and
+      // "Weiter →" losing its arrow is a navigation control losing its meaning.
+      className={`target max-w-full rounded-lg border-[length:var(--line-width)] px-4 py-3 text-lg sm:px-6 disabled:opacity-40 disabled:cursor-not-allowed ${
         styles[variant]
       } ${wide ? 'w-full' : ''}`}
     >

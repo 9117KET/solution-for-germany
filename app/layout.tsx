@@ -99,6 +99,41 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div id="content" className="flex flex-1 flex-col">
             {children}
           </div>
+          {/*
+           * Reachable from every screen, and printed nowhere.
+           *
+           * A German organisation looks for these two links before it reads
+           * anything else, and § 5 DDG wants the Impressum easily findable
+           * rather than buried. Plain anchors rather than next/link: this is a
+           * footer on a client-heavy page, and a full navigation is both fine
+           * and cheaper than dragging the router into the root layout.
+           */}
+          {/*
+           * Flex-wrapped rather than a line of inline links.
+           *
+           * JSX drops the whitespace between elements written on their own
+           * lines, so `<a>Impressum</a><span>·</span><a>Datenschutz</a>` has no
+           * break opportunity in it and renders as one unbreakable run. At the
+           * largest text size that ran 37px past the right edge of a 360px
+           * phone -- pushing the privacy link off the screen for exactly the
+           * readers the largest text size exists for. Wrapping is the fix; a
+           * gap replaces the separator so nothing can be orphaned on its own
+           * line.
+           */}
+          <footer className="no-print mt-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border-t border-line px-4 py-4">
+            <a
+              className="target text-fg-muted underline underline-offset-4 hover:text-fg"
+              href="/impressum"
+            >
+              Impressum
+            </a>
+            <a
+              className="target text-fg-muted underline underline-offset-4 hover:text-fg"
+              href="/datenschutz"
+            >
+              Datenschutz
+            </a>
+          </footer>
         </SettingsProvider>
       </body>
     </html>

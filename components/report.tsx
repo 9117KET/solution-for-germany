@@ -13,6 +13,7 @@ import {
   type GapStatus,
   type Pflegegrad,
 } from '@/lib/rules';
+import { asOfMonth, freshness } from '@/lib/rules/freshness';
 import type { ContentLang } from '@/lib/i18n';
 import type { IntakeAnswers } from '@/lib/intake/score';
 import type { Coverage, GradeBounds } from '@/lib/intake/adaptive';
@@ -90,6 +91,10 @@ export function Report({
   const { t, s, numberLocale, contentLang } = useT();
   const [showAnswers, setShowAnswers] = useState(false);
   const [showAdjust, setShowAdjust] = useState(false);
+  // How old the money is. Cheap, pure, and wanted in two places below.
+  const figures = freshness();
+  const figuresAsOf = asOfMonth(pdfLang);
+
   const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
   const [erased, setErased] = useState(false);
   const lines = answerLines(answers, { lang: pdfLang, plain: plainWords });
@@ -240,6 +245,17 @@ export function Report({
       {report.estimateExceedsCurrent ? (
         <Notice tone="warn" title={t('estimateHigherTitle')}>
           {t('estimateHigherBody')}
+        </Notice>
+      ) : null}
+
+      {/* Said in words once the figures are old enough that a reader would
+          want to know, rather than leaving it to the dated line in the
+          footer. The amounts here are only as good as the last time somebody
+          checked them against the statute, and the person reading this is
+          about to take a number to a counter. */}
+      {figures.level !== 'fresh' ? (
+        <Notice tone="warn" title={t('figuresStaleTitle')}>
+          {t('figuresStaleBody', { date: figuresAsOf })}
         </Notice>
       ) : null}
 
@@ -565,6 +581,11 @@ export function Report({
       <footer className="flex flex-col gap-4 border-t border-line pt-6">
         <p className="max-w-prose text-base text-fg-muted">
           <span {...content}>{s(report.disclaimer)}</span> {t('disclaimerExtra')}
+        </p>
+        {/* Always shown, fresh or not, so an adviser can judge for themselves
+            instead of trusting that somebody has kept up. */}
+        <p className="max-w-prose text-base text-fg-muted">
+          {t('figuresAsOf', { date: figuresAsOf })}
         </p>
         <div className="no-print flex flex-col gap-3">
           <div className="flex flex-wrap gap-3">

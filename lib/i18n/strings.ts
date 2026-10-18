@@ -993,12 +993,12 @@ export const UI = {
     ar: 'التقدير أعلى من درجتك الحالية',
   },
   estimateHigherBody: {
-    de: 'Von den nachgeprüften Gutachten waren etwa 29 von 100 falsch und wurden geändert. Der erste Punkt in der Liste unten ist der wichtigste.',
-    en: 'Of the reports that were checked again, about 29 in 100 were wrong and were changed. The first item in the list below is the one that matters.',
-    tr: 'Yeniden incelenen raporların yaklaşık 100’de 29’u yanlış çıktı ve düzeltildi. Aşağıdaki listedeki ilk madde en önemlisidir.',
-    ru: 'Из перепроверенных заключений около 29 из 100 оказались неверными и были исправлены. Первый пункт в списке ниже – самый важный.',
-    pl: 'Spośród ponownie sprawdzonych orzeczeń około 29 na 100 okazało się błędnych i zostało poprawionych. Pierwsza pozycja na liście poniżej jest najważniejsza.',
-    ar: 'من بين التقارير التي أُعيد فحصها، تبيّن أن نحو 29 من كل 100 كانت خاطئة وجرى تصحيحها. البند الأول في القائمة أدناه هو الأهم.',
+    de: 'Von 100 Gutachten, die nach einem Widerspruch noch einmal geprüft wurden, wurden rund 29 geändert. Der erste Punkt in der Liste unten ist der wichtigste.',
+    en: 'Of every 100 reports re-examined after an objection, around 29 were changed. The first item in the list below is the one that matters.',
+    tr: 'İtiraz üzerine yeniden incelenen her 100 rapordan yaklaşık 29’u değiştirildi. Aşağıdaki listedeki ilk madde en önemlisidir.',
+    ru: 'Из каждых 100 заключений, перепроверенных после возражения, около 29 были изменены. Первый пункт в списке ниже – самый важный.',
+    pl: 'Spośród każdych 100 orzeczeń ponownie sprawdzonych po odwołaniu około 29 zostało zmienionych. Pierwsza pozycja na liście poniżej jest najważniejsza.',
+    ar: 'من بين كل 100 تقرير أُعيد فحصه بعد اعتراض، جرى تغيير نحو 29 تقريرًا. البند الأول في القائمة أدناه هو الأهم.',
   },
   m5SkippedTitle: {
     de: 'Diese Einschätzung ist einen Pflegegrad zu niedrig',
@@ -1403,6 +1403,52 @@ export const UI = {
     ru: 'Сколько дня человек может организовать без помощи?',
     pl: 'Ile dnia osoba potrafi ułożyć bez pomocy?',
     ar: 'كم من اليوم يستطيع الشخص تنظيمه دون مساعدة؟',
+  },
+
+  // ------------------------------------------------- how old the figures are
+  //
+  // `lib/rules/freshness.ts` explains why these exist. Short version: the
+  // amounts are only as good as the last time a human checked them, and the
+  // reader is entitled to know when that was without taking it on trust.
+  figuresAsOf: {
+    de: 'Beträge zuletzt geprüft: {date}',
+    en: 'Figures last checked: {date}',
+    tr: 'Tutarlar en son kontrol edildi: {date}',
+    ru: 'Суммы последний раз проверены: {date}',
+    pl: 'Kwoty ostatnio sprawdzone: {date}',
+    ar: 'آخر تحقق من المبالغ: {date}',
+  },
+  figuresStaleTitle: {
+    de: 'Diese Beträge wurden länger nicht geprüft',
+    en: 'These figures have not been checked for a while',
+    tr: 'Bu tutarlar bir süredir kontrol edilmedi',
+    ru: 'Эти суммы давно не проверялись',
+    pl: 'Te kwoty nie były od dawna sprawdzane',
+    ar: 'لم يجرِ التحقق من هذه المبالغ منذ فترة',
+  },
+  figuresStaleBody: {
+    de: 'Zuletzt geprüft: {date}. Beträge und Grenzwerte ändern sich meist zum Jahreswechsel. Bitte bestätigen Sie die Zahlen bei Ihrer Pflegekasse oder im Pflegestützpunkt.',
+    en: 'Last checked: {date}. Amounts and thresholds usually change at the turn of the year. Please confirm the figures with your care insurer or at a Pflegestützpunkt.',
+    tr: 'En son kontrol: {date}. Tutarlar ve eşik değerleri genellikle yıl başında değişir. Lütfen rakamları bakım sigortanızdan veya bir Pflegestützpunkt’tan teyit edin.',
+    ru: 'Последняя проверка: {date}. Суммы и пороговые значения обычно меняются в начале года. Пожалуйста, уточните цифры в вашей кассе по уходу или в Pflegestützpunkt.',
+    pl: 'Ostatnie sprawdzenie: {date}. Kwoty i progi zmieniają się zwykle z początkiem roku. Prosimy potwierdzić dane w swojej kasie opiekuńczej lub w Pflegestützpunkt.',
+    ar: 'آخر تحقق: {date}. عادةً ما تتغير المبالغ والحدود مع بداية العام. يُرجى تأكيد الأرقام لدى صندوق الرعاية التابع لك أو في أحد مراكز Pflegestützpunkt.',
+  },
+
+  // --------------------------------------------------------- voice and audio
+  //
+  // Said where voice is chosen, not only in the privacy notice. The product
+  // claims answers do not leave the device, and for tapping and typing that is
+  // true; speech recognition in Chrome and Edge uploads the audio. Someone
+  // choosing voice is choosing that, and should be told at the moment of
+  // choosing rather than left to find it in a footer.
+  voicePrivacyNotice: {
+    de: 'Hinweis zur Spracheingabe: Chrome und Edge werten die Tonaufnahme auf Servern ihres Herstellers aus. Angetippte und getippte Antworten bleiben auf dem Gerät. Jede Frage lässt sich auch antippen.',
+    en: 'A note on answering by voice: Chrome and Edge send the recording to their maker’s servers. Answers you tap or type stay on the device. Every question can be tapped instead.',
+    tr: 'Sesli yanıt hakkında: Chrome ve Edge ses kaydını üreticinin sunucularında işler. Dokunarak veya yazarak verdiğiniz yanıtlar cihazda kalır. Her soru dokunarak da yanıtlanabilir.',
+    ru: 'О голосовом ответе: Chrome и Edge обрабатывают аудиозапись на серверах своего производителя. Ответы, введённые касанием или с клавиатуры, остаются на устройстве. На любой вопрос можно ответить касанием.',
+    pl: 'O odpowiadaniu głosem: Chrome i Edge przetwarzają nagranie na serwerach swojego producenta. Odpowiedzi udzielone dotknięciem lub wpisane pozostają na urządzeniu. Na każde pytanie można odpowiedzieć również dotknięciem.',
+    ar: 'ملاحظة بشأن الإجابة الصوتية: يعالج Chrome وEdge التسجيل الصوتي على خوادم الشركة المطوِّرة. أما الإجابات التي تدخلها باللمس أو بالكتابة فتبقى على جهازك. ويمكن الإجابة عن كل سؤال باللمس أيضًا.',
   },
 } as const satisfies Record<string, ChromeText>;
 

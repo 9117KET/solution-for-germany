@@ -386,7 +386,17 @@ export default function Home() {
              */}
             <Card>
               <p className="text-lg font-semibold">{t('currentGradeQ')}</p>
-              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {/*
+                * Columns sized in `ch`, not a fixed count.
+                *
+                * `grid-cols-2` fits "Pflegegrad 4" at the default text size and
+                * clips it at the largest one -- 212px of label in a 103px cell,
+                * on the setting that exists precisely for people who cannot
+                * read small text. `ch` is font-relative, so the track grows
+                * with the scale and the grid drops to one column by itself
+                * rather than cutting the words in half.
+                */}
+              <div className="mt-3 grid grid-cols-[repeat(auto-fit,minmax(14ch,1fr))] gap-2">
                 {([0, 1, 2, 3, 4, 5] as Pflegegrad[]).map((g) => (
                   <button
                     key={g}
@@ -457,7 +467,7 @@ export default function Home() {
          * every question.
          */
         <nav
-          className="no-print sticky bottom-0 -mx-4 mt-auto flex items-center justify-between gap-3 border-t border-line bg-bg px-4 py-3 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-5"
+          className="no-print sticky bottom-0 -mx-4 mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-line bg-bg px-4 py-3 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-5"
           style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
         >
           <Button variant="secondary" onClick={goBack}>

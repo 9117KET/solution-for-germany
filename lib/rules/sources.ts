@@ -139,6 +139,26 @@ export const SOURCES = {
     checkedOn: '2026-08-18',
     validFrom: '2025-01-01',
   },
+  korrekturquote: {
+    law: 'Medizinischer Dienst Bund, Meldung vom 21. November 2023 (Daten 2022)',
+    covers:
+      'Share of Widerspruchsgutachten that were corrected. Of 185.494 reports ' +
+      're-examined after an objection in 2022, roughly every third was changed ' +
+      '(about 54.839, i.e. ~29 in 100). Across all 2,5 million assessments in ' +
+      'that year the correction rate is 2,3 %.',
+    url:
+      'https://md-bund.de/aktuell/aktuelle-meldungen/' +
+      'korrekturquote-bei-pflegegutachten-liegt-bei-2-3-prozent.html',
+    checkedOn: '2026-09-21',
+    validFrom: '2022-01-01',
+    note:
+      'Two things this figure does NOT say, both of which earlier copy in this ' +
+      'repository got wrong. The denominator is reports re-examined after an ' +
+      'objection, not all assessments. And "corrected" is not "was wrong": the ' +
+      'MD published these numbers specifically to rebut that reading, and a ' +
+      'grade can change because the condition changed or because new evidence ' +
+      'was supplied. State it as changed, never as wrong.',
+  },
   widerspruch: {
     law: '§ 84 SGG',
     covers:

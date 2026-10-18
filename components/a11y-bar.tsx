@@ -205,6 +205,17 @@ export function A11yBar() {
               </Pill>
             </Group>
 
+            {/* The same disclosure as on the welcome screen. Someone who
+                switches to voice halfway through never sees that one, and the
+                promise about answers staying on the device changes either way.
+                Plain text rather than a Notice: this bar is a strip of
+                controls, and a boxed warning inside it reads as an error. */}
+            {settings.answerMode === 'voice' ? (
+              <p className="max-w-prose text-base text-fg-muted">
+                {t('voicePrivacyNotice')}
+              </p>
+            ) : null}
+
             <Group label={t('readAloud')}>
               <Pill active={settings.autoRead} onClick={() => set('autoRead', true)}>
                 {t('plainWordsOn')}
