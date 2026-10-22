@@ -27,9 +27,9 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 ### Was Sie als Organisation bekommen
 
 - **Ihren eigenen Link:** `https://[Adresse der Seite]/?via=[kürzel]`. Besuche über diesen Link werden Ihrer Organisation zugeordnet, nicht einer Person.
-- **Die Zahlen zu Ihrem Link, per Link zu einer Übersicht oder als monatliche Zusammenstellung von uns**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
+- **Sobald die Zählung eingeschaltet ist, die Zahlen zu Ihrem Link, per Link zu einer Übersicht oder als monatliche Zusammenstellung von uns**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
 - **Nichts Persönliches.** Es werden keine Namen, keine Antworten und kein Pflegegrad erhoben. Familien brauchen kein Konto.
-- **Ein Verweis auf Sie.** Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach § 7a SGB XI zusteht. Sie schickt Familien also zur Beratung, nicht von ihr weg.
+- **Ein Verweis auf die Beratung.** Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach § 7a SGB XI zusteht. Sie schickt Familien also zur Beratung, nicht von ihr weg.
 - Keine Werbung, keine Vermittlungsprovisionen, kein Verkauf von Daten.
 
 ### Datenschutz
@@ -89,9 +89,9 @@ It lists the next steps in order, each with its statutory basis.
 ### What you get as an organisation
 
 - **Your own link:** `https://[Adresse der Seite]/?via=[kürzel]`. Visits through this link are attributed to your organisation, not to a person.
-- **The numbers for your link, as a link to a filtered overview or as a monthly summary from us**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
+- **Once counting is switched on, the numbers for your link, as a link to a filtered overview or as a monthly summary from us**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
 - **Nothing personal.** No names, no answers and no Pflegegrad are collected. Families need no account.
-- **A pointer to you.** The site tells every family that free statutory care advice under § 7a SGB XI is their right. It sends families towards advice, not away from it.
+- **A pointer to advice.** The site tells every family that free statutory care advice under § 7a SGB XI is their right. It sends families towards advice, not away from it.
 - No advertising, no referral fees, no sale of data.
 
 ### Privacy
