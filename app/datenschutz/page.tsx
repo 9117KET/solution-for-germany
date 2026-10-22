@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { LegalPage } from '@/components/legal-page';
-import { DATENSCHUTZ, DATENSCHUTZ_TITLE } from '@/lib/legal/datenschutz';
+import { isEnabled } from '@/lib/analytics';
+import { DATENSCHUTZ_TITLE, datenschutzForBuild } from '@/lib/legal/datenschutz';
 
 export const metadata: Metadata = {
   title: 'Datenschutzerklärung | Anspruch',
@@ -9,5 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function DatenschutzPage() {
-  return <LegalPage title={DATENSCHUTZ_TITLE} sections={DATENSCHUTZ} />;
+  // Fixed at build time, like the analytics script in the layout, so the page
+  // states the truth of the build it is part of.
+  return <LegalPage title={DATENSCHUTZ_TITLE} sections={datenschutzForBuild(isEnabled())} />;
 }

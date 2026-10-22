@@ -71,9 +71,10 @@ the list.
 ## 4. Open points found in the code (no scout source)
 
 - **Voice input.** Answering by voice uses the browser's speech recognition
-  (`lib/a11y/speech.ts`). Some browsers send the audio to their vendor for recognition.
-  Neither scout covers this, so the page says nothing about it. Check whether the
-  Datenschutzerklärung must mention it.
+  (`lib/a11y/speech.ts`). Neither scout covers this. Section 3 of `/datenschutz` says it
+  is optional, done by the browser, possibly on the browser maker's servers, and that the
+  operator receives no audio or text; it names no vendor. To do: verify how Chrome and
+  Edge process speech recognition and whether to name them.
 - **The `gap` band.** `result_shown` sends the monthly unclaimed amount in five bands. It
   is derived from the result, not an answer or the grade; confirm in the legal read (2.6)
   that this is acceptable without consent. SC:40

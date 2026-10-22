@@ -27,7 +27,7 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 ### Was Sie als Organisation bekommen
 
 - **Ihren eigenen Link:** `https://[Adresse der Seite]/?via=[kürzel]`. Besuche über diesen Link werden Ihrer Organisation zugeordnet, nicht einer Person.
-- **Monatlich die Zahlen zu Ihrem Link**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
+- **Die Zahlen zu Ihrem Link, per Link zu einer Übersicht oder als monatliche Zusammenstellung von uns**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
 - **Nichts Persönliches.** Es werden keine Namen, keine Antworten und kein Pflegegrad erhoben. Familien brauchen kein Konto.
 - **Ein Verweis auf Sie.** Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach § 7a SGB XI zusteht. Sie schickt Familien also zur Beratung, nicht von ihr weg.
 - Keine Werbung, keine Vermittlungsprovisionen, kein Verkauf von Daten.
@@ -37,6 +37,7 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 Die Antworten der Familie bleiben auf ihrem Gerät; sie werden nur in diesem Browser gespeichert und lassen sich mit einem Tipp löschen.
 Es gibt kein Konto und keinen Server, der Antworten speichert.
 Gezählt werden nur Besuche und fünf Schritte (Start, Ergebnis, weitere Fragen, PDF, Löschen), ohne Cookies, ohne Namen, ohne Antworten und ohne Pflegegrad, und Sie sehen davon nur Summen.
+Die Zählung läuft ohne Cookies auf Servern in der EU, und die Seite hat ein Impressum und eine Datenschutzerklärung.
 Sie können Familien deshalb ohne Einschränkung sagen: Ihre Antworten verlassen Ihr Gerät nicht.
 
 ### Was Anspruch nicht ist
@@ -88,7 +89,7 @@ It lists the next steps in order, each with its statutory basis.
 ### What you get as an organisation
 
 - **Your own link:** `https://[Adresse der Seite]/?via=[kürzel]`. Visits through this link are attributed to your organisation, not to a person.
-- **The numbers for your link every month**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
+- **The numbers for your link, as a link to a filtered overview or as a monthly summary from us**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
 - **Nothing personal.** No names, no answers and no Pflegegrad are collected. Families need no account.
 - **A pointer to you.** The site tells every family that free statutory care advice under § 7a SGB XI is their right. It sends families towards advice, not away from it.
 - No advertising, no referral fees, no sale of data.
@@ -98,6 +99,7 @@ It lists the next steps in order, each with its statutory basis.
 The family's answers stay on their device; they are kept only in that browser and can be deleted with one tap.
 There is no account and no server that stores answers.
 Only visits and five steps (start, result, further questions, PDF, erase) are counted, without cookies, names, answers or Pflegegrad, and you see only totals.
+The counting runs without cookies on servers in the EU, and the site carries an Impressum and a Datenschutzerklärung (privacy policy).
 You can therefore tell families without qualification: your answers do not leave your device.
 
 ### What Anspruch is not

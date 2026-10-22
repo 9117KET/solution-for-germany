@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BLANKS, type LegalSection } from './blanks';
-import { DATENSCHUTZ, DATENSCHUTZ_TITLE } from './datenschutz';
+import { DATENSCHUTZ, DATENSCHUTZ_TITLE, countingStatus, datenschutzForBuild } from './datenschutz';
 import { IMPRESSUM, IMPRESSUM_TITLE } from './impressum';
 
 const allText = (sections: readonly LegalSection[]): string[] =>
@@ -45,11 +45,13 @@ describe('legal texts', () => {
   });
 
   // The ten items the Datenschutzerklärung must contain, in this order
-  // (scout-compliance.md, final list). One keyword each, so that an edit
+  // (scout-compliance.md, final list), plus voice input as section 3 (spec 10,
+  // fix round 2). One keyword each, so that an edit
   // cannot silently drop one.
   const REQUIRED: Array<[string, RegExp]> = [
     ['controller', /Verantwortlich/],
     ['device storage', /localStorage/],
+    ['voice input', /Sprach/],
     ['PDF', /PDF/],
     ['hosting', /Vercel/],
     ['statistics', /Plausible/],
@@ -60,7 +62,7 @@ describe('legal texts', () => {
     ['health data', /Gesundheitsdaten/],
   ];
 
-  it('contains the ten required items as ten sections, in order', () => {
+  it('contains the eleven required items as eleven sections, in order', () => {
     expect(DATENSCHUTZ.length).toBe(REQUIRED.length);
     REQUIRED.forEach(([name, keyword], i) => {
       const s = DATENSCHUTZ[i];
@@ -87,5 +89,25 @@ describe('legal texts', () => {
   it('never claims that consent is not required', () => {
     const all = TEXTS.join('\n');
     expect(all).not.toMatch(/Einwilligung|consent/i);
+  });
+});
+
+describe('counting status on /datenschutz', () => {
+  it('states the build state right after the first statistics paragraph', () => {
+    for (const enabled of [true, false]) {
+      const s = datenschutzForBuild(enabled).find((x) => x.id === 'statistik')!;
+      expect(s.de.body[1]).toBe(countingStatus(enabled).de);
+      expect(s.en.body[1]).toBe(countingStatus(enabled).en);
+      expect(s.de.body.length).toBe(s.en.body.length);
+    }
+    expect(countingStatus(true).de).toContain('eingeschaltet');
+    expect(countingStatus(false).de).toContain('ausgeschaltet');
+  });
+
+  it('leaves every other section untouched', () => {
+    const built = datenschutzForBuild(false);
+    built.forEach((s, i) => {
+      if (s.id !== 'statistik') expect(s).toBe(DATENSCHUTZ[i]);
+    });
   });
 });
