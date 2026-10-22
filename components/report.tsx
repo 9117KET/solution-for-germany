@@ -161,8 +161,8 @@ export function Report({
                   'Nicht über die Punkte: Bei Gebrauchsunfähigkeit beider Arme und ' +
                   'beider Beine kann der Medizinische Dienst Pflegegrad 5 zuerkennen, ' +
                   'auch unter 90 Punkten (§ 15 Abs. 4 SGB XI, besondere ' +
-                  'Bedarfskonstellation). Nach den Punkten allein wäre es Pflegegrad ' +
-                  `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : assessment.gradeFromPoints}. ` +
+                  'Bedarfskonstellation). Nach den Punkten allein wäre es ' +
+                  `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. ` +
                   'Diese Zuordnung ist eine pflegefachliche Entscheidung, kein Automatismus.',
                 en:
                   'Not from the points: where both arms and both legs are unusable, ' +

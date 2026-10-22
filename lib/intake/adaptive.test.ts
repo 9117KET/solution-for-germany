@@ -361,6 +361,99 @@ describe('the intake stops when, and only when, the grade is settled', () => {
   });
 });
 
+// ------------------------------------------------------- § 15 Abs. 4 SGB XI
+
+describe('unusable limbs settle the grade, not the points grade', () => {
+  const allGates = {
+    hasCognitiveIssues: true,
+    hasBehaviourIssues: true,
+    hasIncontinence: true,
+    hasTubeFeeding: true,
+    hasMedicalMeasures: true,
+  };
+
+  it('keeps asking after the screening questions when only the limb answer is yes', () => {
+    // The bug this pins: both grade bounds are 5 the moment the limb question
+    // is answered yes, and the intake used to end there with 0 of 100 points.
+    const a = emptyIntake();
+    a.conditions = { hasLimbUnusability: true };
+    const b = gradeBounds(a);
+    expect(b.low).toBe(5);
+    expect(b.high).toBe(5);
+    expect(b.lowFromPoints).toBe(0);
+    expect(b.highFromPoints).toBe(5);
+    expect(b.resolved).toBe(false);
+    expect(remainingAskables(a).length).toBeGreaterThan(0);
+  });
+
+  it('settles once every criterion is at its worst', () => {
+    const a = fullAnswers(uniform(3, {
+      conditions: conditions({ ...allGates, hasLimbUnusability: true }),
+      m5: { daily: 3, weekly: 3, intensive: 6 },
+      dietLevel: 3,
+    }));
+    const b = gradeBounds(a);
+    expect(b.lowFromPoints).toBe(5);
+    expect(b.highFromPoints).toBe(5);
+    expect(b.resolved).toBe(true);
+  });
+
+  it('settles at no points grade once everything is at zero and the gates are shut', () => {
+    const b = gradeBounds(uniformAnswers(0, {
+      hasCognitiveIssues: false,
+      hasBehaviourIssues: false,
+      hasIncontinence: false,
+      hasTubeFeeding: false,
+      hasMedicalMeasures: false,
+      hasLimbUnusability: true,
+    }));
+    expect(b.low).toBe(5);
+    expect(b.lowFromPoints).toBe(0);
+    expect(b.highFromPoints).toBe(0);
+    expect(b.resolved).toBe(true);
+  });
+
+  it.each([0, 1, 2, 3])(
+    'asks a limb household at level %i what it would ask the same household without',
+    (level) => {
+      for (const gates of [{}, allGates]) {
+        // Bands only where medical measures were reported: the full-intake
+        // scorer counts stored bands whatever the gate says, so a profile
+        // with bands behind a closed gate would describe no real household.
+        const m5 = 'hasMedicalMeasures' in gates
+          ? { daily: level, weekly: level, intensive: level * 2 }
+          : { daily: 0, weekly: 0, intensive: 0 };
+        const dietLevel = 'hasMedicalMeasures' in gates ? level : 0;
+        const without = uniform(level, { conditions: conditions(gates), m5, dietLevel });
+        const withLimbs = uniform(level, {
+          conditions: conditions({ ...gates, hasLimbUnusability: true }),
+          m5,
+          dietLevel,
+        });
+        const plain = run(without);
+        const limbs = run(withLimbs);
+        expect(limbs.asked).toEqual(plain.asked);
+
+        // The headline is 5, and the points grade is the one the full intake
+        // would have produced.
+        const truth = assessIntake(fullAnswers(withLimbs)).assessment;
+        const b = gradeBounds(limbs.answers);
+        expect(b.resolved).toBe(true);
+        expect(b.low).toBe(5);
+        expect(b.lowFromPoints).toBe(truth.gradeFromPoints);
+      }
+    },
+  );
+
+  it('stops an ordinary household at the same question it always did', () => {
+    // Counts taken from the intake before the points-grade condition existed.
+    expect(run(uniform(0)).asked.length).toBe(15);
+    expect(run(uniform(1)).asked.length).toBe(13);
+    expect(run(uniform(2)).asked.length).toBe(15);
+    expect(run(uniform(3)).asked.length).toBe(12);
+  });
+});
+
 // ------------------------------------------------------------------ module 5
 
 describe('module 5 asked as bands scores what the sixteen rows scored', () => {

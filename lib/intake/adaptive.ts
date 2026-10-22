@@ -207,7 +207,18 @@ export interface GradeBounds {
   /** Weighted point total at each bound, for showing the working. */
   lowPoints: number;
   highPoints: number;
-  /** True where the two agree, which means the grade is settled. */
+  /**
+   * The grade the points alone give at each bound, setting § 15 Abs. 4 aside.
+   *
+   * Where both arms and both legs are unusable, `low` and `high` are 5 from the
+   * screening question onwards. The statute only says the Medizinischer Dienst
+   * *can* assign 5 there, so the family needs the points grade as well. It is
+   * bracketed the same way and has to close before the intake ends. Everywhere
+   * else these equal `low` and `high`.
+   */
+  lowFromPoints: Pflegegrad;
+  highFromPoints: Pflegegrad;
+  /** True where both pairs agree: the grade and the points grade are settled. */
   resolved: boolean;
 }
 
@@ -223,7 +234,13 @@ export function gradeBounds(answers: IntakeAnswers): GradeBounds {
     high: high.grade,
     lowPoints: low.totalWeighted,
     highPoints: high.totalWeighted,
-    resolved: low.grade === high.grade,
+    lowFromPoints: low.gradeFromPoints,
+    highFromPoints: high.gradeFromPoints,
+    // Without a yes to the limb question the grade is the points grade, so the
+    // second condition adds nothing and the intake stops where it always did.
+    // With a yes, the grade is 5 from the start, and only the second condition
+    // keeps the module questions coming until the points grade is known.
+    resolved: low.grade === high.grade && low.gradeFromPoints === high.gradeFromPoints,
   };
 }
 
