@@ -20,7 +20,8 @@ import { answerLines } from '@/lib/intake/summary';
 import { downloadReportPdf } from '@/lib/report/pdf';
 import { clearSession } from '@/lib/intake/session';
 import { Button, Card, Notice, YesNo } from './ui';
-import { useT } from './settings';
+import { useSettings, useT } from './settings';
+import { track } from '@/lib/analytics';
 import type { UiKey } from '@/lib/i18n/strings';
 
 const STATUS: Record<GapStatus, { key: UiKey; className: string }> = {
@@ -88,6 +89,7 @@ export function Report({
   onRestart: () => void;
 }) {
   const { t, s, numberLocale, contentLang } = useT();
+  const { settings } = useSettings();
   const [showAnswers, setShowAnswers] = useState(false);
   const [showAdjust, setShowAdjust] = useState(false);
   const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
@@ -582,6 +584,12 @@ export function Report({
                     officialQuestions: coverage.officialQuestions,
                   });
                   setPdf(name);
+                  // That a PDF was made, and in which language. Not its contents.
+                  track('pdf_downloaded', {
+                    lang: settings.lang,
+                    pace: settings.pace,
+                    doc_lang: pdfLang,
+                  });
                 } catch {
                   // Nothing here reaches the network, so a failure is a
                   // browser refusing the download or running out of memory.

@@ -17,6 +17,9 @@ Everything runs in the browser. There is no account, no server, and no analytics
 answers never leave the device. They are kept *on* the device, in this browser, so a
 half-finished intake survives a closed tab: the next visit offers to carry on or to
 delete the lot. Nothing is written until something has actually been answered.
+A deployment may count visits and five steps of the journey, without cookies and
+without anything that identifies a person, and never any answer; the default build
+sends nothing at all. See "Counting usage" below.
 
 > **This is an estimate, not an assessment.** It reproduces the arithmetic of the
 > *Neues Begutachtungsassessment* exactly, but from answers typed by a family rather
@@ -153,6 +156,48 @@ npm run typecheck
 npm run lint
 npm run build
 ```
+
+### Counting usage
+
+Off by default. A build made without the variables below contains no analytics
+script and sends nothing; `track()` in `lib/analytics` returns before doing anything.
+
+To switch it on, set these for the production build (they are inlined by
+`next build`, so changing them needs a new build; see `.env.example`):
+
+| Variable | Value |
+| --- | --- |
+| `NEXT_PUBLIC_ANALYTICS_PROVIDER` | `plausible` to count; unset, empty or `none` for off |
+| `NEXT_PUBLIC_PLAUSIBLE_SRC` | The script URL from the Plausible dashboard (the legacy `https://plausible.io/js/script.tagged-events.js` also works) |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | The site's domain as registered with Plausible |
+| `NEXT_PUBLIC_PLAUSIBLE_ENDPOINT` | Optional: a proxy for the event API |
+
+When on, the provider counts page views (with the URL stripped of any query
+string) and five events. Every event carries `lang` (interface language), `pace`
+(`one` or `list`) and `partner` (the slug of a partner link, or `none`).
+
+| Event | When | Extra properties |
+| --- | --- | --- |
+| `intake_started` | The person leaves the welcome screen | none |
+| `result_shown` | The report first appears in a page visit | `questions` (`lte10`, `lte20`, `lte40`, `gt40`), `result` (`none`, `range`, `grade`: whether there is one, not which), `gap` (monthly unclaimed amount: `0`, `lt100`, `lt300`, `lt600`, `gte600` euros) |
+| `questions_refined` | "Answer {n} more questions" on the report is used | none |
+| `pdf_downloaded` | The PDF has been produced | `doc_lang` (`de` or `en`) |
+| `intake_erased` | The answers are erased from the device | none |
+
+Nothing else is sent: no grade, no points, no answer, no date, no claimed benefit,
+no free text, no identifier, no cookie. The allow-list is enforced in code and
+pinned by `lib/analytics/analytics.test.ts`. The provider adapter is the single
+file `lib/analytics/plausible.ts`.
+
+A partner organisation gets a link ending in `?via=<slug>`. The slug is checked,
+taken out of the address bar before any script can report the URL, and kept in
+memory for that page visit only; it is never written to the device. See
+`docs/PARTNERS.md`.
+
+### Deploying
+
+See `docs/DEPLOY.md`: Vercel settings, the checks after the first deploy, and what
+has to be in place before analytics are switched on.
 
 ## Layout
 
