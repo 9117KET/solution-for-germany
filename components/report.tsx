@@ -13,7 +13,7 @@ import {
   type GapStatus,
   type Pflegegrad,
 } from '@/lib/rules';
-import type { ContentLang } from '@/lib/i18n';
+import { formatIsoDate, type ContentLang } from '@/lib/i18n';
 import type { IntakeAnswers } from '@/lib/intake/score';
 import type { Coverage, GradeBounds } from '@/lib/intake/adaptive';
 import { answerLines } from '@/lib/intake/summary';
@@ -87,7 +87,7 @@ export function Report({
   remaining: number;
   onRestart: () => void;
 }) {
-  const { t, s, numberLocale, contentLang } = useT();
+  const { t, s, lang, numberLocale, contentLang } = useT();
   const [showAnswers, setShowAnswers] = useState(false);
   const [showAdjust, setShowAdjust] = useState(false);
   const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
@@ -263,7 +263,9 @@ export function Report({
                     </p>
                     <p className="mt-2 font-mono text-sm text-fg-muted">
                       {SOURCES[a.source].law}
-                      {a.deadline ? ` · ${t('deadlineLabel')} ${a.deadline}` : ''}
+                      {a.deadline
+                        ? ` · ${t('deadlineLabel')} ${formatIsoDate(a.deadline, lang)}`
+                        : ''}
                     </p>
                   </div>
                   {a.monthlyValue || a.onceValue ? (

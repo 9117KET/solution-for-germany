@@ -6,6 +6,7 @@ import { DEFAULTS, TEXT_SCALE, TEXT_SIZES, THEMES, parseSettings } from './setti
 import { getSnapshot, resetStore, setSetting } from './store';
 import { UI, translate, type UiKey } from '../i18n/strings';
 import {
+  formatIsoDate,
   LANGUAGES,
   LANG_IDS,
   hasContent,
@@ -196,6 +197,37 @@ describe('the boundary between interface and content', () => {
     for (const meta of LANGUAGES) {
       expect(translate('pointsOf100', meta.id, { n: 100 }), meta.id).toContain('100');
     }
+  });
+});
+
+describe('writing a deadline as a date', () => {
+  // The objection deadline arrives as an ISO string. "Frist 2026-11-10" is a
+  // format nobody writes on a letter; the reader's own format is.
+  it('writes German and English dates the way each reader writes them', () => {
+    expect(formatIsoDate('2026-11-10', 'de')).toBe('10.11.2026');
+    expect(formatIsoDate('2026-11-10', 'en')).toBe('10/11/2026');
+  });
+
+  it('keeps Arabic dates in Latin digits', () => {
+    const out = formatIsoDate('2026-11-10', 'ar');
+    expect(out).not.toMatch(/[٠-٩]/);
+    // Direction marks aside, the day, month and year come through intact.
+    expect(out.replace(/[^\d/]/g, '')).toBe('10/11/2026');
+  });
+
+  it('never prints the ISO string and never shifts the day', () => {
+    // New Year's Eve and the first of a month are where a time-zone shift
+    // would show: `new Date(iso)` reads UTC midnight, which is still the day
+    // before west of Greenwich.
+    for (const meta of LANGUAGES) {
+      expect(formatIsoDate('2026-12-31', meta.id), meta.id).not.toContain('2026-12-31');
+      expect(formatIsoDate('2026-12-31', meta.id).replace(/\D/g, ''), meta.id).toContain('31');
+      expect(formatIsoDate('2027-03-01', meta.id).replace(/\D/g, ''), meta.id).toContain('2027');
+    }
+  });
+
+  it('leaves a string that is not an ISO date alone rather than guessing', () => {
+    expect(formatIsoDate('soon', 'de')).toBe('soon');
   });
 });
 
