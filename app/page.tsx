@@ -351,10 +351,14 @@ export default function Home() {
         <Progress
           current={position - 1}
           total={total - 2}
-          label={t(oneAtATime && chunk ? 'questionOf' : 'stepOf', {
-            n: position - 1,
-            total: total - 2,
-          })}
+          label={
+            onSituation
+              ? t('situationStep')
+              : t(oneAtATime && chunk ? 'questionOf' : 'stepOf', {
+                  n: position - 1,
+                  total: total - 2,
+                })
+          }
         />
       ) : null}
 
