@@ -48,7 +48,7 @@ instead of a link.
 - **Visits from the link.** People who opened the app through it. Not people
   helped: one family may open it twice, and one tablet in a counselling office
   may serve ten families.
-- **`intake_started`.** Someone left the welcome screen.
+- **`intake_started`.** Someone pressed Start on the welcome screen (resuming a saved intake does not count).
 - **`result_shown`.** Someone reached the estimate, with a band for how many
   questions they answered and for the monthly amount unclaimed. Not a grade,
   and not what they were awarded.
