@@ -300,14 +300,14 @@ export const DATENSCHUTZ: readonly LegalSection[] = [
     de: {
       heading: '11. Angaben zur Gesundheit',
       body: [
-        'Viele Fragen betreffen Gesundheit und Pflege. Solche Angaben können Gesundheitsdaten sein. Sie werden nur von Ihrem eigenen Browser verarbeitet und bleiben auf Ihrem Gerät.',
+        'Viele Fragen betreffen Gesundheit und Pflege. Solche Angaben können Gesundheitsdaten sein. Getippte Antworten werden nur von Ihrem eigenen Browser verarbeitet und bleiben auf Ihrem Gerät. Für Antworten per Sprache gilt Abschnitt 3.',
         'Der Betreiber kann Ihre Antworten nicht sehen und erhält sie nicht. Sie sind auch nicht Teil der Zählung unter 6.',
       ],
     },
     en: {
       heading: '11. Information about health',
       body: [
-        'Many questions concern health and care. Such information can be health data. It is processed only by your own browser and stays on your device.',
+        'Many questions concern health and care. Such information can be health data. Typed answers are processed only by your own browser and stay on your device. For answers by voice, section 3 applies.',
         'The operator cannot see your answers and does not receive them. They are not part of the counting under 6. either.',
       ],
     },

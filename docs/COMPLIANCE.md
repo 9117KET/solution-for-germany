@@ -54,19 +54,23 @@ the list.
 1. Fill every blank in section 1; `npm test` still passes.
 2. Decide the Land and authority (2.1) and put it in `DPA_AUTHORITY`.
 3. Choose the Vercel plan (2.2); if the plan's log retention should appear on the page, add
-   it to section 4 of `lib/legal/datenschutz.ts`.
+   it to section 5 of `lib/legal/datenschutz.ts`.
 4. Confirm both DPAs apply (2.4, 2.5) and file them.
 5. Check for cookies on the production URL with `curl -I` (*to verify*: only a
    deployment-protection cookie was found). The page says the app sets none. SC:47
-6. Confirm Plausible's event retention and put it in section 5 in place of "nicht
+6. Confirm Plausible's event retention and put it in section 6 in place of "nicht
    angegeben" (gap). SC:31, SC:64
 7. Decide how an Art. 21 objection is honoured. Plausible has no built-in opt-out, and a
    Do-Not-Track or `plausible_ignore` switch would itself be storage (*to verify*). The page
    currently names the email address only. SC:33
 8. Confirm `?via=` does not reach Plausible inside a URL (the code strips it, SC:30 *verify*
    against the supported-parameter list).
-9. Get the short legal read (2.6, 2.7) and write the VVT (2.8).
-10. Only then set `NEXT_PUBLIC_ANALYTICS_PROVIDER` (see `docs/DEPLOY.md`).
+9. Confirm in the Plausible dashboard that the site's data region is the EU (Plausible
+   states EU processing and storage; vendor claim). SA:9, SC:29
+10. Get the short legal read (2.6, 2.7) and write the VVT (2.8).
+11. Make sure `/impressum` and `/datenschutz` are live, with every blank filled, before
+    `NEXT_PUBLIC_ANALYTICS_PROVIDER` is set.
+12. Only then set `NEXT_PUBLIC_ANALYTICS_PROVIDER` (see `docs/DEPLOY.md`).
 
 ## 4. Open points found in the code (no scout source)
 

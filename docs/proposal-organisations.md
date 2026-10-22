@@ -37,7 +37,7 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 Die Antworten der Familie bleiben auf ihrem Gerät; sie werden nur in diesem Browser gespeichert und lassen sich mit einem Tipp löschen.
 Es gibt kein Konto und keinen Server, der Antworten speichert.
 Gezählt werden nur Besuche und fünf Schritte (Start, Ergebnis, weitere Fragen, PDF, Löschen), ohne Cookies, ohne Namen, ohne Antworten und ohne Pflegegrad, und Sie sehen davon nur Summen.
-Die Zählung läuft ohne Cookies auf Servern in der EU, und die Seite hat ein Impressum und eine Datenschutzerklärung.
+Die Zählung läuft ohne Cookies bei einem Anbieter, der seine Server nach eigenen Angaben in der EU betreibt; die Seite selbst wird von Vercel gehostet. Beides steht in der Datenschutzerklärung, und die Seite hat ein Impressum.
 Sie können Familien deshalb sagen: Was Sie tippen, verlässt Ihr Gerät nicht. Bei Antworten per Sprache erkennt der Browser die Sprache, nicht die Seite.
 
 ### Was Anspruch nicht ist
@@ -99,7 +99,7 @@ It lists the next steps in order, each with its statutory basis.
 The family's answers stay on their device; they are kept only in that browser and can be deleted with one tap.
 There is no account and no server that stores answers.
 Only visits and five steps (start, result, further questions, PDF, erase) are counted, without cookies, names, answers or Pflegegrad, and you see only totals.
-The counting runs without cookies on servers in the EU, and the site carries an Impressum and a Datenschutzerklärung (privacy policy).
+The counting runs without cookies at a provider that, by its own account, runs its servers in the EU; the site itself is hosted by Vercel. Both are set out in the Datenschutzerklärung (privacy policy), and the site has an Impressum.
 You can therefore tell families: what you type does not leave your device. When answering by voice, the browser does the speech recognition, not the site.
 
 ### What Anspruch is not
