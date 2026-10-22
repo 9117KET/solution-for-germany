@@ -68,16 +68,16 @@ Begutachtung wahrscheinlich ergibt. Sie vergleicht die Leistungen, die daraus fo
 was der Haushalt schon bekommt, und nennt die nächsten Schritte mit ihrer gesetzlichen
 Grundlage. Am Ende steht ein PDF auf Deutsch oder Englisch.
 
-\textbf{Das Produkt.} In der Regel genügen 12 bis 20 Fragen statt 64. Steht das Ergebnis noch
+\textbf{Das Produkt.} In der Regel genügen 12 bis 20 Fragen statt 64 Fragen. Steht das Ergebnis noch
 nicht fest, zeigt die Seite einen Bereich und nie einen Mittelwert. Jeder Betrag nennt seine
 Rechtsquelle und das Prüfdatum. Alles läuft im Browser: kein Konto, kein Server, der Antworten
 speichert. Die Oberfläche gibt es in sechs Sprachen, die Fragen selbst auf Deutsch oder
 Englisch. Es ist eine Schätzung, keine Begutachtung und keine Rechtsberatung.
 
 \textbf{Stand am 23.10.2026.} Drei Arbeitsläufe am 22.10.2026 haben die Beträge gegen das
-geltende Recht geprüft, zwei Zitate berichtigt, eine kritische Sicherheitslücke geschlossen,
-vier Fehler aus einem Live-Test behoben, eine abschaltbare Zählung der Nutzung, Partnerlinks,
-Impressum und Datenschutzerklärung gebaut. Offen sind vor allem: die Prüfung der vier
+geltende Recht geprüft und zwei Zitate berichtigt. Sie haben eine kritische Sicherheitslücke
+geschlossen und vier Fehler aus einem Live-Test behoben. Neu sind eine abschaltbare Zählung der
+Nutzung, Partnerlinks, Impressum und Datenschutzerklärung. Offen sind vor allem: die Prüfung der vier
 Fremdsprachen durch Muttersprachler, das Pflegeneuordnungsgesetz (PNOG, Kabinettsentwurf vom
 30.09.2026), drei Fragen zum Quelltext und eine Quelle mit Prüfdatum 26.08.2026.
 
@@ -89,8 +89,8 @@ Prüfung.
 
 \textbf{Förderung.} Der Prototype Fund (Frist 30.11.2026) ist das einzige Programm ausdrücklich
 für eine Privatperson; die Passung ist vorher zu erfragen. Modellvorhaben nach § 123 SGB XI
-laufen über ein Land oder eine Kommune, meist mit einem Träger; nur Niedersachsen lässt auch
-natürliche Personen zu. Aktion Mensch verlangt einen gemeinnützigen Träger, die Deutsche
+laufen über ein Land oder eine Kommune, meist mit einem Träger; von den geprüften Ländern lässt
+nur Niedersachsen auch natürliche Personen zu. Aktion Mensch verlangt einen gemeinnützigen Träger, die Deutsche
 Fernsehlotterie eine Trägerorganisation. Die Robert Bosch Stiftung nimmt keine
 unaufgeforderten Anträge an.
 
@@ -153,8 +153,8 @@ two data processing agreements and a short legal read.
 
 \textbf{Funding.} The Prototype Fund (deadline 30 November 2026) is the only programme
 explicitly for a private individual; its fit must be asked first. Model projects under § 123
-SGB XI run through a Land or a Kommune, usually with a Träger; only Niedersachsen also admits
-natural persons. Aktion Mensch requires a non-profit Träger, the Deutsche Fernsehlotterie a
+SGB XI run through a Land or a Kommune, usually with a Träger; of the Länder checked, only
+Niedersachsen also admits natural persons. Aktion Mensch requires a non-profit Träger, the Deutsche Fernsehlotterie a
 Trägerorganisation. The Robert Bosch Stiftung does not accept unsolicited applications.
 
 \textbf{Partners.} For a pilot we recommend these first three: a Pflegestützpunkt in
@@ -254,10 +254,10 @@ dem Doppelpunkt sind Zeilen).
 \textbf{Datum} & \textbf{Was} & \textbf{Beleg}\\
 \midrule
 \endhead
-22.10.2026 & Oberfläche auf Türkisch, Russisch, Polnisch und Arabisch Schlüssel für Schlüssel gegen
-  das Deutsche geprüft (durch Sprachmodelle); sinnverändernde Fehler behoben, darunter fehlende
-  Fachbegriffe \enquote{Widerspruch} und \enquote{Pflegeberatung}. Eine Überschrift in allen
-  sechs Sprachen berichtigt (fünf statt vier Vorfragen). & LC:13, LC:22; \pfad{lib/i18n/strings.ts} \\
+22.10.2026 & Sprachmodelle haben die Oberfläche auf Türkisch, Russisch, Polnisch und Arabisch
+  Schlüssel für Schlüssel gegen das Deutsche geprüft. Sinnverändernde Fehler wurden behoben,
+  darunter fehlende Fachbegriffe \enquote{Widerspruch} und \enquote{Pflegeberatung}. Eine
+  Überschrift wurde in allen sechs Sprachen berichtigt (fünf statt vier Vorfragen). & LC:13, LC:22; \pfad{lib/i18n/strings.ts} \\
 22.10.2026 & Alle Beträge, Schwellen und Fristen nach geltendem Recht richtig. Zwei Zitate
   berichtigt: Wohngruppenzuschlag nach § 45f statt § 38a SGB XI; die Zwei-Wochen-Regel nach
   § 7b Abs.~1 statt § 7a. Prüfdaten auf 22.10.2026 erneuert, außer einem (siehe Offene Punkte, 3). & LC:14, LC:24;
@@ -305,9 +305,9 @@ Datenschutzerklärung schon enthält, ist zu prüfen.
     15/30/50 Punkte senken. Die erste Lesung ist für den 05.11.2026 angesetzt. Nichts davon
     erreicht die Nutzer; die Hinweise stehen in \pfad{lib/rules/sources.ts}. Wird es wie
     entworfen beschlossen, sind die Beträge der Seite ab 01.01.2027 falsch. (LC:26, LC:36)
-  \item \textbf{Bedarfskonstellation.} Die Seite zeigt als Stand des Regelwerks den 26.08.2026,
-    weil die Angabe, die Begutachtungs-Richtlinien kennten genau eine besondere
-    Bedarfskonstellation, nicht neu abgerufen wurde. (LC:35)
+  \item \textbf{Bedarfskonstellation.} Die Seite zeigt als Stand des Regelwerks den 26.08.2026.
+    Der Grund: Die Angabe, die Begutachtungs-Richtlinien kennten genau eine besondere
+    Bedarfskonstellation, wurde nicht neu abgerufen. (LC:35)
   \item \textbf{Drei Fragen zum Quelltext}, auch für Deutsch und Englisch:
     \texttt{pdfLanguageNote} sagt, die Pflegekasse lese das PDF auf Deutsch oder Englisch; ein
     englisches PDF ist fraglich. \texttt{exclusiveNote} sagt, Pflegegeld und
@@ -330,7 +330,8 @@ Rechercheberichte (SC, SA). Entwurf für eine rechtliche Prüfung, keine Rechtsb
 
 \subsection{Haltung}
 \begin{itemize}
-  \item \textbf{Nichts verlässt das Gerät.} Antworten bleiben in diesem Browser und lassen sich
+  \item \textbf{Was die Familie tippt, verlässt das Gerät nicht.} Hosting und Zählung siehe
+    unten. Antworten bleiben in diesem Browser und lassen sich
     mit einem Tipp löschen. Kein Konto, kein Server, der Antworten speichert. Die App setzt
     keine Cookies. Ausnahme: Bei Spracheingabe erkennt der Browser die Sprache, möglicherweise
     auf Servern des Browserherstellers; der Betreiber erhält weder Ton noch Text.
@@ -407,9 +408,11 @@ Landes.
 In dieser Reihenfolge: (1) alle Lücken füllen, Tests grün; (2) Land und Behörde in
 \texttt{DPA\_AUTHORITY}; (3) Vercel-Plan wählen, Protokollaufbewahrung gegebenenfalls in
 Abschnitt 5 der Datenschutzerklärung; (4) beide AVV bestätigen und ablegen; (5) auf der
-Produktionsadresse mit \texttt{curl -I} auf Cookies prüfen; (6) Aufbewahrungsdauer bei
+Produktionsadresse mit \texttt{curl -I} auf Cookies prüfen (bisher nur ein Deployment-Protection-Cookie gefunden, zu
+prüfen); (6) Aufbewahrungsdauer bei
 Plausible bestätigen und in Abschnitt 6 eintragen; (7) entscheiden, wie ein Widerspruch nach
-Art.~21 umgesetzt wird; (8) bestätigen, dass \texttt{?via=} Plausible nicht in einer URL
+Art.~21 umgesetzt wird (Plausible hat keinen eingebauten Widerspruchsschalter; DNT oder
+\texttt{plausible\_ignore} wären selbst Speicherung, zu prüfen); (8) bestätigen, dass \texttt{?via=} Plausible nicht in einer URL
 erreicht; (9) EU-Datenregion im Plausible-Dashboard bestätigen; (10) rechtliche Prüfung (6, 7)
 einholen und VVT schreiben; (11) \pfad{/impressum} und \pfad{/datenschutz} mit gefüllten
 Lücken live; (12) erst dann \texttt{NEXT\_PUBLIC\_ANALYTICS\_PROVIDER} setzen.
@@ -448,7 +451,7 @@ oder aus FO stammt; alles andere steht unter \enquote{zu bestätigen}.
 \textbf{Betrag} & \textbf{Frist} & \textbf{Status}\\
 \midrule
 \endhead
-Prototype Fund, Jahrgang 03 & zu bestätigen & Unsicher; Linien Resilienz (\enquote{Freie
+Prototype Fund, Jahrgang 03 & zu bestätigen & Unsicher; Spuren Resilienz (\enquote{Freie
   Alternativen zu proprietärer, zentralisierter \dots\ Software}) oder Innovation
   (\enquote{Datensicherheit und Software-Infrastruktur}) & zu bestätigen & zu bestätigen &
   30.11.2026 & erst fragen \\
@@ -479,13 +482,13 @@ Google.org & \nein & \nein & \nein & \nein & \nein & entfällt \\
 \end{longtable}
 }
 
-Belege je Zeile: Prototype Fund SA:7 (Frist, Linien), FO Tabelle und Frage 4 (Passung
+Belege je Zeile: Prototype Fund SA:7 (Frist, Spuren), FO Tabelle und Frage 4 (Passung
 unsicher, erst fragen). § 123 SA:19 und FO Tabelle. Niedersachsen SA:21. Hessen SA:22, SA:50.
 Berlin SA:20. Aktion Mensch SA:27--29. Fernsehlotterie SA:34. Robert Bosch Stiftung SA:35.
 Google.org FO Frage 16 (\enquote{Drop unless a call for Germany appears in 2027}).
 
 \subsection{Prototype Fund, Jahrgang 03}
-\textbf{Geprüft (SA:7).} Drei Linien auf \url{https://bewerben.prototypefund.de/}, jeweils mit
+\textbf{Geprüft (SA:7).} Drei Spuren auf \url{https://bewerben.prototypefund.de/}, jeweils mit
 Frist 30.11.2026: Up and Coming (unter 26, im Studium oder in einer informatischen Ausbildung), Resilienz, Innovation.
 Die Seite nennt keine Beträge, keine Berechtigung, keine Lizenzliste und keinen Geldgeber. Das
 Formular ist nur nach Anmeldung lesbar.
@@ -554,11 +557,11 @@ Stiftungen; V, SA:43) nennt: Anschreiben mit beantragtem Betrag; Titelseite; Zus
 Maßnahmenplan, Personal, Dokumentation und Auswertung, Kosten- und Finanzierungsplan,
 Perspektive; Anhang mit Jahresbericht, Organigramm, Referenzen oder Empfehlungsschreiben.
 Unterschrift durch Geschäftsführung oder Vorstand. Freistellungsbescheid, Registerauszug und
-Satzung verlangen die Formulare einzelner Geldgeber. Für Datenschutzkonzept und Lebenslauf hat
+Satzung verlangen nach älteren Unterlagen (S, zu bestätigen) die Formulare einzelner Geldgeber. Für Datenschutzkonzept und Lebenslauf hat
 die Recherche keine maßgebliche Quelle gefunden.
 
 \subsection{Zu bestätigen}
-\begin{enumerate}
+\begin{enumerate}[nosep]
   \item Prototype Fund: Geldgeber für J03 (J02: BMFTR, betreut von der Open Knowledge Foundation
     Deutschland; A, SA:9).
   \item Prototype Fund: Beträge. J02-Handbuch: höchstens 950 Stunden und 47.500~EUR für eine
@@ -572,7 +575,8 @@ die Recherche keine maßgebliche Quelle gefunden.
   \item Prototype Fund: welche Lizenzen anerkannt sind; EUPL-1.2 wird nicht genannt (TV, SA:14).
   \item Prototype Fund: Passung zu Resilienz oder Innovation (FO, Frage 4).
   \item Prototype Fund: Ablauf und Termine nach der Frist für J03; die J02-Daten nicht zitieren
-    (TV, SA:16); Formularfragen und Grenzen gegen das J03-Formular (A, SA:6).
+    (TV, SA:16); Formularfragen und Grenzen gegen das J03-Formular (A, SA:6); keine Anhänge, nur
+    Text und Links (A, SA:10).
   \item § 123 im Land \blank{Land}: zuständige Stelle, Antragsteller, Frist, Kofinanzierung (FO,
     Frage 7). Hessen: Frist (SA:22 nennt keine). Nicht amtlich bestätigt: NRW, Bayern, Baden-Württemberg, Sachsen-Anhalt, Bremen
     (S, SA:24). Niedersachsen: Datum der Richtlinie und Anlagen zum Antragsvordruck (TV, SA:21).
@@ -594,7 +598,8 @@ die Recherche keine maßgebliche Quelle gefunden.
 Quelle: \pfad{scout-organisations.md} (SO, Prüfung vom 23.10.2026, mit Zeilennummer). Rollen:
 \textbf{N} nutzt das Werkzeug in der Beratung, \textbf{E} empfiehlt es weiter, \textbf{F} fördert
 oder lizenziert möglicherweise. Hier steht nur, was als geprüft gekennzeichnet ist. Das Land des
-Betreibers ist offen; örtliche Stellen findet man über die ZQP-Datenbank.
+Betreibers ist offen; örtliche Stellen findet man über die ZQP-Datenbank (Vollständigkeit zu
+bestätigen).
 
 {\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}P{32mm}P{9mm}P{60mm}P{50mm}@{}}
@@ -613,7 +618,7 @@ AWO Bundesverband & N, E & Pflege und Migration (SO:19) & \href{https://awo.org/
 DRK & N, E & Pflege, Migration und Teilhabe (SO:20) & \href{https://www.drk.de/das-drk/kontakt/}{drk.de/das-drk/kontakt} \\
 Der Paritätische & N, E & Pflege und Migration (SO:21) & \href{https://www.der-paritaetische.de/kontakt/}{der-paritaetische.de/kontakt} \\
 ZWST & E & Senioren- und Demenzarbeit; schwächere Passung (SO:22) & \href{https://zwst.org/de/kontakt}{zwst.org/de/kontakt} \\
-MBE & N, E & Bester Weg zu türkisch-, russisch-, polnisch- und arabischsprachigen Pflegenden; 1.227 Einrichtungen 2025 (SO:23) & \href{https://www.migrationsberatung.org}{migrationsberatung.org} \\
+MBE & N, E & Guter Weg zu türkisch-, russisch-, polnisch- und arabischsprachigen Pflegenden; 1.227 Einrichtungen 2025 (SO:23) & \href{https://www.migrationsberatung.org}{migrationsberatung.org} \\
 \multicolumn{4}{@{}l}{\textit{Pflegekassen und Beratung}}\\
 GKV-Spitzenverband & E & Spitzenverband der Pflegekassen (SO:26) & \href{https://www.gkv-spitzenverband.de/pflegeversicherung/beratung_und_betreuung/pflegeberatung/pflegeberatung.jsp}{gkv-spitzenverband.de, Pflegeberatung} \\
 BARMER & N, F & Eigene Pflegeberatung (SO:28) & \href{https://www.barmer.de/persoenliche-beratung}{barmer.de/persoenliche-beratung} \\
@@ -663,14 +668,14 @@ höheren Ansprüchen verhilft; dafür gibt es keine Quelle (SO:32).
   \item \textbf{Ein Pflegestützpunkt in \blank{Land}}, gefunden über die ZQP-Datenbank: berät
     nach § 7c SGB XI genau die Familien, die das Werkzeug zur Beratung schickt (SO:8, SO:13; FO).
   \item \textbf{Eine MBE-Stelle eines Wohlfahrtsverbands} (Caritas, Diakonie, AWO, DRK oder
-    Paritätischer) in \blank{Land}: der beste Weg zu Pflegenden, die Türkisch, Russisch, Polnisch
+    Paritätischer) in \blank{Land}: ein guter Weg zu Pflegenden, die Türkisch, Russisch, Polnisch
     oder Arabisch sprechen (SO:23).
   \item \textbf{Eine Beratungsstelle des Sozialverbands VdK}: berät selbst im Sozialrecht und
     kann das Werkzeug in der Beratung nutzen und weiterempfehlen (SO:40).
 \end{enumerate}
 
 \subsection{Zu bestätigen}
-\begin{enumerate}
+\begin{enumerate}[nosep]
   \item Ältere Adresse beratungsdatenbank.zqp.de; ob die ZQP-Datenbank alle Pflegestützpunkte
     führt (SO:8).
   \item Rahmenverträge nach § 7c zwischen Landesverbänden der Pflegekassen und Ländern (SO:9).
@@ -743,7 +748,7 @@ Dieses Dossier & \nuetzlich & \nuetzlich & \nuetzlich & \nuetzlich & \nein & Ent
 }
 
 Grundlage der Zuordnung: Prototype Fund ohne Anhänge, nur Text und Links, mit
-Open-Source-Zusage (SA:10, SA:14); § 123 mit Konzeption, Finanzierungsplan und Antrag in
+Open-Source-Zusage (A, gegen J03 zu prüfen; SA:10, SA:14); § 123 mit Konzeption, Finanzierungsplan und Antrag in
 Textform (SA:19); Aktion Mensch mit Bescheid des Finanzamts (SA:29), weitere Unterlagen zu
 bestätigen (SA:31); Stiftungsleitfaden (SA:43); Recht nach \pfad{docs/COMPLIANCE.md}. Für den
 Pilotversuch gibt es keine Quelle; die Zuordnung folgt dem Pilotvorschlag. Ein
@@ -824,8 +829,8 @@ Woche 6). Termine Dritter stehen zur Orientierung dabei.
 % ===========================================================================
 \section{Anhang: Quellen}
 
-\subsection*{Im Repository}
-{\small\raggedright
+\minisec{Im Repository}
+{\footnotesize\raggedright
 \pfad{README.md}; \pfad{docs/COMPLIANCE.md}; \pfad{docs/DEPLOY.md};
 \pfad{docs/PARTNERS.md}; \pfad{docs/funding-outline.md};
 \pfad{docs/proposal-organisations.md}; \pfad{lib/rules/sources.ts};
@@ -834,7 +839,7 @@ Woche 6). Termine Dritter stehen zur Orientierung dabei.
 \pfad{scout-applications.md} und \pfad{scout-organisations.md} in
 \pfad{.orchestration/runs/2026-10-23-dossier/}.\par}
 
-\subsection*{Förderprogramme}
+\minisec{Förderprogramme}
 {\scriptsize\raggedright
 \textbullet~\url{https://bewerben.prototypefund.de/}
 \textbullet~\url{https://bewerben.prototypefund.de/jahrgang-03-resilienz/}
@@ -865,7 +870,7 @@ Woche 6). Termine Dritter stehen zur Orientierung dabei.
 \textbullet~\url{https://interoperable-europe.ec.europa.eu/collection/eupl/faq}
 \par}
 
-\subsection*{Partnerorganisationen}
+\minisec{Partnerorganisationen}
 {\scriptsize\raggedright
 \textbullet~\url{https://www.zqp.de/beratung-pflege/}, \url{https://www.zqp.de/kontakt/},
         \url{https://www.zqp.de/ueber-uns/kooperation/}
@@ -911,7 +916,7 @@ Woche 6). Termine Dritter stehen zur Orientierung dabei.
 \textbullet~\url{https://d-64.org/impressum/}
 \par}
 
-\subsection*{Recht, Datenschutz und Betrieb}
+\minisec{Recht, Datenschutz und Betrieb}
 {\scriptsize\raggedright
 \textbullet~\url{https://www.gesetze-im-internet.de/sgb_11/__7a.html},
         \url{https://www.gesetze-im-internet.de/sgb_11/__7b.html},
