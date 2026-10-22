@@ -38,7 +38,7 @@ Die Antworten der Familie bleiben auf ihrem Gerät; sie werden nur in diesem Bro
 Es gibt kein Konto und keinen Server, der Antworten speichert.
 Gezählt werden nur Besuche und fünf Schritte (Start, Ergebnis, weitere Fragen, PDF, Löschen), ohne Cookies, ohne Namen, ohne Antworten und ohne Pflegegrad, und Sie sehen davon nur Summen.
 Die Zählung läuft ohne Cookies auf Servern in der EU, und die Seite hat ein Impressum und eine Datenschutzerklärung.
-Sie können Familien deshalb ohne Einschränkung sagen: Ihre Antworten verlassen Ihr Gerät nicht.
+Sie können Familien deshalb sagen: Was Sie tippen, verlässt Ihr Gerät nicht. Bei Antworten per Sprache erkennt der Browser die Sprache, nicht die Seite.
 
 ### Was Anspruch nicht ist
 
@@ -100,7 +100,7 @@ The family's answers stay on their device; they are kept only in that browser an
 There is no account and no server that stores answers.
 Only visits and five steps (start, result, further questions, PDF, erase) are counted, without cookies, names, answers or Pflegegrad, and you see only totals.
 The counting runs without cookies on servers in the EU, and the site carries an Impressum and a Datenschutzerklärung (privacy policy).
-You can therefore tell families without qualification: your answers do not leave your device.
+You can therefore tell families: what you type does not leave your device. When answering by voice, the browser does the speech recognition, not the site.
 
 ### What Anspruch is not
 
