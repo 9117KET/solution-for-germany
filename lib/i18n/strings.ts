@@ -88,12 +88,53 @@ export const UI = {
   // outlive the tab, and someone sharing a computer has to be told that in the
   // same breath rather than discovering it.
   privacyBody: {
-    de: 'Das hier ist ein Programm, kein Mensch. Es ist keine Begutachtung durch den Medizinischen Dienst. Ihre Antworten bleiben auf Ihrem Gerät. Es gibt kein Konto und keinen Server, der etwas speichert. Damit Sie später weitermachen können, werden Ihre Antworten in diesem Browser gespeichert; Sie können sie jederzeit mit einem Tipp löschen. Die kostenlose Pflegeberatung nach § 7a SGB XI steht Ihnen jederzeit zu.',
-    en: 'This is a program, not a person. It is not an assessment by the Medizinischer Dienst. Your answers stay on your device. There is no account and no server storing anything. So that you can carry on later, your answers are kept in this browser; you can delete them at any time with one tap. Free statutory care advice under § 7a SGB XI is available to you at any time.',
-    tr: 'Bu bir programdır, bir insan değil. Medizinischer Dienst tarafından yapılan bir değerlendirme değildir. Cevaplarınız cihazınızda kalır. Hesap yok ve hiçbir şey kaydeden bir sunucu da yok. Daha sonra devam edebilmeniz için cevaplarınız bu tarayıcıda saklanır; istediğiniz zaman tek dokunuşla silebilirsiniz. § 7a SGB XI uyarınca ücretsiz bakım danışmanlığı (Pflegeberatung) her zaman hakkınızdır.',
-    ru: 'Это программа, а не человек. Это не экспертиза (Begutachtung), которую проводит Medizinischer Dienst. Ваши ответы остаются на вашем устройстве. Нет ни учётной записи, ни сервера, который что-либо сохраняет. Чтобы вы могли продолжить позже, ваши ответы сохраняются в этом браузере; вы можете удалить их в любой момент одним нажатием. Вы вправе в любое время получить бесплатную консультацию по уходу (Pflegeberatung) согласно § 7a SGB XI.',
-    pl: 'To jest program, a nie człowiek. To nie jest ekspertyza (Begutachtung) przeprowadzana przez Medizinischer Dienst. Twoje odpowiedzi pozostają na Twoim urządzeniu. Nie ma konta ani serwera, który cokolwiek zapisuje. Aby można było kontynuować później, Twoje odpowiedzi są zapisywane w tej przeglądarce; możesz je usunąć w każdej chwili jednym dotknięciem. Bezpłatne doradztwo w zakresie opieki (Pflegeberatung) zgodnie z § 7a SGB XI przysługuje Ci w każdej chwili.',
-    ar: 'هذا برنامج وليس شخصًا. وهو ليس تقييمًا رسميًا (Begutachtung) يجريه Medizinischer Dienst. تبقى إجاباتك على جهازك. لا يوجد حساب ولا خادم يحفظ أي شيء. ولكي تتمكن من المتابعة لاحقًا، تُحفظ إجاباتك في هذا المتصفح؛ ويمكنك حذفها في أي وقت بضغطة واحدة. يحق لك في أي وقت الحصول على الاستشارة المجانية بشأن الرعاية (Pflegeberatung) وفق § 7a SGB XI.',
+    de: 'Das hier ist ein Programm, kein Mensch. Es ist keine Begutachtung durch den Medizinischen Dienst. Ihre Antworten bleiben auf Ihrem Gerät. Es gibt kein Konto und keinen Server, der Ihre Antworten speichert. Wo gezählt wird, zählen wir nur, wie viele Menschen die Seite nutzen und wie weit sie kommen, ohne Cookies und ohne Namen; Ihre Antworten gehören nicht dazu. Damit Sie später weitermachen können, werden Ihre Antworten in diesem Browser gespeichert; Sie können sie jederzeit mit einem Tipp löschen. Die kostenlose Pflegeberatung nach § 7a SGB XI steht Ihnen jederzeit zu.',
+    en: 'This is a program, not a person. It is not an assessment by the Medizinischer Dienst. Your answers stay on your device. There is no account and no server storing your answers. Where counting is in place, we only count how many people use the site and how far they get, without cookies and without names; your answers are not part of it. So that you can carry on later, your answers are kept in this browser; you can delete them at any time with one tap. Free statutory care advice under § 7a SGB XI is available to you at any time.',
+    tr: 'Bu bir programdır, bir insan değil. Medizinischer Dienst tarafından yapılan bir değerlendirme değildir. Cevaplarınız cihazınızda kalır. Hesap yok ve cevaplarınızı kaydeden bir sunucu da yok. Sayım yapılan yerlerde yalnızca siteyi kaç kişinin kullandığını ve ne kadar ilerlediklerini sayıyoruz, çerez (cookie) olmadan ve isim olmadan; cevaplarınız buna dahil değildir. Daha sonra devam edebilmeniz için cevaplarınız bu tarayıcıda saklanır; istediğiniz zaman tek dokunuşla silebilirsiniz. § 7a SGB XI uyarınca ücretsiz bakım danışmanlığı (Pflegeberatung) her zaman hakkınızdır.',
+    ru: 'Это программа, а не человек. Это не экспертиза (Begutachtung), которую проводит Medizinischer Dienst. Ваши ответы остаются на вашем устройстве. Нет ни учётной записи, ни сервера, который сохраняет ваши ответы. Там, где ведётся подсчёт, мы считаем только, сколько людей пользуются сайтом и как далеко они продвигаются, без файлов cookie и без имён; ваши ответы в этот подсчёт не входят. Чтобы вы могли продолжить позже, ваши ответы сохраняются в этом браузере; вы можете удалить их в любой момент одним нажатием. Вы вправе в любое время получить бесплатную консультацию по уходу (Pflegeberatung) согласно § 7a SGB XI.',
+    pl: 'To jest program, a nie człowiek. To nie jest ekspertyza (Begutachtung) przeprowadzana przez Medizinischer Dienst. Twoje odpowiedzi pozostają na Twoim urządzeniu. Nie ma konta ani serwera, który zapisuje Twoje odpowiedzi. Tam, gdzie odbywa się liczenie, liczymy tylko, ile osób korzysta ze strony i jak daleko dochodzą, bez plików cookie i bez imion i nazwisk; Twoje odpowiedzi nie są w to wliczane. Aby można było kontynuować później, Twoje odpowiedzi są zapisywane w tej przeglądarce; możesz je usunąć w każdej chwili jednym dotknięciem. Bezpłatne doradztwo w zakresie opieki (Pflegeberatung) zgodnie z § 7a SGB XI przysługuje Ci w każdej chwili.',
+    ar: 'هذا برنامج وليس شخصًا. وهو ليس تقييمًا رسميًا (Begutachtung) يجريه Medizinischer Dienst. تبقى إجاباتك على جهازك. لا يوجد حساب ولا خادم يحفظ إجاباتك. وحيثما يجري العدّ، نعدّ فقط عدد الأشخاص الذين يستخدمون الموقع ومدى تقدّمهم فيه، دون ملفات تعريف الارتباط (Cookies) ودون أسماء؛ وإجاباتك ليست جزءًا من ذلك. ولكي تتمكن من المتابعة لاحقًا، تُحفظ إجاباتك في هذا المتصفح؛ ويمكنك حذفها في أي وقت بضغطة واحدة. يحق لك في أي وقت الحصول على الاستشارة المجانية بشأن الرعاية (Pflegeberatung) وفق § 7a SGB XI.',
+  },
+  // Shown under `privacyBody` only in a build that counts usage
+  // (`isEnabled()` in `lib/analytics`). It lists exactly the five events in
+  // `ALLOWED_PROPS` there; change both together or neither.
+  analyticsNoticeBody: {
+    de: 'Diese Seite zählt Besuche und fünf Schritte (Start, Ergebnis, weitere Fragen, PDF, Löschen) zusammen mit Sprache, Tempo, der Zahl der gestellten Fragen in Stufen, ob ein Ergebnis erreicht wurde, der Spanne des geschätzten Monatsbetrags, der Sprache des PDF und, falls Sie über eine Organisation kamen, deren Kürzel. Keine Antworten, kein Pflegegrad, keine Cookies, keine Namen. Weil nichts einer Person zugeordnet wird, gibt es nichts, was Sie abschalten müssten.',
+    en: 'This site counts visits and five steps (start, result, further questions, PDF, erase) together with language, pace, the number of questions asked in bands, whether a result was reached, the range of the estimated monthly amount, the language of the PDF and, if you came through an organisation, its short name. No answers, no Pflegegrad, no cookies, no names. Because nothing is linked to a person, there is nothing you would need to switch off.',
+    tr: 'Bu site ziyaretleri ve beş adımı (başlangıç, sonuç, ek sorular, PDF, silme) dil, tempo, sorulan soru sayısının kademesi, bir sonuca ulaşılıp ulaşılmadığı, tahmini aylık tutarın aralığı, PDF’nin dili ve, bir kuruluş aracılığıyla geldiyseniz, o kuruluşun kısa adıyla birlikte sayar. Cevap yok, Pflegegrad yok, çerez (cookie) yok, isim yok. Hiçbir şey bir kişiyle ilişkilendirilmediği için kapatmanız gereken bir şey de yoktur.',
+    ru: 'Этот сайт подсчитывает посещения и пять шагов (начало, результат, дополнительные вопросы, PDF, удаление) вместе с языком, темпом, числом заданных вопросов по ступеням, тем, был ли получен результат, диапазоном оценочной ежемесячной суммы, языком PDF и, если вы пришли через организацию, её кратким обозначением. Никаких ответов, никакого Pflegegrad, никаких файлов cookie, никаких имён. Поскольку ничто не связывается с конкретным человеком, вам нечего отключать.',
+    pl: 'Ta strona liczy odwiedziny i pięć kroków (start, wynik, dalsze pytania, PDF, usunięcie) wraz z językiem, tempem, liczbą zadanych pytań w przedziałach, informacją, czy uzyskano wynik, przedziałem szacowanej kwoty miesięcznej, językiem PDF i, jeśli trafiasz tu przez organizację, jej skrótem. Żadnych odpowiedzi, żadnego Pflegegrad, żadnych plików cookie, żadnych imion i nazwisk. Ponieważ nic nie jest przypisywane do konkretnej osoby, nie ma niczego, co trzeba by wyłączać.',
+    ar: 'يعدّ هذا الموقع الزيارات وخمس خطوات (البدء، النتيجة، أسئلة إضافية، PDF، الحذف) مع اللغة والوتيرة، وعدد الأسئلة المطروحة ضمن فئات، وما إذا تم الوصول إلى نتيجة، ونطاق المبلغ الشهري المقدَّر، ولغة ملف PDF، واختصار اسم المنظمة إن كنت قد وصلت عن طريق منظمة. لا إجابات، ولا Pflegegrad، ولا ملفات تعريف الارتباط (Cookies)، ولا أسماء. ولأنه لا يُنسب أي شيء إلى شخص بعينه، فلا يوجد ما تحتاج إلى إيقافه.',
+  },
+  // Link under the privacy notice to `/datenschutz`. That page is in German
+  // and English only, like the questions, so the German name is kept.
+  privacyMoreLink: {
+    de: 'Mehr dazu in der Datenschutzerklärung',
+    en: 'More in the privacy policy (Datenschutzerklärung)',
+    tr: 'Ayrıntılar gizlilik bildiriminde (Datenschutzerklärung)',
+    ru: 'Подробнее в политике конфиденциальности (Datenschutzerklärung)',
+    pl: 'Więcej w polityce prywatności (Datenschutzerklärung)',
+    ar: 'المزيد في بيان الخصوصية (Datenschutzerklärung)',
+  },
+  // ---------------------------------------------------------------- footer
+  // "Impressum" and "Datenschutz" are what these pages are called in Germany
+  // and what a reader will be told to look for, so the German word stays and
+  // the other languages add a gloss.
+  footerImpressum: {
+    de: 'Impressum',
+    en: 'Impressum (legal notice)',
+    tr: 'Impressum (künye)',
+    ru: 'Impressum (выходные данные)',
+    pl: 'Impressum (nota prawna)',
+    ar: 'Impressum (بيانات الناشر)',
+  },
+  footerDatenschutz: {
+    de: 'Datenschutz',
+    en: 'Datenschutz (privacy)',
+    tr: 'Datenschutz (gizlilik)',
+    ru: 'Datenschutz (конфиденциальность)',
+    pl: 'Datenschutz (prywatność)',
+    ar: 'Datenschutz (الخصوصية)',
   },
   resumeTitle: {
     de: 'Sie haben hier schon einmal angefangen',
@@ -1251,12 +1292,12 @@ export const UI = {
     ar: 'يُكتب ملف PDF بلغة الأسئلة، أي الألمانية أو الإنجليزية، وهي اللغة التي تقرأه بها Pflegekasse.',
   },
   pdfPrivacyNote: {
-    de: 'Die Datei entsteht auf Ihrem Gerät. Nichts wird gesendet. Sie enthält Gesundheitsdaten, geben Sie sie also nur weiter, wenn Sie das wollen.',
-    en: 'The file is produced on your device. Nothing is sent. It contains health data, so pass it on only where you mean to.',
-    tr: 'Dosya sizin cihazınızda oluşturulur. Hiçbir şey gönderilmez. Sağlık verisi içerir; yalnızca isteyerek paylaşın.',
-    ru: 'Файл создаётся на вашем устройстве. Ничего не отправляется. Он содержит данные о здоровье, поэтому передавайте его только осознанно.',
-    pl: 'Plik powstaje na Twoim urządzeniu. Nic nie jest wysyłane. Zawiera dane zdrowotne, więc przekazuj go tylko świadomie.',
-    ar: 'يُنشأ الملف على جهازك ولا يُرسل أي شيء. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
+    de: 'Die Datei entsteht auf Ihrem Gerät. Die Datei wird nicht gesendet. Sie enthält Gesundheitsdaten, geben Sie sie also nur weiter, wenn Sie das wollen.',
+    en: 'The file is produced on your device. The file itself is not sent. It contains health data, so pass it on only where you mean to.',
+    tr: 'Dosya sizin cihazınızda oluşturulur. Dosyanın kendisi gönderilmez. Sağlık verisi içerir; yalnızca isteyerek paylaşın.',
+    ru: 'Файл создаётся на вашем устройстве. Сам файл никуда не отправляется. Он содержит данные о здоровье, поэтому передавайте его только осознанно.',
+    pl: 'Plik powstaje na Twoim urządzeniu. Sam plik nie jest wysyłany. Zawiera dane zdrowotne, więc przekazuj go tylko świadomie.',
+    ar: 'يُنشأ الملف على جهازك ولا يُرسل الملف. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
   },
   privacyEraseTitle: {
     de: 'Antworten von diesem Gerät löschen',
