@@ -1,0 +1,101 @@
+% Kosten- und Finanzierungsplan für Förderanträge.
+% Positionen aus den Arbeitspaketen der Projektbeschreibung, docs/COMPLIANCE.md
+% und docs/funding-outline.md ("Numbers to collect"). Alle Beträge sind Platzhalter.
+% Förderobergrenzen aus .orchestration/runs/2026-10-23-dossier/scout-applications.md;
+% archivierte (A), sekundäre (S) und zu prüfende (TV) Angaben stehen nur mit \todo{}.
+% Bauen aus docs/dossier/antrag/:
+%   latexmk -pdf -interaction=nonstopmode -outdir=../build finanzplan.tex
+\documentclass[11pt,a4paper,parskip=half-]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Anspruch: Kosten- und Finanzierungsplan}}
+
+\begin{document}
+{\LARGE\sffamily\bfseries Anspruch: Kosten- und Finanzierungsplan\par}
+\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
+Programm: \blank{Programm und Spur} \textperiodcentered{}
+Laufzeit: \blank{Förderbeginn} bis \blank{Förderende}\par
+
+\section*{Vor dem Versand ausfüllen}
+\begin{quote}\raggedright
+\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
+\blank{Programm und Spur} \textperiodcentered{}
+\blank{Förderbeginn} \textperiodcentered{} \blank{Förderende} \textperiodcentered{}
+\blank{Monate} und \blank{Betrag} in jeder Zeile \textperiodcentered{}
+\blank{Vercel-Tarif} \textperiodcentered{} \blank{Plausible-Tarif} \textperiodcentered{}
+\blank{Summe} \textperiodcentered{}
+\blank{Beantragte Förderung} \textperiodcentered{} \blank{Eigenanteil} \textperiodcentered{}
+\blank{Partneranteil} \textperiodcentered{} \blank{Partner}
+\end{quote}
+Alle Beträge in EUR. Die Positionen folgen den Arbeitspaketen AP1 bis AP5 der Projektbeschreibung.
+Welche Kostenarten ein Programm anerkennt, ist vor dem Ausfüllen beim Programm zu klären.
+
+\section*{Kostenplan}
+\begin{longtable}{@{}L{0.25\linewidth}L{0.41\linewidth}L{0.14\linewidth}L{0.12\linewidth}@{}}
+\toprule
+\textbf{Position} & \textbf{Beschreibung} & \textbf{Monate / Einheit} & \textbf{Betrag} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+1 Personal & Projektleitung, Entwicklung, Koordination der Arbeitspakete (Gründerin oder Gründer) &
+  \blank{Monate} & \blank{Betrag} \\
+2 Muttersprachliche Prüfung (AP1) & Je eine Person für Türkisch, Russisch, Polnisch und Arabisch,
+  die das deutsche Pflegesystem kennt &
+  4 Sprachen, \blank{Monate} & \blank{Betrag} \\
+3 Rechtliche Prüfung (AP2) & Impressum und Datenschutzerklärung; Auftragsverarbeitungsverträge mit
+  Vercel und Plausible; Prüfung zur Orientierungshilfe Digitale Dienste der DSK; Lizenz und Doppellizenz &
+  \blank{Monate} & \blank{Betrag} \\
+4 Hosting und Zählung & Vercel, Tarif \blank{Vercel-Tarif}; Plausible, Tarif \blank{Plausible-Tarif}
+  (Eigenschaften je Partner brauchen nach Anbieterangabe den Business-Tarif)%
+  \todo{Tarife und Preise bei Anmeldung prüfen; Vercel Hobby nur nicht kommerziell} &
+  \blank{Monate} & \blank{Betrag} \\
+5 Anpassung PNOG (AP4) & Nur falls das Gesetz beschlossen wird: Regelwerk, Quellen, Tests, Texte, PDF &
+  \blank{Monate} & \blank{Betrag} \\
+6 Pilotbegleitung (AP3) & Einrichtung der Partnerlinks, monatliche Rückmeldegespräche, Material für Beratende &
+  \blank{Monate} & \blank{Betrag} \\
+7 Auswertung (AP5) & Monatliche Summenzahlen je Partner, Strichlisten, Abschlussbericht &
+  \blank{Monate} & \blank{Betrag} \\
+8 Verwaltung & Buchhaltung, Berichte an den Fördergeber &
+  \blank{Monate} & \blank{Betrag} \\
+\midrule
+\textbf{Summe} & & & \blank{Summe} \\
+\end{longtable}
+
+\section*{Finanzierungsplan}
+\begin{longtable}{@{}L{0.36\linewidth}L{0.30\linewidth}L{0.26\linewidth}@{}}
+\toprule
+\textbf{Quelle} & \textbf{Anmerkung} & \textbf{Betrag} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Beantragte Förderung & \blank{Programm und Spur} & \blank{Beantragte Förderung} \\
+Eigenanteil & & \blank{Eigenanteil} \\
+Anteil von Partnern & \blank{Partner} & \blank{Partneranteil} \\
+\midrule
+\textbf{Summe} (gleich Summe Kostenplan) & & \blank{Summe} \\
+\end{longtable}
+
+\section*{Obergrenzen der Programme}
+Nur Angaben, die der Scout vom 23.10.2026 an der Quelle geprüft hat, stehen ohne Randnotiz.
+\begin{itemize}
+  \item \textbf{Prototype Fund:} \enquote{max.\ 950\,h für eine Person oder max.\ 1.900\,h für Teams.
+        Die Maximalförderung beträgt 47.500 für eine Person oder 95.000 für Teams}, über sechs Monate.
+        Laut Flyer \enquote{bis zu 95.000 in 6 Monaten oder 158.000 in 10 Monaten} mit Second Stage.
+        Die Obergrenze der Second Stage selbst ist nicht belegt.%
+        \todo{Archiv J02; für J03 bestätigen}
+  \item \textbf{§ 123 SGB XI, Bund:} bis zu 30 Mio.\ EUR im Jahr aus dem Ausgleichsfonds, hälftig
+        kofinanziert durch Land oder Kommune, 2025 bis 2028; höchstens vier Jahre, Ende spätestens
+        31.12.2029.
+  \item \textbf{§ 123 SGB XI, Niedersachsen:} höchstens 1 Mio.\ EUR je Vorhaben; Landesanteil
+        45\,\% für Kommunen, 50\,\% für andere; die Pflegeversicherung gibt denselben Betrag dazu.
+  \item \textbf{§ 123 SGB XI, Hessen:} mindestens 30.000 EUR im Jahr; Personalkosten höchstens nach
+        TV-H oder TVöD; Investitionen nicht förderfähig; gefördert bis 31.12.2028.
+  \item \textbf{§ 123 SGB XI, Berlin:} 200.000 EUR im Jahr für alle Vorhaben zusammen; die Frist
+        für 2026 ist vorbei.
+  \item \textbf{Deutsche Fernsehlotterie:} Gesamtkosten mindestens 50.000 EUR.
+  \item \textbf{Aktion Mensch:} Eigenanteil je nach Programm.\todo{Sekundärquelle (10\,\% Beratung,
+        20\,\% Investitionen); aktuelles Merkblatt prüfen}
+\end{itemize}
+
+\end{document}

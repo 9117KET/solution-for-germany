@@ -1,0 +1,98 @@
+% Zeit- und Meilensteinplan für Förderanträge.
+% Arbeitspakete AP1 bis AP5 aus projektbeschreibung.tex. Die Monate zählen ab
+% Förderbeginn; die Verteilung ist ein Vorschlag und vor dem Versand anzupassen.
+% Externe Termine aus .orchestration/runs/2026-10-23-dossier/scout-applications.md
+% und .orchestration/runs/2026-10-22-last-check/scout-statute.md.
+% Lokales Makro: \gx (gefüllte Zelle im Balkenplan), \gs (Zelle der Second Stage).
+% Bauen aus docs/dossier/antrag/:
+%   latexmk -pdf -interaction=nonstopmode -outdir=../build zeitplan.tex
+\documentclass[11pt,a4paper,parskip=half-]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Anspruch: Zeit- und Meilensteinplan}}
+
+% Balkenzellen ohne TikZ: ein farbiger Strich über die Zellbreite.
+\definecolor{ganttbar}{RGB}{70,110,160}
+\definecolor{ganttsecond}{RGB}{160,180,205}
+\newcommand{\gx}{\textcolor{ganttbar}{\rule[-0.3ex]{\linewidth}{1.6ex}}}
+\newcommand{\gs}{\textcolor{ganttsecond}{\rule[-0.3ex]{\linewidth}{1.6ex}}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{7.5mm}}
+
+\begin{document}
+{\LARGE\sffamily\bfseries Anspruch: Zeit- und Meilensteinplan\par}
+\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
+Antrag vom \blank{Antragsdatum} \textperiodcentered{}
+M1 beginnt am \blank{Förderbeginn}\par
+
+\section*{Vor dem Versand ausfüllen}
+\begin{quote}\raggedright
+\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
+\blank{Antragsdatum} \textperiodcentered{} \blank{Förderbeginn} \textperiodcentered{}
+\blank{Anzahl Pilotpartner} \textperiodcentered{}
+\blank{Schwerpunkt Second Stage} \textperiodcentered{}
+\blank{Meilenstein Second Stage}
+\end{quote}
+Die Verteilung der Arbeitspakete auf die Monate ist ein Vorschlag. M1 bis M6 sind die erste Phase,
+M7 bis M10 eine mögliche Second Stage des Prototype Fund.\todo{Second Stage: Archiv J02, vier
+zusätzliche Monate; für J03 bestätigen}
+
+\section*{Balkenplan}
+{\setlength{\tabcolsep}{1.5pt}
+\begin{longtable}{@{}L{0.33\linewidth}CCCCCC|CCCC@{}}
+\toprule
+\textbf{Arbeitspaket} & M1 & M2 & M3 & M4 & M5 & M6 & M7 & M8 & M9 & M10 \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+AP1 Muttersprachliche Prüfung & \gx & \gx & \gx & & & & & & & \\
+AP2 Rechtliche und fachliche Prüfung & \gx & \gx & \gx & & & & & & & \\
+AP3 Pilote mit Partnern & & & \gx & \gx & \gx & \gx & \gs & \gs & \gs & \gs \\
+AP4 Anpassung PNOG, falls beschlossen & \gx & \gx & & & & & & & & \\
+AP5 Auswertung & & & \gx & \gx & \gx & \gx & \gs & \gs & \gs & \gs \\
+\end{longtable}}
+In M3 werden die Pilote vorbereitet; sie laufen drei Monate ab M4, wie im Vorschlag an Organisationen.
+Liegt der Förderbeginn nach dem 01.01.2027 und ist das PNOG dann in Kraft, steht AP4 vor allen
+anderen Paketen. Neue Texte aus AP4 gehen durch AP1.
+Für M7 bis M10 ist eine Fortsetzung von AP3 und AP5 eingetragen; der Schwerpunkt ist offen:
+\blank{Schwerpunkt Second Stage}.
+
+\section*{Meilensteine}
+\begin{longtable}{@{}L{0.07\linewidth}L{0.13\linewidth}L{0.10\linewidth}L{0.62\linewidth}@{}}
+\toprule
+\textbf{Nr.} & \textbf{Monat} & \textbf{AP} & \textbf{Meilenstein und Nachweis} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+MS1 & Ende M2 & AP4 & Stand des PNOG geklärt. Falls beschlossen: Beträge und Schwellen umgestellt,
+  jede mit Quelle und Prüfdatum, Tests bestanden. \\
+MS2 & Ende M3 & AP1 & Texte in Türkisch, Russisch, Polnisch und Arabisch muttersprachlich geprüft und
+  korrigiert. \\
+MS3 & Ende M3 & AP2 & Impressum und Datenschutzerklärung vollständig und rechtlich geprüft,
+  Auftragsverarbeitungsverträge abgelegt, Lizenz gewählt. Erst dann wird die Zählung eingeschaltet. \\
+MS4 & Beginn M4 & AP3 & Pilot bei \blank{Anzahl Pilotpartner} Partnern gestartet; jeder Partner hat seinen Link. \\
+MS5 & Ende M6 & AP3, AP5 & Pilote abgeschlossen; Auswertungsbericht mit Summenzahlen und Strichlisten. \\
+MS6 & Ende M10 & offen & \blank{Meilenstein Second Stage} \\
+\end{longtable}
+
+\section*{Feste Termine von außen}
+\begin{longtable}{@{}L{0.22\linewidth}L{0.70\linewidth}@{}}
+\toprule
+\textbf{Datum} & \textbf{Termin} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+05.11.2026 & PNOG: erste Lesung im Bundestag angesetzt (Vorschau, nicht als gehalten bestätigt). \\
+02.11.--17.12.2026 & Deutsche Fernsehlotterie: Bewerbungszeitraum; Organisationsdaten bis 10.12.2026. \\
+30.11.2026 & Prototype Fund, Jahrgang 03: Bewerbungsschluss in allen drei Spuren.
+  Die Lizenz wird vorher entschieden. \\
+01.01.2027 & PNOG tritt in Kraft, falls es wie entworfen beschlossen wird. \\
+01.01.2027 & Aktion Mensch: Beginn der nächsten Antragsphase. \\
+Mai 2027 & Deutsche Fernsehlotterie: Entscheidung der Gremien; frühester Start 01.06.2027. \\
+31.08.\ jährlich & § 123 SGB XI in Niedersachsen: Antragsfrist für einen Start im selben Jahr. \\
+\end{longtable}
+Der Prototype Fund nennt für Jahrgang 03 keine Auswahltermine; ein Förderbeginn ist deshalb nicht
+eingetragen.\todo{Auswahltermine J03 beim Prototype Fund erfragen}
+
+\end{document}
