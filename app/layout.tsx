@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "@/components/settings";
 import { A11yBar } from "@/components/a11y-bar";
+import { SiteFooter } from "@/components/site-footer";
 import { isEnabled } from "@/lib/analytics";
 import { AnalyticsScript } from "@/lib/analytics/script";
 
@@ -120,6 +121,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div id="content" className="flex flex-1 flex-col">
             {children}
           </div>
+          {/* After the content, so the skip link stays first in tab order. */}
+          <SiteFooter />
         </SettingsProvider>
         {/* Nothing at all unless the build switched analytics on. */}
         {isEnabled() ? <AnalyticsScript /> : null}

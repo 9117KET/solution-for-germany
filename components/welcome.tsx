@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { LANGUAGES, hasContent } from '@/lib/i18n';
 import { TEXT_SIZES, THEMES, type TextSize, type Theme } from '@/lib/a11y/settings';
 import { canListen, canSpeak } from '@/lib/a11y/speech';
@@ -219,6 +220,9 @@ export function Welcome({
         {t('privacyBody')}
         {/* Fixed at build time, so server and client always agree. */}
         {isEnabled() ? <span className="mt-2 block">{t('analyticsNoticeBody')}</span> : null}
+        <Link href="/datenschutz" className="target mt-1 flex w-fit items-center font-semibold underline">
+          {t('privacyMoreLink')}
+        </Link>
       </Notice>
 
       <div>

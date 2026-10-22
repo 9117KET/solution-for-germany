@@ -106,6 +106,36 @@ export const UI = {
     pl: 'Ta strona liczy odwiedziny i pięć kroków (start, wynik, dalsze pytania, PDF, usunięcie) wraz z językiem, tempem i, jeśli trafiasz tu przez organizację, jej skrótem. Żadnych odpowiedzi, żadnego Pflegegrad, żadnych plików cookie, żadnych imion i nazwisk. Ponieważ nic nie jest przypisywane do konkretnej osoby, nie ma niczego, co trzeba by wyłączać.',
     ar: 'يعدّ هذا الموقع الزيارات وخمس خطوات (البدء، النتيجة، أسئلة إضافية، PDF، الحذف) مع اللغة والوتيرة، واختصار اسم المنظمة إن كنت قد وصلت عن طريق منظمة. لا إجابات، ولا Pflegegrad، ولا ملفات تعريف الارتباط (Cookies)، ولا أسماء. ولأنه لا يُنسب أي شيء إلى شخص بعينه، فلا يوجد ما تحتاج إلى إيقافه.',
   },
+  // Link under the privacy notice to `/datenschutz`. That page is in German
+  // and English only, like the questions, so the German name is kept.
+  privacyMoreLink: {
+    de: 'Mehr dazu in der Datenschutzerklärung',
+    en: 'More in the privacy policy (Datenschutzerklärung)',
+    tr: 'Ayrıntılar gizlilik bildiriminde (Datenschutzerklärung)',
+    ru: 'Подробнее в политике конфиденциальности (Datenschutzerklärung)',
+    pl: 'Więcej w polityce prywatności (Datenschutzerklärung)',
+    ar: 'المزيد في بيان الخصوصية (Datenschutzerklärung)',
+  },
+  // ---------------------------------------------------------------- footer
+  // "Impressum" and "Datenschutz" are what these pages are called in Germany
+  // and what a reader will be told to look for, so the German word stays and
+  // the other languages add a gloss.
+  footerImpressum: {
+    de: 'Impressum',
+    en: 'Impressum (legal notice)',
+    tr: 'Impressum (künye)',
+    ru: 'Impressum (выходные данные)',
+    pl: 'Impressum (nota prawna)',
+    ar: 'Impressum (بيانات الناشر)',
+  },
+  footerDatenschutz: {
+    de: 'Datenschutz',
+    en: 'Datenschutz (privacy)',
+    tr: 'Datenschutz (gizlilik)',
+    ru: 'Datenschutz (конфиденциальность)',
+    pl: 'Datenschutz (prywatność)',
+    ar: 'Datenschutz (الخصوصية)',
+  },
   resumeTitle: {
     de: 'Sie haben hier schon einmal angefangen',
     en: 'You started this here before',

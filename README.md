@@ -211,6 +211,8 @@ has to be in place before analytics are switched on.
 | `lib/i18n/` | The six interface languages, and the chrome/content boundary |
 | `lib/a11y/` | Display settings, speech synthesis and recognition |
 | `components/` | Interface |
+| `app/impressum/` | The Impressum (§ 5 DDG), German and English; the text is in `lib/legal/impressum.ts` |
+| `app/datenschutz/` | The Datenschutzerklärung, German and English; the text is in `lib/legal/datenschutz.ts`, the open items in `docs/COMPLIANCE.md` |
 
 `lib/intake/criteria.ts` is a transcription of the official instrument and is meant to
 stay verifiable line by line against it. Rewording lives in `lib/intake/plain.ts` so
