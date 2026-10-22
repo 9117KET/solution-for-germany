@@ -174,8 +174,13 @@ the transcription is never edited for readability.
 ## Known limits
 
 - The Turkish, Russian, Polish and Arabic interface copy has **not been reviewed by a
-  native speaker**. A few strings carry statutory substance and should be checked
-  before this is put in front of real families.
+  native speaker**. On 22 October 2026 each of the four was checked key by key against
+  the German source by a language model, and the errors that changed meaning (money,
+  deadlines, what the tool is, dropped German terms of art) were fixed. That is a
+  pre-screen, not a review: a native speaker who knows the German care system should
+  still read the strings that carry statutory substance (`privacyBody`, `bescheidHint`,
+  `m5CapBody`, `exclusiveNote`, `disclaimerExtra` in `lib/i18n/strings.ts`) before this
+  is put in front of real families.
 - Speech recognition needs a browser that supports it (Chrome and Edge do) and a
   microphone the person grants. Where it is missing, voice mode is not offered.
 - Reading a full question aloud takes around 20 seconds, so a complete run in voice

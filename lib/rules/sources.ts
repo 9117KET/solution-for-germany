@@ -7,6 +7,12 @@
  *
  * `checkedOn` is the date a human last verified the value against the source.
  * `supersededBy` marks values we know are scheduled to change.
+ *
+ * Pending reform, not law: the Pflegeneuordnungsgesetz (PNOG) was adopted by
+ * the federal cabinet on 30 Sep 2026. If enacted as drafted it replaces most
+ * of the figures below from 1 Jan 2027. The notes say which. Nothing from the
+ * bill is shown to users. Regierungsentwurf, Stand 30.09.2026:
+ * https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/Gesetze_und_Verordnungen/GuV/P/Kabinett-GE_Pflegeneuordnungsgesetz_PNOG.pdf
  */
 
 export interface Source {
@@ -29,19 +35,25 @@ export const SOURCES = {
     law: '§ 37 SGB XI',
     covers: 'Pflegegeld: cash benefit paid when care is provided privately',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__37.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
     note:
       'No increase for 2026 (Nullrunde). Values are the 1 Jan 2025 amounts ' +
-      'after the 4.5% uprating. Next scheduled increase: 1 Jan 2028.',
+      'after the 4.5% uprating. Next scheduled increase under current § 30: ' +
+      '1 Jan 2028. The PNOG cabinet bill of 30 Sep 2026 would replace this ' +
+      'from 1 Jan 2027 with an Entlastungsbudget of 380 / 630 / 890 / 1080 € ' +
+      '(PG2-5), uprated annually from 2029 instead, if enacted.',
   },
   pflegesachleistung: {
     law: '§ 36 SGB XI',
     covers: 'Pflegesachleistung: value of professional home-care services',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__36.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
-    note: 'No increase for 2026 (Nullrunde).',
+    note:
+      'No increase for 2026 (Nullrunde). The PNOG cabinet bill of 30 Sep 2026 ' +
+      'would replace this from 1 Jan 2027 with a Sachleistungsbudget of ' +
+      '890 / 1590 / 2090 / 2530 € (PG2-5), if enacted.',
   },
   entlastungsbetrag: {
     law: '§ 45b SGB XI',
@@ -49,18 +61,22 @@ export const SOURCES = {
       'Entlastungsbetrag: monthly allowance for relief services, available ' +
       'from Pflegegrad 1. Reimburses approved services; never paid as cash.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__45b.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
+    note:
+      'The PNOG cabinet bill of 30 Sep 2026 would replace § 45b with a ' +
+      'Sozialraumbudget from 1 Jan 2027, if enacted.',
   },
   pflegehilfsmittel: {
     law: '§ 40 Abs. 2 SGB XI',
     covers: 'Pflegehilfsmittel zum Verbrauch: monthly allowance for consumable care aids',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__40.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
     note:
-      'Reform proposals would fold this into a broader Entlastungsbudget. ' +
-      'Not enacted as of Aug 2026: recheck before each release.',
+      'The PNOG cabinet bill of 30 Sep 2026 would delete the separate 42 € ' +
+      'from 1 Jan 2027 and fold consumables into the Entlastungsbudget, if ' +
+      'enacted. Recheck before each release.',
   },
   gemeinsamerJahresbetrag: {
     law: '§ 42a SGB XI',
@@ -68,7 +84,7 @@ export const SOURCES = {
       'Gemeinsamer Jahresbetrag: pooled annual budget merging Verhinderungspflege ' +
       'and Kurzzeitpflege. Replaced the two separate budgets on 1 July 2025.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__42a.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-07-01',
     note:
       'Verhinderungspflege extended from 6 to 8 weeks (56 days). The former ' +
@@ -76,8 +92,10 @@ export const SOURCES = {
       'common reason families wrongly believe they are not yet eligible. ' +
       'The 3.539 € is the pooled ceiling: where a close relative provides the ' +
       'cover, the Verhinderungspflege share is capped at twice the Pflegegeld ' +
-      '(§ 39 SGB XI). Cross-checked 2026-08-19 against BMG, "Zahlen, Daten und ' +
-      'Fakten zur Pflegeversicherung", Stand Juli 2026.',
+      '(§ 39 SGB XI). Cross-checked 2026-10-22 against BMG, "Zahlen, Daten und ' +
+      'Fakten zur Pflegeversicherung", Stand Juli 2026. The PNOG cabinet bill ' +
+      'of 30 Sep 2026 would replace § 42a from 1 Jan 2027 with an ' +
+      'Überbrückungsbudget of up to 2.285 € a year, if enacted.',
   },
   wohnumfeldverbesserung: {
     law: '§ 40 Abs. 4 SGB XI',
@@ -85,17 +103,17 @@ export const SOURCES = {
       'Wohnumfeldverbessernde Maßnahmen: one-off grant per measure for home ' +
       'adaptation. Available from Pflegegrad 1.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__40.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
     note:
       'Payable per measure, not per year. Where several eligible people share ' +
       'a household, up to four claims may be pooled for the same measure.',
   },
   wohngruppenzuschlag: {
-    law: '§ 38a SGB XI',
+    law: '§ 45f SGB XI',
     covers: 'Wohngruppenzuschlag: monthly supplement for members of a shared care household',
-    url: 'https://www.gesetze-im-internet.de/sgb_11/__38a.html',
-    checkedOn: '2026-08-18',
+    url: 'https://www.gesetze-im-internet.de/sgb_11/__45f.html',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
   },
   kombinationsleistung: {
@@ -104,7 +122,7 @@ export const SOURCES = {
       'Kombinationsleistung: where professional services are used at less than ' +
       'their full value, Pflegegeld is paid pro rata for the unused share.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__38.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
   },
   nbaAssessment: {
@@ -113,8 +131,12 @@ export const SOURCES = {
       'Determination of the Pflegegrad from the six assessment modules, their ' +
       'weightings, and the raw-to-weighted point conversion.',
     url: 'https://www.aok.de/gp/pflegebeduerftigkeit/begutachtungsinstrument/pflegegrades',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2017-01-01',
+    note:
+      'The PNOG cabinet bill of 30 Sep 2026 would lower the thresholds for ' +
+      'PG1-3 to 15 / 30 / 50 points from 1 Jan 2027, if enacted. See the ' +
+      'Regierungsentwurf linked at the top of this file.',
   },
   bedarfskonstellation: {
     law: '§ 15 Abs. 4 SGB XI',
@@ -133,11 +155,16 @@ export const SOURCES = {
   pflegeberatung: {
     law: '§ 7a SGB XI',
     covers:
-      'Free statutory care advice. A legal entitlement: the insurer must offer ' +
-      'an appointment within two weeks of a request.',
+      'Free statutory care advice. A legal entitlement under § 7a SGB XI.',
     url: 'https://www.gesetze-im-internet.de/sgb_11/__7a.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
+    note:
+      'The two-week rule is § 7b Abs. 1 SGB XI, not § 7a. After an application ' +
+      'for benefits, the advice must take place within two weeks (Nr. 1). ' +
+      'Otherwise the insurer issues a Beratungsgutschein redeemable within two ' +
+      'weeks (Nr. 2). ' +
+      'https://www.gesetze-im-internet.de/sgb_11/__7b.html',
   },
   widerspruch: {
     law: '§ 84 SGG',
@@ -145,7 +172,7 @@ export const SOURCES = {
       'One month to lodge an objection against a Pflegegrad decision, running ' +
       'from notification of the Bescheid.',
     url: 'https://www.gesetze-im-internet.de/sgg/__84.html',
-    checkedOn: '2026-08-18',
+    checkedOn: '2026-10-22',
     validFrom: '2025-01-01',
   },
 } as const satisfies Record<string, Source>;
