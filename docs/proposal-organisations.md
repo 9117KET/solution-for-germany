@@ -18,7 +18,7 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 ### Was Ihre Beraterinnen und Berater bekommen
 
 - **Sechs Sprachen.** Die Oberfläche gibt es auf Deutsch, Englisch, Türkisch, Russisch, Polnisch und Arabisch. Die Fragen selbst stehen auf Deutsch oder Englisch, weil sie dem amtlichen Begutachtungsinstrument folgen.
-- **In der Regel 12 bis 20 Fragen** statt der 64 Kriterien des Instruments. Die Befragung endet, wenn weitere Antworten das Ergebnis nicht mehr ändern können. Steht das Ergebnis noch nicht fest, zeigt die Seite einen Bereich und keinen Mittelwert.
+- **In der Regel 12 bis 20 Fragen** statt der 64 Fragen des amtlichen Instruments. Die Befragung endet, wenn weitere Antworten das Ergebnis nicht mehr ändern können. Steht das Ergebnis noch nicht fest, zeigt die Seite einen Bereich und keinen Mittelwert.
 - **Ein PDF für die Pflegekasse.** Die Familie lädt es auf Deutsch oder Englisch herunter und nimmt es zur Pflegekasse und zur Begutachtung mit. Es enthält die Schätzung, die Beträge, die Schritte mit Paragraf und die gegebenen Antworten.
 - **Gesetzliche Grundlage bei jedem Betrag.** Jeder Betrag und jede Schwelle nennt die Vorschrift, aus der sie stammt. Ein Betrag ohne Quelle wird nicht angezeigt.
 - **Vorsichtige Summen.** Einmalige Zuschüsse zählen nicht zur Monatssumme. Leistungen mit Bedingungen erscheinen als „prüfen, ob das zutrifft“, nicht als sicheres Geld.
@@ -27,9 +27,9 @@ Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Gr
 ### Was Sie als Organisation bekommen
 
 - **Ihren eigenen Link:** `https://[Adresse der Seite]/?via=[kürzel]`. Besuche über diesen Link werden Ihrer Organisation zugeordnet, nicht einer Person.
-- **Die Zahlen zu Ihrem Link, per Link zu einer Übersicht oder als monatliche Zusammenstellung von uns**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
+- **Sobald die Zählung eingeschaltet ist, die Zahlen zu Ihrem Link, per Link zu einer Übersicht oder als monatliche Zusammenstellung von uns**, nur als Summen: Besuche; wie viele begonnen haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die Spanne, in der die geschätzte monatliche Lücke lag.
 - **Nichts Persönliches.** Es werden keine Namen, keine Antworten und kein Pflegegrad erhoben. Familien brauchen kein Konto.
-- **Ein Verweis auf Sie.** Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach § 7a SGB XI zusteht. Sie schickt Familien also zur Beratung, nicht von ihr weg.
+- **Ein Verweis auf die Beratung.** Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach § 7a SGB XI zusteht. Sie schickt Familien also zur Beratung, nicht von ihr weg.
 - Keine Werbung, keine Vermittlungsprovisionen, kein Verkauf von Daten.
 
 ### Datenschutz
@@ -80,7 +80,7 @@ It lists the next steps in order, each with its statutory basis.
 ### What your counsellors get
 
 - **Six languages.** The interface is in German, English, Turkish, Russian, Polish and Arabic. The questions themselves stay in German or English, because they follow the official assessment instrument.
-- **Typically 12 to 20 questions** instead of the instrument's 64 criteria. The intake ends when further answers can no longer change the result. Where the result is not settled, the site shows a range and never a midpoint.
+- **Typically 12 to 20 questions** instead of the official instrument's 64 questions. The intake ends when further answers can no longer change the result. Where the result is not settled, the site shows a range and never a midpoint.
 - **A PDF for the Pflegekasse.** The family downloads it in German or English and takes it to the Pflegekasse and to the assessment. It holds the estimate, the amounts, the steps with their statute and the answers given.
 - **Statutory basis on every figure.** Every amount and every threshold names the provision it comes from. A figure without a source is not shown.
 - **Cautious totals.** One-off grants never enter the monthly total. Conditional benefits appear as "check whether this applies", not as certain money.
@@ -89,9 +89,9 @@ It lists the next steps in order, each with its statutory basis.
 ### What you get as an organisation
 
 - **Your own link:** `https://[Adresse der Seite]/?via=[kürzel]`. Visits through this link are attributed to your organisation, not to a person.
-- **The numbers for your link, as a link to a filtered overview or as a monthly summary from us**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
+- **Once counting is switched on, the numbers for your link, as a link to a filtered overview or as a monthly summary from us**, as totals only: visits; how many started; how many reached a result; how many downloaded a PDF; the interface language; the band of questions asked; the band in which the estimated monthly gap fell.
 - **Nothing personal.** No names, no answers and no Pflegegrad are collected. Families need no account.
-- **A pointer to you.** The site tells every family that free statutory care advice under § 7a SGB XI is their right. It sends families towards advice, not away from it.
+- **A pointer to advice.** The site tells every family that free statutory care advice under § 7a SGB XI is their right. It sends families towards advice, not away from it.
 - No advertising, no referral fees, no sale of data.
 
 ### Privacy

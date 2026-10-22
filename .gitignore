@@ -45,3 +45,14 @@ next-env.d.ts
 /research/
 
 .vercel
+
+# LaTeX dossier: build output and auxiliary files are never committed
+/docs/dossier/build/
+/docs/dossier/**/*.aux
+/docs/dossier/**/*.log
+/docs/dossier/**/*.out
+/docs/dossier/**/*.toc
+/docs/dossier/**/*.fls
+/docs/dossier/**/*.fdb_latexmk
+/docs/dossier/**/*.synctex.gz
+/docs/dossier/**/*.pdf

@@ -1,0 +1,76 @@
+% Shared preamble for the Anspruch dossier and its companion documents.
+% Load after \documentclass with \input{preamble} (from docs/dossier/)
+% or \input{../preamble} (from docs/dossier/antrag/ or docs/dossier/partner/).
+% Each document sets its own \documentclass and its own pdftitle via
+% \hypersetup{pdftitle={...}}. Only packages that ship with MiKTeX.
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english,ngerman]{babel} % last option = main language: ngerman
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage{marginnote}
+\usepackage[hidelinks,unicode,pdflang={de-DE}]{hyperref}
+
+% ---------------------------------------------------------------------------
+% Colours
+\definecolor{blankbg}{RGB}{255,236,153}   % highlighted placeholder
+\definecolor{todofg}{RGB}{170,40,40}      % "to confirm" margin note
+
+% \blank{Text}: a highlighted placeholder "[Text]" for values the sender
+% fills in before sending. Usable in running text and in table cells.
+\newcommand{\blank}[1]{\begingroup\setlength{\fboxsep}{1pt}%
+  \colorbox{blankbg}{\strut[#1]}\endgroup}
+
+% \todo{Text}: a "zu bestätigen" note in the margin. Works in running text,
+% lists and longtable cells (via marginnote, not \marginpar).
+% Defined with \providecommand so that it does not clash if a document
+% loads todonotes on its own (todonotes then wins).
+\providecommand{\todo}[1]{\marginnote{\raggedright\scriptsize
+  \textcolor{todofg}{\textbf{Zu bestätigen:} #1}}}
+\setlength{\marginparwidth}{20mm}
+
+% \draftmark: header text for every page of a draft.
+\newcommand{\draftmark}{Entwurf, 23.10.2026}
+
+% Draft header for scrartcl / scrreprt (KOMA) and article / report.
+% Letters (scrlttr2, letter) place \draftmark themselves.
+\makeatletter
+\@ifclassloaded{scrartcl}{\def\anspruch@koma{}}{}
+\@ifclassloaded{scrreprt}{\def\anspruch@koma{}}{}
+\@ifclassloaded{article}{\def\anspruch@std{}}{}
+\@ifclassloaded{report}{\def\anspruch@std{}}{}
+\ifdefined\anspruch@koma
+  \usepackage[headsepline]{scrlayer-scrpage}
+  \clearpairofpagestyles
+  \ohead{\small\draftmark}
+  \ihead{\small\headmark}
+  \cfoot*{\pagemark}
+  \automark[section]{section}
+  \pagestyle{scrheadings}
+\fi
+\ifdefined\anspruch@std
+  \usepackage{fancyhdr}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \fancyhead[R]{\small\draftmark}
+  \fancyhead[L]{\small\nouppercase{\leftmark}}
+  \fancyfoot[C]{\thepage}
+  \fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\small\draftmark}%
+    \fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+\fi
+\makeatother
+
+% Lists: compact, as in a German Antrag.
+\setlist{itemsep=0.2em,topsep=0.4em}
+
+% Tables: a bit more air, ragged-right paragraph columns.
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}

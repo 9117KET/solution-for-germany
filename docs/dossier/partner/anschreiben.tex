@@ -1,0 +1,70 @@
+% Anschreiben an eine Organisation: Angebot eines Pilotprojekts mit Anspruch.
+% Quellen: docs/proposal-organisations.md (Angebot, Bitte, Datenschutz),
+% docs/PARTNERS.md (was der Partner erhält), README.md (Grenzen).
+% Vor dem Versand ausfüllen: alle gelb markierten Felder (Liste im Kasten
+% oben rechts im Brief). Den Kasten vor dem Versand löschen.
+% Lokale Makros: keine. Briefklasse: scrlttr2 (KOMA-Script, in MiKTeX vorhanden).
+\documentclass[fontsize=11pt,paper=a4,parskip=half,fromalign=right,
+  fromrule=afteraddress,fromemail=true,fromphone=true,
+  foldmarks=true,enlargefirstpage=true]{scrlttr2}
+\input{../preamble}
+\hypersetup{pdftitle={Anschreiben: Pilotprojekt mit Anspruch}}
+% Lokale Anpassung: Die Präambel setzt 25 mm Rand mit geometry. Ohne Fußzeile
+% auf Seite 1 darf der Text bis 17 mm über dem Blattende laufen.
+\AtBeginDocument{\setplength{firstfootvpos}{280mm}}
+
+% Absender: alles Platzhalter.
+\setkomavar{fromname}{\blank{Name}}
+\setkomavar{fromaddress}{\blank{Straße und Hausnummer}\\\blank{PLZ und Ort}}
+\setkomavar{fromemail}{\blank{E-Mail}}
+\setkomavar{fromphone}{\blank{Telefon}}
+\setkomavar{signature}{\blank{Name}\\\blank{Funktion}}
+\setkomavar{date}{\blank{Datum}}
+\setkomavar{place}{\blank{Ort}}
+\setkomavar{subject}{Pilotprojekt mit Anspruch: Pflegeleistungen schätzen in
+  Ihrer Beratung}
+
+% Liste der Platzhalter, sichtbar oben rechts neben der Anschrift.
+\setkomavar{location}{\raggedright\footnotesize
+  \textbf{\draftmark}\\[0.5ex]
+  \textbf{Vor dem Versand ausfüllen:}\\
+  Organisation, Ansprechperson und Anschrift; Anrede und Name; Startdatum;
+  Ihr Name, Funktion, Anschrift, E-Mail, Telefon; Ort und Datum.\\
+  Diesen Kasten danach löschen.}
+
+\begin{document}
+\begin{letter}{\blank{Organisation}\\
+  \blank{Ansprechperson}\\
+  \blank{Straße und Hausnummer}\\
+  \blank{PLZ und Ort}}
+
+\opening{\blank{Anrede und Name, z.\,B. Sehr geehrte Frau \dots},}
+
+Pflegeleistungen werden nicht von selbst gezahlt. Familien müssen sie beantragen,
+oft in einer Sprache, die sie nicht gut sprechen. Ihre Beraterinnen und Berater
+erreichen diese Familien. Deshalb schreiben wir Ihnen.
+
+Anspruch ist eine Webseite für Familien, die einen Angehörigen pflegen. Die Familie
+beantwortet in der Regel 12 bis 20 Fragen zum Alltag. Die Seite schätzt den
+Pflegegrad, den die Begutachtung wahrscheinlich ergibt. Sie vergleicht die Leistungen
+mit dem, was der Haushalt schon bekommt, und nennt die nächsten Schritte mit der
+gesetzlichen Grundlage. Am Ende lädt die Familie ein PDF für die
+Pflegekasse herunter. Die Oberfläche gibt es in sechs Sprachen. Was die Familie
+tippt, bleibt auf ihrem Gerät. Die Seite verweist jede Familie auf die kostenlose
+Pflegeberatung nach §~7a SGB~XI. Das Ergebnis ist eine Schätzung, keine Begutachtung
+und keine Rechtsberatung.
+
+Wir bitten Sie um ein Pilotprojekt über drei Monate ab \blank{Startdatum}. Zwei
+Beraterinnen oder Berater nutzen die Seite im Gespräch oder geben Familien den Link
+mit. Einmal im Monat sprechen wir mit Ihnen über Ihre Erfahrungen. Ihre Beratenden
+führen dazu eine Strichliste ohne Namen. Sie erhalten einen eigenen Link und, sobald
+die Zählung eingeschaltet ist, die Zahlen dazu, nur als Summen. Personenbezogene Daten tauschen wir nicht aus.
+Einzelheiten stehen im beigefügten Factsheet und im Vorschlag. Gern stellen wir Ihnen
+die Seite in einem kurzen Gespräch vor.
+
+\closing{Mit freundlichen Grüßen}
+
+\encl{Factsheet Anspruch\\Vorschlag für eine Pilotpartnerschaft}
+
+\end{letter}
+\end{document}

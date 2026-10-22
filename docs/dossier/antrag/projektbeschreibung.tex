@@ -1,0 +1,386 @@
+% Projektbeschreibung für Förderanträge (Prototype Fund, Stiftungen, § 123 SGB XI).
+% Quellen: README.md, docs/COMPLIANCE.md, docs/funding-outline.md,
+% docs/proposal-organisations.md, die Zusammenfassungen der Läufe vom 22.10.2026
+% und .orchestration/runs/2026-10-23-dossier/scout-applications.md.
+% Markierungen aus dem Scout: V = an der Quelle geprüft, A = archivierte Fassung,
+% S = Sekundärquelle, TV = zu prüfen. A, S und TV stehen hier nur mit \todo{}.
+% Bauen aus docs/dossier/antrag/:
+%   latexmk -pdf -interaction=nonstopmode -outdir=../build projektbeschreibung.tex
+\documentclass[11pt,a4paper,parskip=half-]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Anspruch: Projektbeschreibung}}
+
+
+\begin{document}
+{\LARGE\sffamily\bfseries Anspruch: Projektbeschreibung\par}
+\blank{Name der Antragstellerin oder des Antragstellers}\par
+
+\section*{Vor dem Versand ausfüllen}
+Jeder gelb markierte Platzhalter muss vor dem Versand ersetzt werden.
+Randnotizen in Rot sind offene Prüfpunkte; sie werden vor dem Versand geklärt und gelöscht.
+\begin{quote}\raggedright
+\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
+\blank{Adresse der Seite} \textperiodcentered{}
+\blank{Programm und Spur} \textperiodcentered{}
+\blank{Vergleich mit ähnlichen Angeboten} \textperiodcentered{}
+\blank{Ergebnis AP1} bis \blank{Ergebnis AP5} \textperiodcentered{}
+\blank{Aufwand AP1} bis \blank{Aufwand AP5} \textperiodcentered{}
+\blank{Arbeitsstunden gesamt} \textperiodcentered{}
+\blank{Anzahl Pilotpartner} \textperiodcentered{}
+\blank{Pilotpartner} \textperiodcentered{}
+\blank{Lizenzentscheidung} \textperiodcentered{}
+\blank{Team} \textperiodcentered{}
+\blank{Erfahrung, bis zu drei Projekte} \textperiodcentered{}
+\blank{Land} \textperiodcentered{}
+\blank{Kommune oder Träger}
+\end{quote}
+Die Gliederung folgt dem \enquote{Kleinen Leitfaden für Förderanfragen an Stiftungen}
+des Initiativkreises Hamburger Stiftungen, veröffentlicht beim Bundesverband Deutscher
+Stiftungen (\href{https://www.stiftungen.org/fileadmin/stiftungen_org/Verband/Was_wir_tun/Veranstaltungen/AK-Foerderstiftungen/Leitfaden-fuer-Foerderanfragen-an-Stiftungen.pdf}{Leitfaden}).
+Die Randnotizen \enquote{Formularfeld} nennen das passende Feld im Formular des Prototype Fund
+und seine Längengrenze. Felder und Grenzen stammen aus dem Bewerbungshandbuch für Jahrgang 02
+(Stand September 2025, archivierte Fassung). Das Formular für Jahrgang 03 ist nur nach Anmeldung
+sichtbar; die Grenzen sind dort zu prüfen.
+
+% ---------------------------------------------------------------------------
+\section{Kurzfassung}
+\todo{Formularfeld 2 \enquote{Projektbeschreibung}, max.\ 100 Wörter (J02, Archiv)}%
+Anspruch ist eine Webseite für Familien, die einen Angehörigen pflegen.
+Die Familie beantwortet Fragen zum Alltag der pflegebedürftigen Person.
+Die Seite schätzt den Pflegegrad, den die Begutachtung wahrscheinlich ergibt.
+Sie vergleicht die Leistungen, die daraus folgen, mit dem, was der Haushalt schon bekommt.
+Sie nennt die nächsten Schritte in Reihenfolge, jeweils mit der gesetzlichen Grundlage,
+und erstellt ein PDF auf Deutsch oder Englisch.
+In der Regel genügen 12 bis 20 Fragen statt der 64 Fragen des amtlichen Instruments.
+Die Oberfläche gibt es in sechs Sprachen.
+Alles läuft im Browser: Es gibt kein Konto und keinen Server, der Antworten speichert.
+Die geförderte Phase macht die Seite bereit für den Einsatz in Beratungsstellen:
+muttersprachliche Prüfung, rechtliche Prüfung, Pilotprojekte mit Partnern, Anpassung an eine
+mögliche Pflegereform und eine Auswertung in Summenzahlen.
+
+% ---------------------------------------------------------------------------
+\section{Ausgangslage und Problem}
+\todo{Formularfeld 3 \enquote{Gesellschaftliche Herausforderung}, max.\ 175 Wörter (J02, Archiv). Quelle zum nicht abgerufenen Entlastungsbetrag ergänzen.}%
+Leistungen der Pflegeversicherung werden nicht von selbst gezahlt.
+Sie müssen beantragt werden, oft einzeln, und in einer Sprache, die viele Familien nicht sprechen.
+Auch bewilligtes Geld wird oft nicht abgerufen, etwa der Entlastungsbetrag.
+Nach Einschätzung des Projekts verlieren dabei am meisten die sehr alten Menschen, die erschöpften Angehörigen und Familien,
+die den Schriftverkehr in einer zweiten Sprache führen.
+
+Das Gesetz sieht Beratung und Unterstützung vor:
+\begin{itemize}
+  \item \href{https://www.gesetze-im-internet.de/sgb_11/__7a.html}{§ 7a SGB XI}:
+        Anspruch auf individuelle Pflegeberatung; die Pflegekasse benennt unverzüglich
+        eine Beraterin oder einen Berater.
+  \item \href{https://www.gesetze-im-internet.de/sgb_11/__7b.html}{§ 7b SGB XI}:
+        Nach einem Erstantrag bietet die Pflegekasse innerhalb von zwei Wochen einen
+        Beratungstermin an oder stellt einen Beratungsgutschein aus.
+  \item \href{https://www.gesetze-im-internet.de/sgb_11/__7c.html}{§ 7c SGB XI}:
+        Pflegestützpunkte, wenn das Land sie bestimmt, mit unabhängiger Beratung und Koordination.
+  \item \href{https://www.gesetze-im-internet.de/sgb_11/__45.html}{§ 45 SGB XI}:
+        Unentgeltliche Pflegekurse für Angehörige, auf Wunsch auch zu Hause.
+\end{itemize}
+Diese Rechte nützen nur, wenn die Familie vorbereitet in die Beratung und in die Begutachtung geht.
+Sie muss wissen, welche Leistungen in Frage kommen und was sie gefragt wird.
+Hier setzt Anspruch an.
+
+% ---------------------------------------------------------------------------
+\section{Zielgruppe}
+\todo{Formularfeld 8 \enquote{Zielgruppe}, max.\ 100 Wörter (J02, Archiv)}%
+\begin{itemize}
+  \item \textbf{Familien}, die einen Angehörigen zu Hause pflegen: vor dem Erstantrag,
+        vor der Begutachtung oder wenn der Bedarf gestiegen ist.
+  \item \textbf{Pflegende, die Deutsch als zweite Sprache sprechen.}
+        Die Oberfläche gibt es auf Deutsch, Englisch, Türkisch, Russisch, Polnisch und Arabisch;
+        Arabisch wird durchgehend von rechts nach links dargestellt.
+  \item \textbf{Beraterinnen und Berater} in Pflegeberatung, Pflegestützpunkten und
+        Beratungsstellen. Sie nutzen die Seite im Gespräch oder geben Familien den Link mit.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section{Ziel und Nutzen}
+Ziel ist, dass Familien vorbereitet zur Pflegekasse, zur Beratung und zur Begutachtung gehen.
+\begin{itemize}
+  \item Die Familie sieht, welcher Pflegegrad wahrscheinlich ist und welche Leistungen daraus folgen.
+  \item Sie sieht die Schritte in Reihenfolge, jeweils mit Paragraf.
+  \item Sie nimmt ein PDF mit ihren eigenen Antworten mit. Die Begutachtung fragt dasselbe;
+        mit den Antworten auf Papier muss sie sich im Gespräch nicht an alles erinnern.
+  \item Die Seite sagt jeder Familie, dass die Pflegeberatung nach § 7a SGB XI kostenlos ist und
+        ihr zusteht. Sie schickt Familien zur Beratung, nicht von ihr weg.
+  \item Beratende bekommen ein Werkzeug, das im Gespräch in sechs Sprachen funktioniert.
+\end{itemize}
+Anspruch ist eine Schätzung aus den Angaben der Familie.
+Es ist keine Begutachtung durch den Medizinischen Dienst und keine Rechtsberatung.
+
+% ---------------------------------------------------------------------------
+\section{Lösung}
+
+\subsection{Was heute besteht}
+\todo{Formularfeld 5 \enquote{Aktueller Stand}, max.\ 100 Wörter (J02, Archiv)}%
+Die Seite ist gebaut und auf Vercel bereitgestellt (\blank{Adresse der Seite}).
+\begin{itemize}
+  \item \textbf{Kurze Befragung.} In der Regel 12 bis 20 Fragen statt 64.
+        Die Befragung endet, wenn weitere Antworten das Ergebnis nicht mehr ändern können.
+        Steht es noch nicht fest, zeigt die Seite einen Bereich und nie einen Mittelwert.
+        Der Bericht nennt, wie viele Fragen gestellt wurden und warum die übrigen entfallen.
+  \item \textbf{Beträge mit Quelle.} Jeder Betrag und jede Schwelle nennt die Vorschrift
+        und das Datum der letzten Prüfung. Beträge und Schwellen wurden am 22.10.2026 geprüft;
+        eine Regel (besondere Bedarfskonstellation) zuletzt am 26.08.2026. Ein Betrag ohne Quelle wird nicht angezeigt.
+  \item \textbf{Vorsichtige Summen.} Einmalige Zuschüsse zählen nicht zur Monatssumme.
+        Leistungen mit Bedingungen erscheinen als \enquote{prüfen, ob das zutrifft}.
+        Pflegegeld und Pflegesachleistung werden nicht addiert.
+  \item \textbf{PDF auf dem Gerät.} Schätzung, Beträge, Schritte mit Paragraf und die gegebenen
+        Antworten, auf Deutsch oder Englisch.
+  \item \textbf{Sechs Sprachen} in der Oberfläche. Die Fragen stehen auf Deutsch oder Englisch,
+        weil sie dem amtlichen Instrument folgen.
+  \item \textbf{Barrierefreiheit.} Einstellungen für Schrift, Farbe, Sprache und Tempo auf der
+        ersten Seite; vier Farbschemata mit Kontrast nach WCAG AAA; Vorlesen; Antworten per Sprache
+        in Browsern, die Spracherkennung anbieten (Chrome und Edge).
+  \item \textbf{Zählung und Partnerlinks.} Ohne Einstellung sendet die Seite nichts.
+        Eingeschaltet zählt sie Besuche und fünf Schritte ohne Cookies.
+        Partner erhalten einen eigenen Link mit Kürzel.
+  \item \textbf{Impressum und Datenschutzerklärung} als Seiten, mit markierten Lücken für die
+        Angaben zum Betreiber.
+\end{itemize}
+
+\subsection{Technische Umsetzung}
+\todo{Formularfeld 4 \enquote{Technische Umsetzung}, max.\ 175 Wörter (J02, Archiv)}%
+Anspruch ist eine Web-Anwendung mit Next.js. Schätzung, Speicherung und PDF entstehen im Browser.
+\begin{itemize}
+  \item \textbf{Regelwerk.} Beträge, Schwellen und die Umrechnungstabellen des
+        Begutachtungsinstruments liegen in \texttt{lib/rules/}. Jeder Wert trägt eine Quellen-ID
+        mit Vorschrift und Prüfdatum (\texttt{lib/rules/sources.ts}).
+  \item \textbf{Abbruchregel.} Jede offene Frage gilt als Spanne. Die Seite rechnet zweimal,
+        einmal mit der günstigsten und einmal mit der ungünstigsten Annahme. Stimmen beide
+        Grenzen überein, kann keine weitere Antwort den Pflegegrad ändern. Das gilt, weil die
+        Bewertung in jedem Modul monoton ist (\texttt{lib/intake/adaptive.ts}).
+  \item \textbf{PDF.} Erstellt mit \texttt{jspdf} im Browser; kein Upload, kein Netzwerkaufruf.
+  \item \textbf{Speicherung.} Antworten liegen nur im Browser und lassen sich mit einem Tipp löschen.
+        Gespeichert wird erst, wenn etwas beantwortet ist.
+  \item \textbf{Zählung.} Aus, solange beim Bauen keine Variablen gesetzt sind. Eingeschaltet über
+        Plausible, ohne Cookies. Eine Positivliste im Code verhindert, dass Antworten, Pflegegrad,
+        Punkte oder Freitext gesendet werden; Tests sichern sie ab.
+  \item \textbf{Partnerlinks.} Das Kürzel aus \texttt{?via=} wird geprüft, aus der Adresszeile
+        entfernt und nur für den Besuch im Speicher gehalten, nie auf dem Gerät.
+\end{itemize}
+
+\subsection{Was neu ist}
+\todo{Formularfeld 7 \enquote{Innovation / ähnliche Ansätze}, max.\ 100 Wörter (J02, Archiv)}%
+Die Seite verkürzt die Befragung, ohne zu raten: Sie hört erst auf, wenn das Ergebnis feststeht,
+und zeigt sonst einen Bereich. Sie braucht keinen Server für Antworten.
+Abgrenzung zu ähnlichen Angeboten: \blank{Vergleich mit ähnlichen Angeboten}.
+
+\subsection{Was die geförderte Phase ergänzt}
+Es fehlen die muttersprachliche Prüfung, die rechtliche Prüfung, Erfahrung mit Partnern, eine Auswertung
+und, falls die Pflegereform kommt, die Anpassung der Beträge. Diese Punkte sind die Arbeitspakete in
+Abschnitt~\ref{sec:ap}.
+
+% ---------------------------------------------------------------------------
+\section{Vorgehen und Arbeitspakete}\label{sec:ap}
+\todo{Formularfeld 9 \enquote{Meilensteine}, max.\ 100 Wörter; Feld 12 \enquote{Arbeitsstunden}: eine Zahl (J02, Archiv)}%
+Zeiten und Meilensteine stehen im Zeitplan, Kosten im Finanzplan.
+Arbeitsstunden gesamt: \blank{Arbeitsstunden gesamt}.
+
+\subsection*{AP1: Muttersprachliche Prüfung}
+Die Oberfläche auf Türkisch, Russisch, Polnisch und Arabisch ist bisher nur von einem
+Sprachmodell gegen den deutschen Text geprüft. Je eine Person pro Sprache, die das deutsche
+Pflegesystem kennt, liest zuerst die Texte mit gesetzlichem Inhalt
+(\texttt{privacyBody}, \texttt{bescheidHint}, \texttt{m5CapBody}, \texttt{exclusiveNote},
+\texttt{disclaimerExtra}), dann die neueren Texte
+(\texttt{m5SkippedTitle}, \texttt{situationStep}, \texttt{pointsRangeTitle},
+\texttt{gradeNoneNominative} und die Hinweise zur Zählung) und schließlich den Rest.
+Dabei werden drei offene Fragen entschieden: Polnisch nutzt die Du-Form, wo das Deutsche
+\enquote{Sie} sagt; die arabischen Schaltflächen mischen Befehlsform und Verbalsubstantiv;
+und ob Pflegegeld, Pflegesachleistung und Pflegekasse beim ersten Vorkommen erklärt werden.
+\par\textbf{Ergebnis:} \blank{Ergebnis AP1}\quad \textbf{Aufwand:} \blank{Aufwand AP1}
+
+\subsection*{AP2: Rechtliche und fachliche Prüfung}
+Aus \texttt{docs/COMPLIANCE.md}, vor dem Einschalten der Zählung:
+\begin{itemize}
+  \item Angaben zum Betreiber im Impressum und in der Datenschutzerklärung; zuständige Aufsichtsbehörde.
+  \item Wahl des Vercel-Tarifs (Hobby ist für nicht kommerzielle Nutzung) und des Plausible-Tarifs.
+  \item Auftragsverarbeitungsverträge mit Vercel und Plausible bestätigen und ablegen.
+  \item Kurze rechtliche Prüfung zur Orientierungshilfe Digitale Dienste der DSK
+        (Rn.~87--90 zur Reichweitenmessung, Rn.~68/69, Rn.~80 zur Speicherung im Browser)
+        und zum Band der monatlichen Lücke in der Zählung.
+  \item Verzeichnis der Verarbeitungstätigkeiten mit drei Einträgen; Position zu BFSG und BITV~2.0.
+  \item Klären, wie Chrome und Edge die Spracherkennung verarbeiten.
+  \item Lizenz entscheiden und den Weg der Doppellizenz anwaltlich bestätigen lassen
+        (Abschnitt~\ref{sec:oss}).
+\end{itemize}
+Fachliche Textfragen aus der Prüfung vom 22.10.2026: ob die Pflegekasse ein englisches PDF annimmt;
+ob der Hinweis zu Pflegegeld und Pflegesachleistung die Kombination nach § 38 SGB XI
+richtig wiedergibt; ein Hinweistext mit einer Zahl ohne Quellenangabe (\texttt{estimateHigherBody});
+die erneute Prüfung der Begutachtungs-Richtlinien, damit das angezeigte Datum des Regelwerks
+aktuell wird.
+\par\textbf{Ergebnis:} \blank{Ergebnis AP2}\quad \textbf{Aufwand:} \blank{Aufwand AP2}
+
+\subsection*{AP3: Pilotprojekte mit Partnern}
+Nach dem Vorschlag an Organisationen (\texttt{docs/proposal-organisations.md}):
+drei Monate je Partner; zwei Beraterinnen oder Berater, die die Seite im Gespräch nutzen oder
+den Link mitgeben; ein Rückmeldegespräch pro Monat; eine Strichliste der Beratenden ohne Namen.
+Jeder Partner erhält einen eigenen Link. Geplant sind \blank{Anzahl Pilotpartner} Partner:
+\blank{Pilotpartner}. Die Pilotprojekte beginnen erst, wenn AP1 und AP2 abgeschlossen sind.
+\par\textbf{Ergebnis:} \blank{Ergebnis AP3}\quad \textbf{Aufwand:} \blank{Aufwand AP3}
+
+\subsection*{AP4: Anpassung an das Pflegeneuordnungsgesetz, falls beschlossen}
+Das Kabinett hat den Entwurf des Pflegeneuordnungsgesetzes (PNOG) am 30.09.2026 beschlossen.
+Die erste Lesung im Bundestag ist für den 05.11.2026 angesetzt. Das Gesetz ist noch nicht beschlossen
+und kann sich ändern. Wird es wie entworfen beschlossen, ändern sich die meisten Beträge und die
+Schwellen der Pflegegrade ab dem 01.01.2027. Dann müssen Regelwerk, Quellen-IDs, Tests, Texte in
+sechs Sprachen und das PDF angepasst werden; neue Texte gehen durch AP1.
+Wird es nicht beschlossen, bleibt die Prüfung aller Beträge vor jeder Veröffentlichung.
+\par\textbf{Ergebnis:} \blank{Ergebnis AP4}\quad \textbf{Aufwand:} \blank{Aufwand AP4}
+
+\subsection*{AP5: Auswertung}
+Monatlich und je Partnerlink die Summenzahlen aus Abschnitt~\ref{sec:wirkung},
+dazu die Strichlisten der Beratenden und die Notizen aus den Rückmeldegesprächen.
+Am Ende steht ein Bericht ohne personenbezogene Daten.
+\par\textbf{Ergebnis:} \blank{Ergebnis AP5}\quad \textbf{Aufwand:} \blank{Aufwand AP5}
+
+% ---------------------------------------------------------------------------
+\section{Wirkung und Indikatoren}\label{sec:wirkung}
+Die Zählung erfasst Besuche und fünf Schritte. Jeder Schritt trägt die Sprache der Oberfläche,
+das Tempo (eine Frage oder Liste) und das Partnerkürzel.
+
+\begingroup\small
+\begin{longtable}{@{}L{0.24\linewidth}L{0.30\linewidth}L{0.38\linewidth}@{}}
+\toprule
+\textbf{Schritt} & \textbf{Wann} & \textbf{Zusätzliche Angaben} \\
+\midrule
+\endhead
+\texttt{intake\_started} & Start auf der ersten Seite & keine \\
+\texttt{result\_shown} & Der Bericht erscheint &
+  Fragen: bis 10, bis 20, bis 40, über 40; Ergebnis: keines, Bereich, Pflegegrad (ob, nicht welcher);
+  monatliche Lücke: 0, unter 100, unter 300, unter 600, ab 600 EUR \\
+\texttt{questions\_refined} & Weitere Fragen werden beantwortet & keine \\
+\texttt{pdf\_downloaded} & Das PDF ist erstellt & Sprache des PDF: Deutsch oder Englisch \\
+\texttt{intake\_erased} & Die Antworten werden gelöscht & keine \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+Dazu kommen die Strichlisten der Beratenden: wie oft die Seite genutzt wurde und wie oft danach
+ein Antrag, ein Antrag auf Höherstufung oder ein Widerspruch folgte.
+Indikatoren sind diese Zahlen und der Anteil der begonnenen Befragungen, die ein Ergebnis erreichen.
+Ein Ergebnis in Zahlen wird vorab nicht versprochen.
+Die Zahlen zeigen Nutzung, nicht den Bescheid der Pflegekasse.
+
+% ---------------------------------------------------------------------------
+\section{Datenschutz}
+Die Antworten der Familie bleiben auf ihrem Gerät; sie liegen nur in diesem Browser und lassen sich
+mit einem Tipp löschen.
+Es gibt kein Konto und keinen Server, der Antworten speichert, und das PDF entsteht im Browser.
+Ist die Zählung eingeschaltet, zählt ein Anbieter, der seine Server nach eigenen Angaben in der EU
+betreibt, Besuche und fünf Schritte ohne Cookies, ohne Antworten und ohne Pflegegrad.
+Bei Antworten per Sprache erkennt der Browser die Sprache, nicht die Seite; die rechtliche Prüfung
+der Datenschutzerklärung ist Teil von AP2.
+
+% ---------------------------------------------------------------------------
+\section{Open Source und Nachhaltigkeit}\label{sec:oss}
+Der Quellcode hat noch keine Lizenz. Entscheidung: \blank{Lizenzentscheidung}.
+\begin{itemize}
+  \item \textbf{Empfehlung:} EUPL-1.2. Das Urheberrecht bleibt in einer Hand, und vor jedem
+        Beitrag von außen wird eine Beitragsvereinbarung (CLA) geschlossen. Die EUPL-1.2 ist
+        OSI-zertifiziert und wechselseitig; ein Partner kann den Code nicht schließen.
+  \item \textbf{Prototype Fund:} Die Ergebnisse sollen unter einer Open-Source-Lizenz öffentlich
+        zugänglich sein.\todo{Archiv J02; keine Liste zulässiger Lizenzen, EUPL-1.2 nicht genannt}
+        Die Entscheidung fällt vor dem 30.11.2026, wenn die Bewerbung kommt.
+  \item \textbf{Doppellizenz:} Mit dem Urheberrecht in einer Hand kann neben der offenen Lizenz
+        eine gepflegte Fassung für Organisationen angeboten werden. Das muss anwaltlich bestätigt werden.
+  \item \textbf{Hessen:} Ein dort nach § 123 SGB XI gefördertes Ergebnis darf nicht kommerziell
+        vertrieben werden und muss Dritten diskriminierungsfrei zur Verfügung stehen. Für ein so
+        gefördertes Ergebnis passt der Weg der Doppellizenz nicht.
+\end{itemize}
+Nach der Förderung fallen Kosten für Hosting und Zählung an, dazu die Prüfung aller Beträge vor
+jeder Veröffentlichung und Anpassungen bei Gesetzesänderungen. Die Finanzierung danach ist offen;
+Pilotgebühren und eine gepflegte Fassung sind Optionen, keine Zusagen.
+
+% ---------------------------------------------------------------------------
+\section{Team}
+\todo{Formularfeld 10 \enquote{Team}, max.\ 30 Wörter; Feld 11 \enquote{Erfahrung}, max.\ 3 Projekte, 100 Wörter (J02, Archiv)}%
+\blank{Team}\quad Erfahrung: \blank{Erfahrung, bis zu drei Projekte}
+
+% ---------------------------------------------------------------------------
+\section{Risiken}
+\begingroup\small
+\begin{longtable}{@{}L{0.22\linewidth}L{0.31\linewidth}L{0.39\linewidth}@{}}
+\toprule
+\textbf{Risiko} & \textbf{Folge} & \textbf{Umgang} \\
+\midrule
+\endhead
+PNOG wird beschlossen, geändert oder verschoben & Beträge und Schwellen ab 01.01.2027 falsch; Umfang von AP4 offen. &
+  AP4 im Plan und im Budget; Anpassung erst nach Verkündung; bis dahin gilt das geltende Recht. \\
+Die rechtliche Prüfung verlangt eine Einwilligung für die Zählung & Ohne Einwilligung keine Summenzahlen. &
+  Die Zählung bleibt aus; die Seite sendet dann nichts. AP5 stützt sich auf die Strichlisten. \\
+Die Speicherung im Browser über den Besuch hinaus wird beanstandet & Die Speicherung muss angepasst werden. &
+  Gespeichert wird erst nach einer Antwort; Löschen mit einem Tipp; Prüfung in AP2. \\
+Ungeprüfte Übersetzungen werden geglaubt & Familien handeln auf falscher Grundlage. &
+  AP1 vor jedem Pilot; die Fragen selbst stehen auf Deutsch oder Englisch. \\
+Partner nutzen die Seite wenig & Wenig Zahlen für AP5. &
+  Kleiner Pilot mit zwei Beratenden und monatlichem Gespräch; auch geringe Nutzung ist ein Ergebnis. \\
+Die Schätzung weicht von der Begutachtung ab & Die Familie erwartet mehr, als bewilligt wird. &
+  Bereich statt Mittelwert; Hinweis, dass es eine Schätzung ist; vorsichtige Summen. \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+% ---------------------------------------------------------------------------
+\section{Bezug zum Programm}
+Beantragt bei: \blank{Programm und Spur}.
+
+\subsection{Prototype Fund, Jahrgang 03}
+\todo{Formularfeld 13 \enquote{Motivation}, max.\ 100 Wörter; Felder 14 bis 16 Second Stage (J02, Archiv)}%
+Bewerbungsschluss ist der 30.11.2026 für alle drei Spuren
+(\href{https://bewerben.prototypefund.de/}{bewerben.prototypefund.de}). Die Spuren laut Seite:
+\begin{itemize}
+  \item \enquote{Resilienz}: \enquote{Freie Alternativen zu proprietärer, zentralisierter und
+        dominierender Software}.
+  \item \enquote{Innovation}: \enquote{Innovative Projekte im Bereich Datensicherheit und
+        Software-Infrastruktur}.
+  \item \enquote{Up and Coming}: \enquote{für alle unter 26 oder in einem Studium oder in einer
+        informatischen Ausbildung}.
+\end{itemize}
+Vorgeschlagen wird \enquote{Resilienz}: Anspruch erledigt im Browser, was sonst einen Server braucht.
+Schätzung, gespeicherte Sitzung und PDF entstehen auf dem Gerät, ohne Konto und ohne Upload.
+Ob die Spur passt, wird vor der Bewerbung beim Prototype Fund erfragt.
+
+Gefördert werden laut Handbuch nur Einzelpersonen oder Teams bis vier Personen, als Privatperson,
+über 18 Jahre, mit Hauptwohnsitz oder GbR-Sitz in Deutschland.
+Eine Second Stage muss schon in der ersten Bewerbung beantragt werden.%
+\todo{Archiv J02: Zulassung und Second Stage für J03 bestätigen}
+
+\subsection{Modellvorhaben nach § 123 SGB XI}
+Grundlage sind die Empfehlungen des GKV-Spitzenverbandes nach § 123 Abs.~3 SGB XI
+(\href{https://www.gkv-spitzenverband.de/media/dokumente/pflegeversicherung/richtlinien__vereinbarungen__formulare/2026-06-01_Pflege_Empfehlungen_nach_123_Abs.3_SGB_XI.pdf}{Empfehlungen}).
+Sie nennen die \enquote{Digitale Vernetzung der Pflegeangebote}; ein Rechner für den einzelnen Haushalt
+ist nicht genannt. Anspruch wäre deshalb ein Baustein eines Vorhabens, das \blank{Kommune oder Träger}
+in \blank{Land} trägt. Nötig sind eine Konzeption, eine wissenschaftliche Begleitung nach § 124 SGB XI
+und die hälftige Kofinanzierung durch Land oder Kommune.
+Nach Land, soweit geprüft:
+\begin{itemize}
+  \item \textbf{Niedersachsen:} Antragsberechtigt sind auch natürliche Personen; Frist jeweils
+        bis 31.08.\ für einen Start im selben Jahr.
+  \item \textbf{Berlin:} Natürliche Personen sind nicht antragsberechtigt; die Frist 21.08.2026 ist
+        vorbei.
+  \item \textbf{Hessen:} Antrag beim Ministerium mit Stellungnahme des Landkreises oder der
+        kreisfreien Stadt; das Ergebnis darf nicht kommerziell vertrieben werden.
+  \item \textbf{Schleswig-Holstein:} Richtlinie vom 01.10.2025; Antragsteller und Fristen sind nicht
+        angegeben und beim Sozialministerium zu erfragen.
+\end{itemize}
+
+\subsection{Aktion Mensch}
+Die aktuellen Programme enthalten keines für digitale Teilhabe. Neue Programme sind ab 02.11.2026
+angekündigt; die nächste Antragsphase beginnt am 01.01.2027. Einzelpersonen sind nicht förderfähig;
+ein Antrag ginge nur über einen gemeinnützigen Träger.
+
+\subsection{Deutsche Fernsehlotterie (Stiftung Deutsches Hilfswerk)}
+Organisationsdaten bis 10.12.2026, Bewerbung vom 02.11.\ bis 17.12.2026, Entscheidung im Mai 2027,
+frühester Start 01.06.2027. Die Gesamtkosten müssen mindestens 50.000 EUR betragen; je Träger
+gibt es eine Bewerbung. Ein Antrag ginge nur über einen gemeinnützigen Träger.%
+\todo{\enquote{nur gemeinnützige Träger}: Sekundärquelle; Passung prüfen}
+
+Nicht vorgesehen ist ein Antrag bei der Robert Bosch Stiftung: Sie bearbeitet keine unaufgefordert
+eingesandten Förderanfragen.
+
+\end{document}
