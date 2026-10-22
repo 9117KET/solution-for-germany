@@ -1,0 +1,194 @@
+% Kooperationsvereinbarung für ein Pilotprojekt mit Anspruch.
+% ENTWURF ZUR ANWALTLICHEN PRÜFUNG. Keine Rechtsberatung.
+% Quellen: docs/proposal-organisations.md (Angebot, Bitte, Kosten, Lizenz,
+% Grenzen), docs/PARTNERS.md (Partnerlink, Summen, Übersicht oder monatliche
+% Zusammenstellung), docs/COMPLIANCE.md, lib/legal/datenschutz.ts
+% (Datenschutzerklärung), README.md (Grenzen, Lizenz offen).
+% Genannte Normen: nur § 7a SGB XI. Weitere Normen setzt die anwaltliche
+% Prüfung ein; jede solche Stelle trägt ein \todo{}.
+% Lokale Makros: \fillin (Kasten mit den Platzhaltern), \sigfield
+% (Unterschriftsfeld), Kopfzeile mit "Entwurf zur anwaltlichen Prüfung"
+% (überschreibt \ihead und \ohead der Präambel nur in diesem Dokument).
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Kooperationsvereinbarung Pilotprojekt Anspruch (Entwurf)}}
+
+% Kopfzeile: sichtbarer Entwurfsvermerk auf jeder Seite.
+\ihead{\small\textbf{Entwurf zur anwaltlichen Prüfung}}
+\ohead{\small\draftmark}
+% Paragrafen statt Abschnittsnummern.
+\renewcommand*{\thesection}{§\,\arabic{section}}
+\renewcommand*{\sectionformat}{\thesection\enskip}
+\RedeclareSectionCommand[beforeskip=1.2ex plus .2ex,afterskip=.4ex]{section}
+\setkomafont{section}{\normalfont\large\bfseries}
+
+% parskip=half reserves 1em at the end of a paragraph; the full-width box needs
+% that switched off locally.
+\newcommand{\fillin}[2]{{\setlength{\parfillskip}{0pt plus 1fil}\noindent
+  \fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+  \footnotesize\raggedright\textbf{#1} #2}}\par}}
+\newcommand{\sigfield}[1]{\parbox[t]{0.45\linewidth}{\vspace{14mm}\hrule\vspace{1mm}%
+  \footnotesize #1}}
+
+\begin{document}
+
+\fillin{Vor dem Versand ausfüllen:}{Name des Betreibers; Anschrift des
+Betreibers; Organisation; Anschrift der Organisation; vertreten durch (Name,
+Funktion); Startdatum; Adresse der Seite; kürzel; Betrag; Zahlungsweise;
+Kündigungsfrist. Nach der anwaltlichen Prüfung: Regelung zur Haftung; anwendbares
+Recht und Gerichtsstand; alle Stellen mit \enquote{Zu bestätigen} am Rand.}
+
+\begin{center}
+  {\Large\bfseries Kooperationsvereinbarung}\\[0.5ex]
+  {\large über ein Pilotprojekt mit der Webseite \enquote{Anspruch}}\\[0.5ex]
+  {\small\textbf{Entwurf zur anwaltlichen Prüfung.} Noch nicht zur Unterschrift.}
+\end{center}
+
+\section{Parteien}
+Diese Vereinbarung schließen
+\begin{enumerate}[label=(\arabic*)]
+  \item \blank{Name des Betreibers}, \blank{Anschrift des Betreibers},
+    Betreiber der Webseite Anspruch (im Folgenden \enquote{Betreiber}), und
+  \item \blank{Organisation}, \blank{Anschrift der Organisation}, vertreten durch
+    \blank{Name}, \blank{Funktion} (im Folgenden \enquote{Partner}).
+\end{enumerate}
+
+\section{Gegenstand}
+(1) Anspruch ist eine Webseite für Familien, die einen Angehörigen pflegen. Die
+Familie beantwortet Fragen zum Alltag der pflegebedürftigen Person. Die Seite
+schätzt den Pflegegrad, den die Begutachtung wahrscheinlich ergibt. Sie vergleicht
+die Leistungen, die daraus folgen, mit dem, was der Haushalt schon bekommt, und
+nennt die nächsten Schritte mit der gesetzlichen Grundlage.
+
+(2) Gegenstand dieser Vereinbarung ist ein Pilotprojekt. Der Partner erprobt die
+Seite in seiner Beratung. Die Parteien werten die Erfahrungen gemeinsam aus.
+
+\section{Laufzeit}
+(1) Das Pilotprojekt beginnt am \blank{Startdatum} und dauert drei Monate.
+
+(2) Es endet nach drei Monaten, ohne dass es einer Kündigung bedarf. Eine
+Verlängerung bedarf einer schriftlichen Vereinbarung.
+
+\section{Leistungen des Betreibers}
+Der Betreiber
+\begin{enumerate}[label=(\arabic*)]
+  \item stellt die Webseite unter \blank{Adresse der Seite} für die Laufzeit
+    bereit. Familien brauchen kein Konto.\todo{Ob eine Verfügbarkeit zugesagt
+    wird und in welchem Umfang.}
+  \item richtet für den Partner einen eigenen Link ein:
+    \texttt{https://}\blank{Adresse der Seite}\texttt{/?via=}\blank{kürzel}.
+    Besuche über diesen Link werden der Organisation zugeordnet, nicht einer
+    Person.
+  \item stellt dem Partner die Zahlen zu diesem Link zur Verfügung, nur als
+    Summen. Das geschieht per Link zu einer gefilterten Übersicht oder als
+    monatliche Zusammenstellung. Die Zahlen sind: Besuche; wie viele begonnen
+    haben; wie viele ein Ergebnis erreicht haben; wie viele ein PDF geladen
+    haben; die Sprache der Oberfläche; die Spanne der gestellten Fragen; die
+    Spanne, in der die geschätzte monatliche Lücke lag. Voraussetzung ist, dass
+    die Zählung eingeschaltet ist.\todo{Ob die Zählung zum Start eingeschaltet
+    ist und welcher der beiden Wege gilt.}
+  \item führt einmal im Monat ein Rückmeldegespräch mit dem Partner.
+  \item stellt dem Partner das Factsheet und den Vorschlag für eine
+    Pilotpartnerschaft zur Verfügung.
+  \item teilt dem Partner vor Beginn des Pilotprojekts mit, unter welcher Lizenz
+    der Quellcode steht (siehe §\,10).
+\end{enumerate}
+
+\section{Leistungen des Partners}
+Der Partner
+\begin{enumerate}[label=(\arabic*)]
+  \item benennt zwei Beraterinnen oder Berater. Sie nutzen die Seite im Gespräch
+    oder geben Familien den Link mit.
+  \item nimmt einmal im Monat am Rückmeldegespräch teil.
+  \item lässt seine Beratenden eine Strichliste ohne Namen führen: wie oft die
+    Seite genutzt wurde und wie oft danach ein Antrag, ein Antrag auf
+    Höherstufung oder ein Widerspruch gestellt wurde. Die Strichliste enthält
+    keine Angaben, die sich einer Person zuordnen lassen.
+  \item gibt den Link nur im eigenen Namen weiter.
+\end{enumerate}
+
+\section{Datenschutz}
+(1) Die Parteien tauschen keine personenbezogenen Daten aus. Das gilt auch für die
+Strichliste nach §\,5 Abs.\,3.
+
+(2) Was eine Familie auf der Seite tippt, bleibt auf ihrem Gerät. Die Antworten
+werden nur in ihrem Browser gespeichert und lassen sich dort mit einem Tipp löschen.
+Der Betreiber erhält sie nicht. Antwortet die Familie per Sprache, erkennt der
+Browser die Sprache, nicht die Seite. Dafür gilt die Datenschutzerklärung des
+Browserherstellers.
+
+(3) Ist die Zählung eingeschaltet, werden nur Besuche und fünf Schritte gezählt
+(Start, Ergebnis, weitere Fragen, PDF, Löschen). Die Zählung arbeitet ohne Cookies,
+ohne Namen, ohne Antworten und ohne Pflegegrad. Das Kürzel des Links bezeichnet die
+Organisation, nicht eine Person. Der Partner erhält nur Summen.
+
+(4) Jede Partei ist für ihre eigene Verarbeitung personenbezogener Daten selbst
+verantwortlich. Der Partner für seine Beratung, der Betreiber für die Webseite nach
+ihrer Datenschutzerklärung.
+
+(5) Der Betreiber verarbeitet keine personenbezogenen Daten im Auftrag des Partners.
+Eine Auftragsverarbeitung entsteht nicht.\todo{Rollen nach der DSGVO (Abs.~4
+und 5): keine gemeinsame Verantwortung, keine Auftragsverarbeitung, kein
+Vertrag dazu nötig.}
+
+\section{Charakter des Werkzeugs}
+(1) Die Seite liefert eine Schätzung aus den Angaben der Familie. Sie ist keine
+Begutachtung durch den Medizinischen Dienst und keine Rechtsberatung.
+
+(2) Die Seite sagt jeder Familie, dass ihr die kostenlose Pflegeberatung nach
+§\,7a SGB~XI zusteht. Sie ersetzt diese Beratung nicht. Die Beratenden des Partners
+bleiben für ihre Beratung selbst verantwortlich.
+
+(3) Die Beträge und Punkteschwellen folgen dem geltenden Recht. Sie wurden zuletzt
+am 22.10.2026 geprüft. Das Pflegeneuordnungsgesetz ist ein Kabinettsentwurf vom
+30.09.2026 und noch kein Gesetz. Wird es wie entworfen beschlossen, ändern sich die
+meisten Beträge ab dem 01.01.2027 und die Seite muss angepasst werden.
+
+(4) Die türkische, russische, polnische und arabische Oberfläche ist noch nicht von
+Muttersprachlern geprüft, sondern bisher nur von einem Sprachmodell gegen den
+deutschen Text.
+
+\section{Haftung}
+\blank{Regelung zur Haftung}\todo{Haftung beider Parteien regeln, insbesondere
+für eine unzutreffende Schätzung und für Ausfälle der Seite.}
+
+\section{Kosten}
+(1) Für das Pilotprojekt zahlt der Partner \blank{Betrag}.
+
+(2) Zahlungsweise: \blank{Zahlungsweise}.
+
+\section{Nutzungsrechte}
+(1) Der Partner darf den Link nach §\,4 Abs.\,2 und die Unterlagen nach §\,4 Abs.\,5
+für die Dauer des Pilotprojekts in seiner Beratung und in Hinweisen an Familien
+nutzen.
+
+(2) Der Quellcode der Seite hat noch keine Lizenz. Der Betreiber teilt die
+Entscheidung vor Beginn des Pilotprojekts mit. Diese Vereinbarung räumt keine
+Rechte am Quellcode ein.\todo{Lizenz des Quellcodes und ihre Folgen für den
+Partner.}
+
+(3) Der Betreiber nennt den Partner nur mit dessen schriftlicher Zustimmung als
+Pilotpartner.
+
+\section{Kündigung}
+(1) Jede Partei kann diese Vereinbarung mit einer Frist von \blank{Kündigungsfrist}
+schriftlich kündigen.
+
+(2) Das Recht zur Kündigung aus wichtigem Grund bleibt unberührt.\todo{Folgen
+einer Kündigung für bereits gezahlte Kosten.}
+
+\section{Schlussbestimmungen}
+(1) Änderungen und Ergänzungen bedürfen der Schriftform.
+
+(2) Ist eine Bestimmung unwirksam, bleibt der Rest der Vereinbarung wirksam.
+
+(3) Anwendbares Recht und Gerichtsstand: \blank{anwendbares Recht und
+Gerichtsstand}.\todo{Rechtswahl und Gerichtsstand festlegen; Fassung von
+Abs.~2.}
+
+\vspace{6mm}
+\noindent\sigfield{Ort, Datum\\Unterschrift\\\blank{Name des Betreibers}, Betreiber}\hfill
+\sigfield{Ort, Datum\\Unterschrift und Stempel\\\blank{Name}, \blank{Funktion},
+\blank{Organisation}}
+
+\end{document}

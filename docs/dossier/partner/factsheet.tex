@@ -1,0 +1,149 @@
+% Factsheet Anspruch: Seite 1 Deutsch, Seite 2 Englisch, Abschnitt für Abschnitt
+% gleich. Keine Logos, keine Bilder.
+% Quellen: docs/proposal-organisations.md (Fakten, was der Partner bekommt, was
+% Anspruch nicht ist, Datenschutz), docs/PARTNERS.md, README.md,
+% lib/legal/datenschutz.ts.
+% Lokale Makros: \fillin (Kasten mit den Platzhaltern).
+\documentclass[fontsize=10pt,paper=a4,parskip=half]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Anspruch: Factsheet}}
+\RedeclareSectionCommand[beforeskip=1.4ex plus .2ex,afterskip=.3ex]{subsection}
+
+% parskip=half reserves 1em at the end of a paragraph; the full-width box needs
+% that switched off locally.
+\newcommand{\fillin}[2]{{\setlength{\parfillskip}{0pt plus 1fil}\noindent
+  \fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+  \footnotesize\raggedright\textbf{#1} #2}}\par}}
+
+\begin{document}
+
+% ---------------------------------------------------------------- Deutsch
+\fillin{Vor dem Versand ausfüllen:}{Name; Funktion; E-Mail; Telefon. Diesen
+Kasten danach löschen.}
+
+\begin{center}
+  {\LARGE\bfseries Anspruch}\\[0.5ex]
+  {\large Welche Pflegeleistungen einem Haushalt zustehen und was davon liegen bleibt}
+\end{center}
+
+Anspruch ist eine Webseite für Familien, die einen Angehörigen pflegen. Die Familie
+beantwortet Fragen zum Alltag, und die Seite schätzt den Pflegegrad, den die
+Begutachtung wahrscheinlich ergibt. Sie vergleicht die Leistungen, die daraus
+folgen, mit dem, was der Haushalt schon bekommt, und nennt die nächsten Schritte mit
+der gesetzlichen Grundlage.
+
+\subsection*{Auf einen Blick}
+\begin{itemize}
+  \item \textbf{Sechs Sprachen} der Oberfläche: Deutsch, Englisch, Türkisch,
+    Russisch, Polnisch, Arabisch. Die Fragen stehen auf Deutsch oder Englisch.
+  \item \textbf{In der Regel 12 bis 20 Fragen} statt der 64 Kriterien des
+    Begutachtungsinstruments.
+  \item \textbf{Ein Bereich, kein Mittelwert}, solange das Ergebnis nicht feststeht.
+  \item \textbf{Gesetzliche Grundlage bei jedem Betrag.} Ein Betrag ohne Quelle
+    wird nicht angezeigt.
+  \item \textbf{Auf dem Gerät, ohne Konto.} Die Antworten bleiben im Browser der
+    Familie.
+  \item \textbf{Ein PDF für die Pflegekasse}, auf Deutsch oder Englisch, mit der
+    Schätzung, den Beträgen, den Schritten und den gegebenen Antworten.
+\end{itemize}
+
+\subsection*{Was Sie als Organisation bekommen}
+\begin{itemize}
+  \item \textbf{Ihren eigenen Link.} Besuche darüber werden Ihrer Organisation
+    zugeordnet, nicht einer Person.
+  \item \textbf{Die Zahlen zu Ihrem Link}, per Link zu einer Übersicht oder als
+    monatliche Zusammenstellung, nur als Summen.
+  \item \textbf{Nichts Persönliches.} Keine Namen, keine Antworten, kein
+    Pflegegrad. Familien brauchen kein Konto.
+  \item \textbf{Einen Verweis auf Sie.} Die Seite sagt jeder Familie, dass ihr die
+    kostenlose Pflegeberatung nach §~7a SGB~XI zusteht.
+\end{itemize}
+
+\subsection*{Was Anspruch nicht ist}
+\begin{itemize}
+  \item Keine Begutachtung durch den Medizinischen Dienst. Es ist eine Schätzung
+    aus den Angaben der Familie.
+  \item Keine Rechtsberatung.
+  \item Noch nicht von Muttersprachlern geprüft: die türkische, russische,
+    polnische und arabische Oberfläche. Bisher hat nur ein Sprachmodell sie gegen
+    den deutschen Text geprüft.
+\end{itemize}
+{\small Beträge und Punkteschwellen zuletzt geprüft am 22.10.2026. Das
+Pflegeneuordnungsgesetz ist ein Kabinettsentwurf vom 30.09.2026; wird es wie
+entworfen beschlossen, ändern sich die meisten Beträge ab dem 01.01.2027.\par}
+
+\subsection*{Datenschutz}
+Was Familien tippen, verlässt ihr Gerät nicht. Bei Antworten per Sprache erkennt der
+Browser die Sprache, nicht die Seite. Wenn gezählt wird, dann ohne Cookies, und Sie
+sehen nur Summen.
+
+\subsection*{Kontakt}
+\blank{Name}, \blank{Funktion} \quad \blank{E-Mail} \quad \blank{Telefon}
+
+\newpage
+% ---------------------------------------------------------------- English
+\begin{otherlanguage}{english}
+\fillin{Fill in before sending / Vor dem Versand ausfüllen:}{Name; Funktion
+(role); E-Mail; Telefon (phone). The same blanks as on the German page. Delete
+this box afterwards.}
+
+\begin{center}
+  {\LARGE\bfseries Anspruch}\\[0.5ex]
+  {\large Which care benefits a household is entitled to, and what goes unclaimed}
+\end{center}
+
+Anspruch is a website for families who care for a relative. The family answers
+questions about everyday life, and the site estimates the Pflegegrad the assessment
+would likely arrive at. It compares the benefits that follow with what the household
+already receives, and lists the next steps with their statutory basis.
+
+\subsection*{At a glance}
+\begin{itemize}
+  \item \textbf{Six interface languages}: German, English, Turkish, Russian,
+    Polish, Arabic. The questions are in German or English.
+  \item \textbf{Typically 12 to 20 questions} instead of the assessment
+    instrument's 64 criteria.
+  \item \textbf{A range, never a midpoint}, while the result is not settled.
+  \item \textbf{Statutory basis on every figure.} A figure without a source is not
+    shown.
+  \item \textbf{On the device, no account.} The answers stay in the family's
+    browser.
+  \item \textbf{A PDF for the Pflegekasse}, in German or English, with the
+    estimate, the amounts, the steps and the answers given.
+\end{itemize}
+
+\subsection*{What you get as an organisation}
+\begin{itemize}
+  \item \textbf{Your own link.} Visits through it are attributed to your
+    organisation, not to a person.
+  \item \textbf{The numbers for your link}, as a link to an overview or as a
+    monthly summary, as totals only.
+  \item \textbf{Nothing personal.} No names, no answers, no Pflegegrad. Families
+    need no account.
+  \item \textbf{A pointer to you.} The site tells every family that free statutory
+    care advice under § 7a SGB XI is their right.
+\end{itemize}
+
+\subsection*{What Anspruch is not}
+\begin{itemize}
+  \item Not an assessment by the Medizinischer Dienst. It is an estimate from what
+    the family enters.
+  \item Not legal advice.
+  \item Not yet reviewed by native speakers: the Turkish, Russian, Polish and
+    Arabic interface. So far only a language model has checked it against the
+    German text.
+\end{itemize}
+{\small Amounts and points thresholds last checked on 22 Oct 2026. The
+Pflegeneuordnungsgesetz is a cabinet bill of 30 Sep 2026; if it passes as drafted,
+most amounts change from 1 Jan 2027.\par}
+
+\subsection*{Privacy}
+What families type does not leave their device. When answering by voice, the
+browser does the speech recognition, not the site. Where counting is on, it uses no
+cookies, and you see totals only.
+
+\subsection*{Contact}
+\blank{Name}, \blank{Funktion} \quad \blank{E-Mail} \quad \blank{Telefon}
+\end{otherlanguage}
+
+\end{document}

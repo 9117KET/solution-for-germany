@@ -1,0 +1,118 @@
+% Absichtserklärung (Letter of Intent) eines Pilotpartners, zur Vorlage bei
+% einem Förderantrag. Seite 1 Deutsch, Seite 2 Englisch, Abschnitt für Abschnitt
+% gleich. Unverbindlich.
+% Quellen: docs/proposal-organisations.md ("Worum wir einen Pilotpartner
+% bitten", "Datenschutz"), docs/PARTNERS.md, lib/legal/datenschutz.ts.
+% Lokale Makros: \fillin (Kasten mit den Platzhaltern), \sigfield
+% (Unterschriftsfeld). Die Präambel bleibt unverändert.
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\input{../preamble}
+\hypersetup{pdftitle={Absichtserklärung zum Pilotprojekt Anspruch / Letter of intent}}
+
+% parskip=half reserves 1em at the end of a paragraph; the full-width box needs
+% that switched off locally.
+\newcommand{\fillin}[2]{{\setlength{\parfillskip}{0pt plus 1fil}\noindent
+  \fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+  \footnotesize\raggedright\textbf{#1} #2}}\par}}
+\newcommand{\sigfield}[1]{\parbox[t]{0.45\linewidth}{\vspace{12mm}\hrule\vspace{1mm}%
+  \footnotesize #1}}
+
+\begin{document}
+
+% ---------------------------------------------------------------- Deutsch
+\fillin{Vor dem Versand ausfüllen:}{Organisation; Anschrift; vertreten durch
+(Name, Funktion); Startdatum; Förderer; Name des Betreibers.}
+
+\begin{center}
+  {\Large\bfseries Absichtserklärung zum Pilotprojekt \enquote{Anspruch}}\\[1ex]
+  {\large\bfseries unverbindlich / non-binding}
+\end{center}
+
+\subsection*{1. Wer wir sind}
+\blank{Organisation}, \blank{Anschrift}, vertreten durch \blank{Name},
+\blank{Funktion}.
+
+\subsection*{2. Was wir beabsichtigen}
+Wir beabsichtigen, an einem Pilotprojekt mit der Webseite Anspruch teilzunehmen.
+Anspruch schätzt aus den Angaben einer Familie den Pflegegrad und die Leistungen,
+die daraus folgen. Das Ergebnis ist eine Schätzung, keine Begutachtung und keine
+Rechtsberatung.
+\begin{itemize}
+  \item Laufzeit: drei Monate ab \blank{Startdatum}.
+  \item Zwei unserer Beraterinnen oder Berater nutzen die Seite im Gespräch oder
+    geben Familien unseren Link mit.
+  \item Einmal im Monat führen wir ein Rückmeldegespräch mit dem Betreiber.
+\end{itemize}
+
+\subsection*{3. Datenschutz}
+Zwischen uns und dem Betreiber werden keine personenbezogenen Daten ausgetauscht.
+Was eine Familie tippt, bleibt auf ihrem Gerät. Zu unserem Link erhalten wir nur
+Summen, keine Angaben zu einzelnen Personen.
+
+\subsection*{4. Anonyme Strichliste}
+Unsere Beratenden führen während des Piloten eine Strichliste ohne Namen: wie oft
+die Seite genutzt wurde und wie oft danach ein Antrag, ein Antrag auf Höherstufung
+oder ein Widerspruch gestellt wurde.
+
+\subsection*{5. Zweck und Verbindlichkeit}
+Diese Erklärung dient dem Förderantrag des Betreibers \blank{Name des Betreibers}
+bei \blank{Förderer}. Sie ist unverbindlich. Sie begründet keine
+rechtliche Pflicht und keine Kosten. Einzelheiten regelt, falls es zum Pilotprojekt
+kommt, eine gesonderte Vereinbarung.
+
+\vspace{4mm}
+\noindent\sigfield{Ort, Datum\\Unterschrift und Stempel\\\blank{Name}, \blank{Funktion},
+\blank{Organisation}}\hfill
+\sigfield{Zur Kenntnis genommen: Ort, Datum\\Unterschrift\\\blank{Name des Betreibers}}
+
+\newpage
+% ---------------------------------------------------------------- English
+\begin{otherlanguage}{english}
+\fillin{Fill in before sending / Vor dem Versand ausfüllen:}{Organisation;
+Anschrift (address); vertreten durch (represented by) Name, Funktion (role);
+Startdatum (start date); Förderer (funder); Name des Betreibers (name of the
+operator). The same blanks as on the German page.}
+
+\begin{center}
+  {\Large\bfseries Letter of intent for the \enquote{Anspruch} pilot}\\[1ex]
+  {\large\bfseries non-binding / unverbindlich}
+\end{center}
+
+\subsection*{1. Who we are}
+\blank{Organisation}, \blank{Anschrift}, represented by \blank{Name},
+\blank{Funktion}.
+
+\subsection*{2. What we intend}
+We intend to take part in a pilot with the website Anspruch. From what a family
+enters, Anspruch estimates the Pflegegrad and the benefits that follow. The result
+is an estimate, not an assessment and not legal advice.
+\begin{itemize}
+  \item Duration: three months from \blank{Startdatum}.
+  \item Two of our counsellors use the site in conversations or give families our
+    link.
+  \item Once a month we hold a feedback call with the operator.
+\end{itemize}
+
+\subsection*{3. Privacy}
+No personal data is exchanged between us and the operator. What a family types
+stays on their device. For our link we receive totals only, nothing about any
+individual person.
+
+\subsection*{4. Anonymous tally}
+During the pilot our counsellors keep a tally without names: how often the site was
+used, and how often an application, a request for a higher grade or an objection
+followed.
+
+\subsection*{5. Purpose and status}
+This letter supports the funding application of the operator
+\blank{Name des Betreibers} to \blank{Förderer}. It is
+non-binding. It creates no legal obligation and no cost. If the pilot goes ahead,
+a separate agreement will set out the details.
+
+\vspace{4mm}
+\noindent\sigfield{Place, date\\Signature and stamp\\\blank{Name}, \blank{Funktion},
+\blank{Organisation}}\hfill
+\sigfield{Acknowledged: place, date\\Signature\\\blank{Name des Betreibers}}
+\end{otherlanguage}
+
+\end{document}
