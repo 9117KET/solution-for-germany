@@ -248,8 +248,6 @@ export default function Home() {
     setOrder(saved.order ?? []);
     setStep(saved.index);
     dismissOffer();
-    // Carrying on also leaves the welcome screen.
-    track('intake_started', common);
   };
 
   useEffect(() => {

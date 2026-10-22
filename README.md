@@ -178,7 +178,7 @@ string) and five events. Every event carries `lang` (interface language), `pace`
 
 | Event | When | Extra properties |
 | --- | --- | --- |
-| `intake_started` | The person leaves the welcome screen | none |
+| `intake_started` | The person presses Start on the welcome screen (not when resuming a saved intake) | none |
 | `result_shown` | The report first appears in a page visit | `questions` (`lte10`, `lte20`, `lte40`, `gt40`), `result` (`none`, `range`, `grade`: whether there is one, not which), `gap` (monthly unclaimed amount: `0`, `lt100`, `lt300`, `lt600`, `gte600` euros) |
 | `questions_refined` | "Answer {n} more questions" on the report is used | none |
 | `pdf_downloaded` | The PDF has been produced | `doc_lang` (`de` or `en`) |

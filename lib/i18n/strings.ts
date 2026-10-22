@@ -1230,12 +1230,12 @@ export const UI = {
     ar: 'يُكتب ملف PDF بلغة الأسئلة، أي الألمانية أو الإنجليزية، وهي اللغة التي تقرأه بها Pflegekasse.',
   },
   pdfPrivacyNote: {
-    de: 'Die Datei entsteht auf Ihrem Gerät. Nichts wird gesendet. Sie enthält Gesundheitsdaten, geben Sie sie also nur weiter, wenn Sie das wollen.',
-    en: 'The file is produced on your device. Nothing is sent. It contains health data, so pass it on only where you mean to.',
-    tr: 'Dosya sizin cihazınızda oluşturulur. Hiçbir şey gönderilmez. Sağlık verisi içerir; yalnızca isteyerek paylaşın.',
-    ru: 'Файл создаётся на вашем устройстве. Ничего не отправляется. Он содержит данные о здоровье, поэтому передавайте его только осознанно.',
-    pl: 'Plik powstaje na Twoim urządzeniu. Nic nie jest wysyłane. Zawiera dane zdrowotne, więc przekazuj go tylko świadomie.',
-    ar: 'يُنشأ الملف على جهازك ولا يُرسل أي شيء. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
+    de: 'Die Datei entsteht auf Ihrem Gerät. Die Datei wird nicht gesendet. Sie enthält Gesundheitsdaten, geben Sie sie also nur weiter, wenn Sie das wollen.',
+    en: 'The file is produced on your device. The file itself is not sent. It contains health data, so pass it on only where you mean to.',
+    tr: 'Dosya sizin cihazınızda oluşturulur. Dosyanın kendisi gönderilmez. Sağlık verisi içerir; yalnızca isteyerek paylaşın.',
+    ru: 'Файл создаётся на вашем устройстве. Сам файл никуда не отправляется. Он содержит данные о здоровье, поэтому передавайте его только осознанно.',
+    pl: 'Plik powstaje na Twoim urządzeniu. Sam plik nie jest wysyłany. Zawiera dane zdrowotne, więc przekazuj go tylko świadomie.',
+    ar: 'يُنشأ الملف على جهازك ولا يتم إرسال الملف. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
   },
   privacyEraseTitle: {
     de: 'Antworten von diesem Gerät löschen',
