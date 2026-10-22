@@ -207,7 +207,18 @@ export interface GradeBounds {
   /** Weighted point total at each bound, for showing the working. */
   lowPoints: number;
   highPoints: number;
-  /** True where the two agree, which means the grade is settled. */
+  /**
+   * The grade the points alone give at each bound, setting § 15 Abs. 4 aside.
+   *
+   * Where both arms and both legs are unusable, `low` and `high` are 5 from the
+   * screening question onwards. The statute only says the Medizinischer Dienst
+   * *can* assign 5 there, so the family needs the points grade as well. It is
+   * bracketed the same way and has to close before the intake ends. Everywhere
+   * else these equal `low` and `high`.
+   */
+  lowFromPoints: Pflegegrad;
+  highFromPoints: Pflegegrad;
+  /** True where both pairs agree: the grade and the points grade are settled. */
   resolved: boolean;
 }
 
@@ -223,7 +234,41 @@ export function gradeBounds(answers: IntakeAnswers): GradeBounds {
     high: high.grade,
     lowPoints: low.totalWeighted,
     highPoints: high.totalWeighted,
-    resolved: low.grade === high.grade,
+    lowFromPoints: low.gradeFromPoints,
+    highFromPoints: high.gradeFromPoints,
+    // Without a yes to the limb question the grade is the points grade, so the
+    // second condition adds nothing and the intake stops where it always did.
+    // With a yes, the grade is 5 from the start, and only the second condition
+    // keeps the module questions coming until the points grade is known.
+    resolved: low.grade === high.grade && low.gradeFromPoints === high.gradeFromPoints,
+  };
+}
+
+/**
+ * How the report shows the estimate, as one of three cases.
+ *
+ *  - `settled`: both pairs of bounds agree. One grade, one points grade.
+ *  - `range`: the grade itself is still open. Shown as low to high.
+ *  - `pointsOpen`: the grade is 5 by § 15 Abs. 4 SGB XI, but the points grade
+ *    is still open. Printing the grade as "5–5" would be a range of one, and
+ *    the range worth showing is the points range.
+ *
+ * `pointsOpen` can only arise through the limb question, because everywhere
+ * else the grade is the points grade and the two pairs close together.
+ */
+export type EstimateDisplay =
+  | { kind: 'settled'; grade: Pflegegrad }
+  | { kind: 'range'; low: Pflegegrad; high: Pflegegrad }
+  | { kind: 'pointsOpen'; grade: Pflegegrad; lowFromPoints: Pflegegrad; highFromPoints: Pflegegrad };
+
+export function estimateDisplay(b: GradeBounds): EstimateDisplay {
+  if (b.resolved) return { kind: 'settled', grade: b.low };
+  if (b.low !== b.high) return { kind: 'range', low: b.low, high: b.high };
+  return {
+    kind: 'pointsOpen',
+    grade: b.low,
+    lowFromPoints: b.lowFromPoints,
+    highFromPoints: b.highFromPoints,
   };
 }
 
@@ -314,6 +359,55 @@ export function remainingAskables(answers: IntakeAnswers): Askable[] {
   // happens, the filter is dropped rather than the questions: a few extra
   // screens are a far smaller cost than a range presented as an answer.
   return decisive.length > 0 ? decisive : open;
+}
+
+// --------------------------------------------------------------- screens
+
+const SCREENING_SET = new Set<string>(SCREENING);
+
+/**
+ * Which heading a question sits under.
+ *
+ * Also the unit the "a section at a time" pace groups by, which is why it is a
+ * function of the askable rather than a field on it: the screening questions
+ * are one section regardless of what they gate, and tube feeding belongs with
+ * self-care because that is the module it opens up.
+ */
+export function sectionOf(a: Askable): string {
+  if (a.kind === 'condition') return SCREENING_SET.has(a.id) ? 'screening' : 'm4';
+  if (a.kind === 'group') return a.group.module;
+  return 'm5';
+}
+
+/**
+ * The questions as screens: one per screen, or a section per screen.
+ *
+ * In list pace, consecutive questions under the same heading share a screen.
+ * `section` is only there so a test can describe sections of any size.
+ */
+export function chunkByPace(
+  questions: readonly Askable[],
+  pace: 'one' | 'list',
+  section: (a: Askable) => string = sectionOf,
+): Askable[][] {
+  if (pace === 'one') return questions.map((a) => [a]);
+  const out: Askable[][] = [];
+  for (const a of questions) {
+    const last = out[out.length - 1];
+    if (last && section(last[0]) === section(a)) last.push(a);
+    else out.push([a]);
+  }
+  return out;
+}
+
+/**
+ * The first screen that still holds an unanswered question, or -1.
+ *
+ * This is where "answer the remaining questions" has to land. Counting the
+ * answered questions only finds it when every screen holds one question.
+ */
+export function firstOpenChunk(chunks: readonly Askable[][], answers: IntakeAnswers): number {
+  return chunks.findIndex((c) => c.some((a) => !isAnswered(a, answers)));
 }
 
 /** How many questions this household has answered, and how many are left. */

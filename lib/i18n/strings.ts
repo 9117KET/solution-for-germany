@@ -514,6 +514,16 @@ export const UI = {
     pl: 'Jeszcze bez odpowiedzi',
     ar: 'لم تتم الإجابة بعد',
   },
+  /** The progress label on the situation screen, which comes before the
+   *  numbered steps and so carries no number of its own. */
+  situationStep: {
+    de: 'Vorab: Ihre Situation',
+    en: 'First: your situation',
+    tr: 'Önce: durumunuz',
+    ru: 'Сначала: ваша ситуация',
+    pl: 'Najpierw: Twoja sytuacja',
+    ar: 'أولًا: وضعك الحالي',
+  },
 
   situationEyebrow: {
     de: 'Ihre Situation',
@@ -1001,12 +1011,12 @@ export const UI = {
     ar: 'من بين التقارير التي أُعيد فحصها، تبيّن أن نحو 29 من كل 100 كانت خاطئة وجرى تصحيحها. البند الأول في القائمة أدناه هو الأهم.',
   },
   m5SkippedTitle: {
-    de: 'Diese Einschätzung ist einen Pflegegrad zu niedrig',
-    en: 'This estimate is capped one grade low',
-    tr: 'Bu tahmin bir Pflegegrad düşük kalıyor',
-    ru: 'Эта оценка на одну степень занижена',
-    pl: 'Ta ocena jest o jeden stopień za niska',
-    ar: 'هذا التقدير أقل مما ينبغي بدرجة Pflegegrad واحدة',
+    de: 'Ohne ärztlich verordnete Maßnahmen gerechnet',
+    en: 'Calculated without medical measures',
+    tr: 'Doktor tarafından reçete edilen uygulamalar olmadan hesaplandı',
+    ru: 'Рассчитано без назначенных врачом мероприятий',
+    pl: 'Obliczone bez zleconych przez lekarza zabiegów i leczenia',
+    ar: 'حُسب التقدير دون الإجراءات الموصوفة طبيًا',
   },
   restart: {
     de: 'Von vorne anfangen',
@@ -1101,6 +1111,28 @@ export const UI = {
     ru: 'Между Pflegegrad {low} и Pflegegrad {high}',
     pl: 'Między Pflegegrad {low} a Pflegegrad {high}',
     ar: 'بين Pflegegrad {low} و Pflegegrad {high}',
+  },
+  // Grade 5 is settled by § 15 Abs. 4 SGB XI, but the points grade is not.
+  // {low} and {high} arrive already rendered, as gradeNoneNominative or
+  // gradeN. Outside German and English the bounds are joined by a dash, so
+  // no case ending has to agree with a bound that may be "no Pflegegrad".
+  pointsRangeTitle: {
+    de: 'Pflegegrad 5. Nach den Punkten allein noch offen: {low} bis {high}',
+    en: 'Pflegegrad 5. On the points alone, still open: {low} to {high}',
+    tr: 'Pflegegrad 5. Yalnızca puanlara göre henüz belli değil: {low} – {high}',
+    ru: 'Pflegegrad 5. По одним баллам ещё не ясно: {low} – {high}',
+    pl: 'Pflegegrad 5. Według samych punktów jeszcze otwarte: {low} – {high}',
+    ar: 'Pflegegrad 5. حسب النقاط وحدها لم يُحسم بعد: {low} – {high}',
+  },
+  // "No Pflegegrad" as a phrase in a sentence, not as the answer to "Which
+  // Pflegegrad?", which is what gradeNone is.
+  gradeNoneNominative: {
+    de: 'kein Pflegegrad',
+    en: 'no Pflegegrad',
+    tr: 'Pflegegrad yok',
+    ru: 'без Pflegegrad',
+    pl: 'brak Pflegegrad',
+    ar: 'بدون Pflegegrad',
   },
   rangeBody: {
     de: 'Es sind noch Fragen offen, die das Ergebnis verändern könnten. Beantworten Sie sie, wenn Sie eine genauere Zahl möchten.',

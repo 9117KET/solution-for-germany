@@ -117,6 +117,26 @@ export function bcp47(lang: Lang): string {
   return BY_ID[lang].bcp47;
 }
 
+/**
+ * An ISO date (`YYYY-MM-DD`) as the reader writes it: `10.11.2026` in German,
+ * `10/11/2026` in English, Latin digits in Arabic.
+ *
+ * The parts are read off the string and formatted in UTC, never passed through
+ * `new Date(iso)` in local time, so the day cannot slip across a time zone. A
+ * string that is not an ISO date is returned unchanged rather than guessed at.
+ */
+export function formatIsoDate(iso: string, lang: Lang): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  const date = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  return new Intl.DateTimeFormat(BY_ID[lang].numberLocale, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date);
+}
+
 /** Whether the assessment content exists in this language at all. */
 export function hasContent(lang: Lang): lang is ContentLang {
   return lang === 'de' || lang === 'en';

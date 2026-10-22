@@ -13,12 +13,14 @@ import {
   type GapStatus,
   type Pflegegrad,
 } from '@/lib/rules';
-import type { ContentLang } from '@/lib/i18n';
+import { formatIsoDate, type ContentLang } from '@/lib/i18n';
 import type { IntakeAnswers } from '@/lib/intake/score';
 import type { Coverage, GradeBounds } from '@/lib/intake/adaptive';
 import { answerLines } from '@/lib/intake/summary';
 import { downloadReportPdf } from '@/lib/report/pdf';
 import { clearSession } from '@/lib/intake/session';
+import { estimateDisplay } from '@/lib/intake/adaptive';
+import { translate } from '@/lib/i18n/strings';
 import { Button, Card, Notice, YesNo } from './ui';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
@@ -87,7 +89,7 @@ export function Report({
   remaining: number;
   onRestart: () => void;
 }) {
-  const { t, s, numberLocale, contentLang } = useT();
+  const { t, s, lang, numberLocale, contentLang } = useT();
   const [showAnswers, setShowAnswers] = useState(false);
   const [showAdjust, setShowAdjust] = useState(false);
   const [pdf, setPdf] = useState<'idle' | 'working' | 'failed' | string>('idle');
@@ -101,6 +103,15 @@ export function Report({
   // Money follows the interface language, not the content language: the
   // separators someone reads fluently are the ones of the language they chose.
   const money = (c: number) => formatEuro(c, numberLocale);
+  // Settled, an open grade range, or grade 5 by § 15 Abs. 4 with the points
+  // grade still open. The last must never print as "5–5".
+  const estimate = estimateDisplay(bounds);
+  const gradeLabel = (g: Pflegegrad) =>
+    g === 0 ? t('gradeNoneNominative') : t('gradeN', { n: g });
+  // The same label inside a content sentence, which is German or English
+  // whatever the interface language is.
+  const contentGradeLabel = (g: Pflegegrad, l: ContentLang) =>
+    g === 0 ? translate('gradeNoneNominative', l) : `Pflegegrad ${g}`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -141,11 +152,11 @@ export function Report({
               estimate would be the same lie the long intake was built to
               avoid, just told faster. */}
           <p className="mt-1 text-4xl font-bold tabular-nums">
-            {bounds.resolved
-              ? assessment.grade === 0
+            {estimate.kind === 'range'
+              ? `${estimate.low}–${estimate.high}`
+              : assessment.grade === 0
                 ? '–'
-                : assessment.grade
-              : `${bounds.low}–${bounds.high}`}
+                : assessment.grade}
           </p>
           <p className="mt-1 text-base text-fg-muted">
             {t('pointsOf100', { n: assessment.totalWeighted })}
@@ -161,15 +172,26 @@ export function Report({
                   'Nicht über die Punkte: Bei Gebrauchsunfähigkeit beider Arme und ' +
                   'beider Beine kann der Medizinische Dienst Pflegegrad 5 zuerkennen, ' +
                   'auch unter 90 Punkten (§ 15 Abs. 4 SGB XI, besondere ' +
-                  'Bedarfskonstellation). Nach den Punkten allein wäre es Pflegegrad ' +
-                  `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : assessment.gradeFromPoints}. ` +
+                  'Bedarfskonstellation). ' +
+                  // While questions are open, the points grade is a range: the
+                  // low end only reflects what has not been asked yet.
+                  (estimate.kind === 'pointsOpen'
+                    ? 'Nach den Punkten allein ist der Pflegegrad noch offen: ' +
+                      `${contentGradeLabel(estimate.lowFromPoints, 'de')} bis ` +
+                      `${contentGradeLabel(estimate.highFromPoints, 'de')}. `
+                    : 'Nach den Punkten allein wäre es ' +
+                      `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. `) +
                   'Diese Zuordnung ist eine pflegefachliche Entscheidung, kein Automatismus.',
                 en:
                   'Not from the points: where both arms and both legs are unusable, ' +
                   'the Medizinischer Dienst can award Pflegegrad 5 even below 90 ' +
-                  'points (§ 15 Abs. 4 SGB XI, besondere Bedarfskonstellation). On ' +
-                  'the points alone this would be ' +
-                  `${assessment.gradeFromPoints === 0 ? 'no Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. ` +
+                  'points (§ 15 Abs. 4 SGB XI, besondere Bedarfskonstellation). ' +
+                  (estimate.kind === 'pointsOpen'
+                    ? 'On the points alone the grade is still open: ' +
+                      `${contentGradeLabel(estimate.lowFromPoints, 'en')} to ` +
+                      `${contentGradeLabel(estimate.highFromPoints, 'en')}. `
+                    : 'On the points alone this would be ' +
+                      `${assessment.gradeFromPoints === 0 ? 'no Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. `) +
                   'The assignment is a professional decision, not automatic.',
               })}
             </p>
@@ -226,7 +248,14 @@ export function Report({
       {!bounds.resolved ? (
         <Notice
           tone="warn"
-          title={t('rangeTitle', { low: bounds.low, high: bounds.high })}
+          title={
+            estimate.kind === 'pointsOpen'
+              ? t('pointsRangeTitle', {
+                  low: gradeLabel(estimate.lowFromPoints),
+                  high: gradeLabel(estimate.highFromPoints),
+                })
+              : t('rangeTitle', { low: bounds.low, high: bounds.high })
+          }
         >
           <p>{t('rangeBody')}</p>
           {onRefine && remaining > 0 ? (
@@ -263,7 +292,9 @@ export function Report({
                     </p>
                     <p className="mt-2 font-mono text-sm text-fg-muted">
                       {SOURCES[a.source].law}
-                      {a.deadline ? ` · ${t('deadlineLabel')} ${a.deadline}` : ''}
+                      {a.deadline
+                        ? ` · ${t('deadlineLabel')} ${formatIsoDate(a.deadline, lang)}`
+                        : ''}
                     </p>
                   </div>
                   {a.monthlyValue || a.onceValue ? (
