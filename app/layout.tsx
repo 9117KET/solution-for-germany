@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "@/components/settings";
 import { A11yBar } from "@/components/a11y-bar";
+import { isEnabled } from "@/lib/analytics";
+import { AnalyticsScript } from "@/lib/analytics/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,9 +53,28 @@ export const metadata: Metadata = {
  * importing it: this has to be a tiny synchronous script in the document head,
  * before React exists. The scale table and storage key are kept in step by
  * `a11y.test.ts`.
+ *
+ * It also takes a partner link (`?via=<slug>`) out of the address bar. This
+ * has to happen here, before any analytics script can report the page URL:
+ * the slug may reach the provider only as the `partner` event property, never
+ * inside a URL. A valid slug is kept in memory only (`window.__anspruchPartner`)
+ * and is never written to any storage: keeping it on the device would serve
+ * attribution rather than the person, which § 25 TDDDG does not exempt. A
+ * reload or a new tab loses it, deliberately. The slug pattern is kept in step
+ * with `lib/analytics` by `analytics.test.ts`.
  */
 const APPLY_SETTINGS_EARLY = `
 (function(){try{
+  try {
+    var u = new URL(location.href);
+    var via = u.searchParams.get('via');
+    if (via !== null) {
+      via = via.toLowerCase();
+      if (/^[a-z0-9-]{1,40}$/.test(via)) window.__anspruchPartner = via;
+      u.searchParams.delete('via');
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    }
+  } catch(e){}
   var raw = localStorage.getItem('anspruch.settings.v1');
   var s = raw ? JSON.parse(raw) : {};
   var scale = {normal:1, large:1.25, larger:1.5, largest:1.9};
@@ -100,6 +121,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </div>
         </SettingsProvider>
+        {/* Nothing at all unless the build switched analytics on. */}
+        {isEnabled() ? <AnalyticsScript /> : null}
       </body>
     </html>
   );

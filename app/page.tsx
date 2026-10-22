@@ -52,6 +52,7 @@ import { Welcome } from '@/components/welcome';
 import { VoiceControls } from '@/components/voice';
 import { useSettings, useT } from '@/components/settings';
 import type { UiKey } from '@/lib/i18n/strings';
+import { bucketMonthlyGap, bucketQuestions, track } from '@/lib/analytics';
 
 const MODULE_COPY: Record<ModuleId, { eyebrow: UiKey; title: UiKey; intro: UiKey }> = {
   m1: { eyebrow: 'm1Eyebrow', title: 'm1Title', intro: 'm1Intro' },
@@ -181,6 +182,28 @@ export default function Home() {
       bescheidDate: bescheidDate || undefined,
     });
   }, [claimed, currentGrade, assessment, circumstances, bescheidDate]);
+
+  /**
+   * What every usage event carries from here; `track` adds the partner of
+   * this visit itself. A no-op unless the build switched analytics on; see
+   * `lib/analytics`.
+   */
+  const common = { lang: settings.lang, pace: settings.pace };
+
+  // `result_shown` once per page load, however often the report is revisited.
+  const resultCounted = useRef(false);
+  useEffect(() => {
+    if (!onReport || resultCounted.current) return;
+    resultCounted.current = true;
+    track('result_shown', {
+      lang: settings.lang,
+      pace: settings.pace,
+      questions: bucketQuestions(coverage.asked),
+      // Whether there is a result, never which grade it is.
+      result: !bounds.resolved ? 'range' : assessment.grade === 0 ? 'none' : 'grade',
+      gap: bucketMonthlyGap(report.monthlyGapTotal),
+    });
+  }, [onReport, settings, coverage.asked, bounds.resolved, assessment.grade, report.monthlyGapTotal]);
 
   const goNext = useCallback(() => setStep((i) => i + 1), []);
   const goBack = useCallback(() => setStep((i) => Math.max(0, i - 1)), []);
@@ -349,6 +372,7 @@ export default function Home() {
           <Welcome
             onStart={() => {
               dismissOffer();
+              track('intake_started', common);
               goNext();
             }}
             resume={saved ? { onContinue: resumeSaved, onDiscard: restart } : undefined}
@@ -427,8 +451,18 @@ export default function Home() {
             onBescheidDate={setBescheidDate}
             onClaimed={setClaimed}
             onCircumstances={setCircumstances}
-            onErase={() => setPersist(false)}
-            onRefine={remaining > 0 && firstOpen >= 0 ? () => setStep(2 + firstOpen) : undefined}
+            onErase={() => {
+              setPersist(false);
+              track('intake_erased', common);
+            }}
+            onRefine={
+              remaining > 0 && firstOpen >= 0
+                ? () => {
+                    track('questions_refined', common);
+                    setStep(2 + firstOpen);
+                  }
+                : undefined
+            }
             remaining={remaining}
             onRestart={restart}
           />
