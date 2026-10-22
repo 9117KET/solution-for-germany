@@ -103,7 +103,7 @@ export const UI = {
     en: 'This site counts visits and five steps (start, result, further questions, PDF, erase) together with language, pace and, if you came through an organisation, its short name. No answers, no Pflegegrad, no cookies, no names. Because nothing is linked to a person, there is nothing you would need to switch off.',
     tr: 'Bu site ziyaretleri ve beş adımı (başlangıç, sonuç, ek sorular, PDF, silme) dil, tempo ve, bir kuruluş aracılığıyla geldiyseniz, o kuruluşun kısa adıyla birlikte sayar. Cevap yok, Pflegegrad yok, çerez (cookie) yok, isim yok. Hiçbir şey bir kişiyle ilişkilendirilmediği için kapatmanız gereken bir şey de yoktur.',
     ru: 'Этот сайт подсчитывает посещения и пять шагов (начало, результат, дополнительные вопросы, PDF, удаление) вместе с языком, темпом и, если вы пришли через организацию, её кратким обозначением. Никаких ответов, никакого Pflegegrad, никаких файлов cookie, никаких имён. Поскольку ничто не связывается с конкретным человеком, вам нечего отключать.',
-    pl: 'Ta strona liczy odwiedziny i pięć kroków (start, wynik, dalsze pytania, PDF, usunięcie) wraz z językiem, tempem i, jeśli trafiłeś tu przez organizację, jej skrótem. Żadnych odpowiedzi, żadnego Pflegegrad, żadnych plików cookie, żadnych imion i nazwisk. Ponieważ nic nie jest przypisywane do konkretnej osoby, nie ma niczego, co musiałbyś wyłączać.',
+    pl: 'Ta strona liczy odwiedziny i pięć kroków (start, wynik, dalsze pytania, PDF, usunięcie) wraz z językiem, tempem i, jeśli trafiasz tu przez organizację, jej skrótem. Żadnych odpowiedzi, żadnego Pflegegrad, żadnych plików cookie, żadnych imion i nazwisk. Ponieważ nic nie jest przypisywane do konkretnej osoby, nie ma niczego, co trzeba by wyłączać.',
     ar: 'يعدّ هذا الموقع الزيارات وخمس خطوات (البدء، النتيجة، أسئلة إضافية، PDF، الحذف) مع اللغة والوتيرة، واختصار اسم المنظمة إن كنت قد وصلت عن طريق منظمة. لا إجابات، ولا Pflegegrad، ولا ملفات تعريف الارتباط (Cookies)، ولا أسماء. ولأنه لا يُنسب أي شيء إلى شخص بعينه، فلا يوجد ما تحتاج إلى إيقافه.',
   },
   resumeTitle: {
@@ -1235,7 +1235,7 @@ export const UI = {
     tr: 'Dosya sizin cihazınızda oluşturulur. Dosyanın kendisi gönderilmez. Sağlık verisi içerir; yalnızca isteyerek paylaşın.',
     ru: 'Файл создаётся на вашем устройстве. Сам файл никуда не отправляется. Он содержит данные о здоровье, поэтому передавайте его только осознанно.',
     pl: 'Plik powstaje na Twoim urządzeniu. Sam plik nie jest wysyłany. Zawiera dane zdrowotne, więc przekazuj go tylko świadomie.',
-    ar: 'يُنشأ الملف على جهازك ولا يتم إرسال الملف. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
+    ar: 'يُنشأ الملف على جهازك ولا يُرسل الملف. وهو يحتوي على بيانات صحية، فلا تشاركه إلا عن قصد.',
   },
   privacyEraseTitle: {
     de: 'Antworten von diesem Gerät löschen',
