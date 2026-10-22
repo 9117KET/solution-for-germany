@@ -376,8 +376,14 @@ function buildActions(profile: CareProfile, certainGaps: BenefitGap[]): Action[]
       en: 'Request free statutory care advice under § 7a SGB XI',
     },
     why: {
-      de: 'Ein gesetzlicher Anspruch. Die Pflegekasse muss innerhalb von zwei Wochen einen Termin anbieten.',
-      en: 'A legal entitlement. The insurer must offer an appointment within two weeks.',
+      de:
+        'Ein gesetzlicher Anspruch. Nach einem Antrag auf Leistungen muss die Beratung ' +
+        'innerhalb von zwei Wochen stattfinden (§ 7b Abs. 1 SGB XI). Sonst stellt die ' +
+        'Pflegekasse einen Beratungsgutschein aus, der innerhalb von zwei Wochen einlösbar ist.',
+      en:
+        'A legal entitlement. After an application for benefits, the advice must take ' +
+        'place within two weeks (§ 7b Abs. 1 SGB XI). Otherwise the insurer issues an ' +
+        'advice voucher you can redeem within two weeks.',
     },
     monthlyValue: null,
     onceValue: null,
