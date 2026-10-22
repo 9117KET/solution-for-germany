@@ -20,6 +20,7 @@ import { answerLines } from '@/lib/intake/summary';
 import { downloadReportPdf } from '@/lib/report/pdf';
 import { clearSession } from '@/lib/intake/session';
 import { estimateDisplay } from '@/lib/intake/adaptive';
+import { translate } from '@/lib/i18n/strings';
 import { Button, Card, Notice, YesNo } from './ui';
 import { useT } from './settings';
 import type { UiKey } from '@/lib/i18n/strings';
@@ -105,7 +106,12 @@ export function Report({
   // Settled, an open grade range, or grade 5 by § 15 Abs. 4 with the points
   // grade still open. The last must never print as "5–5".
   const estimate = estimateDisplay(bounds);
-  const gradeLabel = (g: Pflegegrad) => (g === 0 ? t('gradeNone') : t('gradeN', { n: g }));
+  const gradeLabel = (g: Pflegegrad) =>
+    g === 0 ? t('gradeNoneNominative') : t('gradeN', { n: g });
+  // The same label inside a content sentence, which is German or English
+  // whatever the interface language is.
+  const contentGradeLabel = (g: Pflegegrad, l: ContentLang) =>
+    g === 0 ? translate('gradeNoneNominative', l) : `Pflegegrad ${g}`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -170,9 +176,9 @@ export function Report({
                   // While questions are open, the points grade is a range: the
                   // low end only reflects what has not been asked yet.
                   (estimate.kind === 'pointsOpen'
-                    ? 'Nach den Punkten allein ist der Pflegegrad noch offen, zwischen ' +
-                      `${estimate.lowFromPoints === 0 ? 'keinem Pflegegrad' : `Pflegegrad ${estimate.lowFromPoints}`} ` +
-                      `und Pflegegrad ${estimate.highFromPoints}. `
+                    ? 'Nach den Punkten allein ist der Pflegegrad noch offen: ' +
+                      `${contentGradeLabel(estimate.lowFromPoints, 'de')} bis ` +
+                      `${contentGradeLabel(estimate.highFromPoints, 'de')}. `
                     : 'Nach den Punkten allein wäre es ' +
                       `${assessment.gradeFromPoints === 0 ? 'kein Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. `) +
                   'Diese Zuordnung ist eine pflegefachliche Entscheidung, kein Automatismus.',
@@ -181,9 +187,9 @@ export function Report({
                   'the Medizinischer Dienst can award Pflegegrad 5 even below 90 ' +
                   'points (§ 15 Abs. 4 SGB XI, besondere Bedarfskonstellation). ' +
                   (estimate.kind === 'pointsOpen'
-                    ? 'On the points alone the grade is still open, between ' +
-                      `${estimate.lowFromPoints === 0 ? 'no Pflegegrad' : `Pflegegrad ${estimate.lowFromPoints}`} ` +
-                      `and Pflegegrad ${estimate.highFromPoints}. `
+                    ? 'On the points alone the grade is still open: ' +
+                      `${contentGradeLabel(estimate.lowFromPoints, 'en')} to ` +
+                      `${contentGradeLabel(estimate.highFromPoints, 'en')}. `
                     : 'On the points alone this would be ' +
                       `${assessment.gradeFromPoints === 0 ? 'no Pflegegrad' : `Pflegegrad ${assessment.gradeFromPoints}`}. `) +
                   'The assignment is a professional decision, not automatic.',

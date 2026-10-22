@@ -26,7 +26,7 @@
 
 import type { ContentLang, Localised } from '../i18n';
 import { formatEuro, SOURCES, type Assessment, type GapReport } from '../rules';
-import type { GradeBounds } from '../intake/adaptive';
+import { estimateDisplay, type GradeBounds } from '../intake/adaptive';
 
 /** One answered question, as the report lists it back. */
 export interface AnswerLine {
@@ -68,6 +68,12 @@ const L = {
   range: {
     de: 'Nach den Angaben liegt das Ergebnis zwischen Pflegegrad {low} und Pflegegrad {high}.',
     en: 'On these answers the result lies between Pflegegrad {low} and Pflegegrad {high}.',
+  },
+  // Pflegegrad 5 by § 15 Abs. 4 SGB XI is settled, the points grade is not.
+  // {low} and {high} arrive rendered, a 0 bound as `none`.
+  pointsOpen: {
+    de: 'Nach den Punkten allein ist der Pflegegrad noch offen: {low} bis {high}.',
+    en: 'On the points alone the grade is still open: {low} to {high}.',
   },
   asked: {
     de: '{asked} Fragen beantwortet, von {total} des amtlichen Instruments.',
@@ -205,10 +211,17 @@ export async function downloadReportPdf(input: PdfInput): Promise<string> {
     gap: 2,
   });
   text(`${t('currentGrade')}: ${grade(input.report.currentGrade)}`, { gap: 4 });
+  // Same three cases as the screen: never "between 5 and 5".
+  const estimate = estimateDisplay(input.bounds);
   text(
-    input.bounds.resolved
+    estimate.kind === 'settled'
       ? t('settled')
-      : fill(t('range'), { low: input.bounds.low, high: input.bounds.high }),
+      : estimate.kind === 'range'
+        ? fill(t('range'), { low: estimate.low, high: estimate.high })
+        : fill(t('pointsOpen'), {
+            low: grade(estimate.lowFromPoints),
+            high: grade(estimate.highFromPoints),
+          }),
     { size: SIZE.small, colour: '#555555', gap: 2 },
   );
   text(fill(t('asked'), { asked: input.asked, total: input.officialQuestions }), {
