@@ -361,6 +361,55 @@ export function remainingAskables(answers: IntakeAnswers): Askable[] {
   return decisive.length > 0 ? decisive : open;
 }
 
+// --------------------------------------------------------------- screens
+
+const SCREENING_SET = new Set<string>(SCREENING);
+
+/**
+ * Which heading a question sits under.
+ *
+ * Also the unit the "a section at a time" pace groups by, which is why it is a
+ * function of the askable rather than a field on it: the screening questions
+ * are one section regardless of what they gate, and tube feeding belongs with
+ * self-care because that is the module it opens up.
+ */
+export function sectionOf(a: Askable): string {
+  if (a.kind === 'condition') return SCREENING_SET.has(a.id) ? 'screening' : 'm4';
+  if (a.kind === 'group') return a.group.module;
+  return 'm5';
+}
+
+/**
+ * The questions as screens: one per screen, or a section per screen.
+ *
+ * In list pace, consecutive questions under the same heading share a screen.
+ * `section` is only there so a test can describe sections of any size.
+ */
+export function chunkByPace(
+  questions: readonly Askable[],
+  pace: 'one' | 'list',
+  section: (a: Askable) => string = sectionOf,
+): Askable[][] {
+  if (pace === 'one') return questions.map((a) => [a]);
+  const out: Askable[][] = [];
+  for (const a of questions) {
+    const last = out[out.length - 1];
+    if (last && section(last[0]) === section(a)) last.push(a);
+    else out.push([a]);
+  }
+  return out;
+}
+
+/**
+ * The first screen that still holds an unanswered question, or -1.
+ *
+ * This is where "answer the remaining questions" has to land. Counting the
+ * answered questions only finds it when every screen holds one question.
+ */
+export function firstOpenChunk(chunks: readonly Askable[][], answers: IntakeAnswers): number {
+  return chunks.findIndex((c) => c.some((a) => !isAnswered(a, answers)));
+}
+
 /** How many questions this household has answered, and how many are left. */
 export interface Progress {
   answered: number;

@@ -10,8 +10,10 @@ import {
 import {
   askableId,
   canChangeOutcome,
+  chunkByPace,
   coverageOf,
   estimateDisplay,
+  firstOpenChunk,
   fullPlan,
   gradeBounds,
   isAnswered,
@@ -601,5 +603,47 @@ describe('worstLevel', () => {
     // 4.13 scores 0, 6, 3: feeding by tube alongside eating by mouth is the
     // heaviest, not feeding almost entirely by tube.
     expect(worstLevel(CRITERIA.find((c) => c.id === '4.13')!)).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------- screens
+
+describe('the screens, and where answering the rest picks up', () => {
+  /** The first `n` of these answered, the rest left open. */
+  const answeredUpTo = (questions: Askable[], n: number): IntakeAnswers =>
+    questions.slice(0, n).reduce((acc, a) => answer(a, uniform(0), acc), emptyIntake());
+
+  const eighteen = fullPlan().slice(0, 18);
+
+  /** Sections of five, six and seven, whatever the questions in them are. */
+  const sized = (a: Askable): string => {
+    const i = eighteen.findIndex((x) => askableId(x) === askableId(a));
+    return i < 5 ? 'first' : i < 11 ? 'second' : 'third';
+  };
+
+  it('puts one question on each screen in one-question pace', () => {
+    const chunks = chunkByPace(fullPlan(), 'one');
+    expect(chunks.map((c) => c.length)).toEqual(fullPlan().map(() => 1));
+  });
+
+  it('groups the full plan into the same section screens as before', () => {
+    // Screening, self-care with tube feeding, the module 5 bands and diet,
+    // then modules 2, 3, 6 and 1.
+    const chunks = chunkByPace(fullPlan(), 'list');
+    expect(chunks.map((c) => c.length)).toEqual([5, 9, 4, 3, 5, 3, 3]);
+    expect(chunks.flat().map(askableId)).toEqual(fullPlan().map(askableId));
+  });
+
+  it('picks up at the first unanswered question in one-question pace', () => {
+    const chunks = chunkByPace(eighteen, 'one');
+    expect(firstOpenChunk(chunks, answeredUpTo(eighteen, 5))).toBe(5);
+  });
+
+  it('picks up at the section holding the first unanswered question in list pace', () => {
+    const chunks = chunkByPace(eighteen, 'list', sized);
+    expect(chunks.map((c) => c.length)).toEqual([5, 6, 7]);
+    expect(firstOpenChunk(chunks, answeredUpTo(eighteen, 5))).toBe(1);
+    expect(firstOpenChunk(chunks, answeredUpTo(eighteen, 6))).toBe(1);
+    expect(firstOpenChunk(chunks, answeredUpTo(eighteen, 18))).toBe(-1);
   });
 });

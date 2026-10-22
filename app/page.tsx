@@ -16,13 +16,15 @@ import {
 } from '@/lib/intake/score';
 import {
   askableId,
+  chunkByPace,
   coverageOf,
+  firstOpenChunk,
   fullPlan,
   gradeBounds,
   isAnswered,
   isAskable,
   remainingAskables,
-  SCREENING,
+  sectionOf,
   type Askable,
 } from '@/lib/intake/adaptive';
 import { saveSession } from '@/lib/intake/session';
@@ -59,22 +61,6 @@ const MODULE_COPY: Record<ModuleId, { eyebrow: UiKey; title: UiKey; intro: UiKey
   m5: { eyebrow: 'm5Eyebrow', title: 'm5Title', intro: 'm5Intro' },
   m6: { eyebrow: 'm6Eyebrow', title: 'm6Title', intro: 'm6Intro' },
 };
-
-const SCREENING_SET = new Set<string>(SCREENING);
-
-/**
- * Which heading a question sits under.
- *
- * Also the unit the "a section at a time" pace groups by, which is why it is a
- * function of the askable rather than a field on it: the screening questions
- * are one section regardless of what they gate, and tube feeding belongs with
- * self-care because that is the module it opens up.
- */
-function sectionOf(a: Askable): string {
-  if (a.kind === 'condition') return SCREENING_SET.has(a.id) ? 'screening' : 'm4';
-  if (a.kind === 'group') return a.group.module;
-  return 'm5';
-}
 
 function sectionCopy(section: string): { eyebrow: UiKey; title: UiKey; intro?: UiKey } {
   if (section === 'screening') {
@@ -144,26 +130,22 @@ export default function Home() {
   }, [order, byId, answers]);
 
   /**
-   * How many questions are still open, and where the open ones start.
+   * How many questions are still open.
    *
    * Zero remaining is the end of the intake, whether that came from answering
    * everything or from the grade settling early. Where it is not zero, the
-   * report offers to carry on, and this is the screen it jumps back to.
+   * report offers to carry on, from `firstOpen` below.
    */
   const remaining = useMemo(() => remainingAskables(answers).length, [answers]);
-  const answeredCount = questions.length - remaining;
 
   /** Screens, as chunks of questions: one per screen, or a section per screen. */
-  const chunks = useMemo<Askable[][]>(() => {
-    if (oneAtATime) return questions.map((a) => [a]);
-    const out: Askable[][] = [];
-    for (const a of questions) {
-      const last = out[out.length - 1];
-      if (last && sectionOf(last[0]) === sectionOf(a)) last.push(a);
-      else out.push([a]);
-    }
-    return out;
-  }, [questions, oneAtATime]);
+  const chunks = useMemo<Askable[][]>(
+    () => chunkByPace(questions, settings.pace),
+    [questions, settings.pace],
+  );
+
+  /** The screen holding the first unanswered question, in either pace. */
+  const firstOpen = useMemo(() => firstOpenChunk(chunks, answers), [chunks, answers]);
 
   // welcome, situation, one screen per chunk, report.
   const total = chunks.length + 3;
@@ -446,7 +428,7 @@ export default function Home() {
             onClaimed={setClaimed}
             onCircumstances={setCircumstances}
             onErase={() => setPersist(false)}
-            onRefine={remaining > 0 ? () => setStep(2 + answeredCount) : undefined}
+            onRefine={remaining > 0 && firstOpen >= 0 ? () => setStep(2 + firstOpen) : undefined}
             remaining={remaining}
             onRestart={restart}
           />
