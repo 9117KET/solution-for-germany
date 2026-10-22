@@ -11,6 +11,7 @@ import {
   askableId,
   canChangeOutcome,
   coverageOf,
+  estimateDisplay,
   fullPlan,
   gradeBounds,
   isAnswered,
@@ -451,6 +452,36 @@ describe('unusable limbs settle the grade, not the points grade', () => {
     expect(run(uniform(1)).asked.length).toBe(13);
     expect(run(uniform(2)).asked.length).toBe(15);
     expect(run(uniform(3)).asked.length).toBe(12);
+  });
+});
+
+describe('how the report shows the estimate', () => {
+  it('is one grade once both pairs of bounds agree', () => {
+    const d = estimateDisplay(gradeBounds(fullAnswers(uniform(1))));
+    expect(d.kind).toBe('settled');
+  });
+
+  it('is a grade range while an ordinary intake is open', () => {
+    const d = estimateDisplay(gradeBounds(emptyIntake()));
+    expect(d).toEqual({ kind: 'range', low: 0, high: 5 });
+  });
+
+  it('is grade 5 with an open points range when § 15 Abs. 4 carries the grade', () => {
+    // The report used to print "5–5" and "Between Pflegegrad 5 and
+    // Pflegegrad 5" here, when the family opened it before the points closed.
+    const a = emptyIntake();
+    a.conditions = { hasLimbUnusability: true };
+    expect(estimateDisplay(gradeBounds(a))).toEqual({
+      kind: 'pointsOpen',
+      grade: 5,
+      lowFromPoints: 0,
+      highFromPoints: 5,
+    });
+  });
+
+  it('settles a § 15 Abs. 4 household once the points grade has closed', () => {
+    const a = fullAnswers(uniform(0, { conditions: conditions({ hasLimbUnusability: true }) }));
+    expect(estimateDisplay(gradeBounds(a))).toEqual({ kind: 'settled', grade: 5 });
   });
 });
 

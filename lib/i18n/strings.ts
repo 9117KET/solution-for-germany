@@ -1102,6 +1102,16 @@ export const UI = {
     pl: 'Między Pflegegrad {low} a Pflegegrad {high}',
     ar: 'بين Pflegegrad {low} و Pflegegrad {high}',
   },
+  // Grade 5 is settled by § 15 Abs. 4 SGB XI, but the points grade is not.
+  // {low} and {high} arrive already rendered, as gradeNone or gradeN.
+  pointsRangeTitle: {
+    de: 'Pflegegrad 5. Nach den Punkten allein noch offen: {low} bis {high}',
+    en: 'Pflegegrad 5. On the points alone, still open: {low} to {high}',
+    tr: 'Pflegegrad 5. Yalnızca puanlara göre henüz belli değil: {low} ile {high} arası',
+    ru: 'Pflegegrad 5. По одним баллам ещё не ясно: от {low} до {high}',
+    pl: 'Pflegegrad 5. Według samych punktów jeszcze otwarte: od {low} do {high}',
+    ar: 'Pflegegrad 5. حسب النقاط وحدها لم يُحسم بعد: من {low} إلى {high}',
+  },
   rangeBody: {
     de: 'Es sind noch Fragen offen, die das Ergebnis verändern könnten. Beantworten Sie sie, wenn Sie eine genauere Zahl möchten.',
     en: 'Questions are still open that could change the result. Answer them if you want a sharper number.',

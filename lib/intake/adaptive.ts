@@ -244,6 +244,34 @@ export function gradeBounds(answers: IntakeAnswers): GradeBounds {
   };
 }
 
+/**
+ * How the report shows the estimate, as one of three cases.
+ *
+ *  - `settled`: both pairs of bounds agree. One grade, one points grade.
+ *  - `range`: the grade itself is still open. Shown as low to high.
+ *  - `pointsOpen`: the grade is 5 by § 15 Abs. 4 SGB XI, but the points grade
+ *    is still open. Printing the grade as "5–5" would be a range of one, and
+ *    the range worth showing is the points range.
+ *
+ * `pointsOpen` can only arise through the limb question, because everywhere
+ * else the grade is the points grade and the two pairs close together.
+ */
+export type EstimateDisplay =
+  | { kind: 'settled'; grade: Pflegegrad }
+  | { kind: 'range'; low: Pflegegrad; high: Pflegegrad }
+  | { kind: 'pointsOpen'; grade: Pflegegrad; lowFromPoints: Pflegegrad; highFromPoints: Pflegegrad };
+
+export function estimateDisplay(b: GradeBounds): EstimateDisplay {
+  if (b.resolved) return { kind: 'settled', grade: b.low };
+  if (b.low !== b.high) return { kind: 'range', low: b.low, high: b.high };
+  return {
+    kind: 'pointsOpen',
+    grade: b.low,
+    lowFromPoints: b.lowFromPoints,
+    highFromPoints: b.highFromPoints,
+  };
+}
+
 // ---------------------------------------------------------------- pinning
 
 /** Answers with one askable forced to its least, or most, dependent answer. */
