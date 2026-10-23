@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BLANKS, type LegalSection } from './blanks';
+import { BLANKS, DPA_AUTHORITY, EMAIL, FILLED, type LegalSection } from './blanks';
 import { DATENSCHUTZ, DATENSCHUTZ_TITLE, countingStatus, datenschutzForBuild } from './datenschutz';
 import { IMPRESSUM, IMPRESSUM_TITLE } from './impressum';
 
@@ -31,6 +31,24 @@ describe('legal texts', () => {
   it('uses exactly the blanks in BLANKS, and every one of them', () => {
     const found = new Set(TEXTS.flatMap((t) => t.match(/\[[^\]]*\]/g) ?? []));
     expect([...found].sort()).toEqual([...BLANKS].sort());
+  });
+
+  it('keeps the name open and the filled values free of brackets', () => {
+    expect(BLANKS[0]).toBe('[Vor- und Nachname]');
+    for (const v of FILLED) expect(v).not.toMatch(/[[\]]/);
+  });
+
+  it('shows the address and email on both pages and the authority on /datenschutz', () => {
+    const impressum = allText(IMPRESSUM).join('\n');
+    const datenschutz = allText(DATENSCHUTZ).join('\n');
+    for (const t of [impressum, datenschutz]) {
+      expect(t).toContain('Alhardstraße 21');
+      expect(t).toContain('28757 Bremen');
+      expect(t).toContain(EMAIL);
+    }
+    expect(datenschutz).toContain(DPA_AUTHORITY);
+    expect(DPA_AUTHORITY).toContain('Landesbeauftragte für Datenschutz und Informationsfreiheit');
+    expect(DPA_AUTHORITY).toContain('Georgstraße 122-124, 27570 Bremerhaven');
   });
 
   it('marks the optional Impressum items as "falls zutreffend"', () => {

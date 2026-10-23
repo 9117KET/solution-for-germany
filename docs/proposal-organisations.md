@@ -1,7 +1,9 @@
 # Anspruch: Vorschlag für eine Pilotpartnerschaft mit `[Organisation]`
 
 > **Fill in before sending / Vor dem Versand ausfüllen** (the same blanks appear in both languages):
-> `[Organisation]` · `[Adresse der Seite]` · `[kürzel]` · `[Startdatum]` · `[Betrag]` · `[Name]` · `[Funktion]` · `[E-Mail]` · `[Telefon]`
+> `[Name]` · `[Funktion]` · `[Telefon]` · `[Organisation]` · `[Adresse der Seite]` · `[kürzel]` · `[Startdatum]` · `[Betrag]`
+>
+> Filled on 23 Oct 2026: the founder's address and email in the contact block.
 >
 > Draft. Do not send before the site is deployed and the partner link works (see `docs/PARTNERS.md`).
 
@@ -63,7 +65,8 @@ Der Quellcode hat noch keine Lizenz. Diese Entscheidung steht aus; wir teilen si
 ### Kontakt
 
 `[Name]`, `[Funktion]`
-`[E-Mail]` · `[Telefon]`
+Alhardstraße 21, 28757 Bremen
+kinlotangiri911@gmail.com · `[Telefon]`
 
 ---
 
@@ -125,4 +128,5 @@ The source code has no licence yet. That decision is open; we will tell you befo
 ### Contact
 
 `[Name]`, `[Funktion]`
-`[E-Mail]` · `[Telefon]`
+Alhardstraße 21, 28757 Bremen
+kinlotangiri911@gmail.com · `[Telefon]`

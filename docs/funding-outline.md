@@ -3,7 +3,7 @@
 *Draft of 22 Oct 2026. Every programme fact below comes from the funding scout of that date (`.orchestration/runs/2026-10-22-usage-and-partners/scout-funding.md`), and only from lines it marked verified. Everything else is under "To confirm".*
 
 > **Fill in before sending**
-> `[Land]` · `[Kommune oder Träger]` · `[Pilotpartner]` · `[Adresse der Seite]` · `[Team]` · `[Zeitplan]` · `[Budget]` · each figure in "Numbers to collect"
+> `[Kommune oder Träger]` · `[Pilotpartner]` · `[Adresse der Seite]` · `[Team]` · `[Zeitplan]` · `[Budget]` · each figure in "Numbers to collect"
 
 ## Programmes
 
@@ -30,7 +30,15 @@ Each item is a question to ask before relying on it. 16 items.
 4. **Prototype Fund, fit.** Does a care-benefit estimator that runs only on the device fit the Resilienz track (free alternatives to proprietary, centralised software) or the Innovation track (data security and software infrastructure)? Ask before writing the application.
 5. **Prototype Fund, licences.** Which open-source licences are accepted? The licence pages returned 403; the [legal basics](https://kb.prototypefund.de/books/rechtliche-grundlagen) only distinguish permissive from copyleft.
 6. **Prototype Fund, tracks.** Are the tracks still Up and Coming, Resilienz and Innovation for Jahrgang 03?
-7. **§ 123 SGB XI in `[Land]`.** Which body runs the call, who may apply, what is the deadline, and does the Land or Kommune co-fund a digital self-help component? Ask the Land ministry and the Landesverbände der Pflegekassen.
+7. **§ 123 SGB XI in Bremen.** The founder lives in Bremen. Answered on 23 Oct 2026 from `.orchestration/runs/2026-10-23-bremen-blanks/scout-bremen.md` (SB, line numbers; V = page read, TV = to verify):
+   - *Body (V, SB:18).* Senatorin für Gesundheit, Frauen und Verbraucherschutz. Richtlinie of 3 Jul 2025 ([Amtsblatt Nr. 117, 11 Jul 2025](https://www.amtsblatt.bremen.de/fastmedia/233/2025_07_11_ABl_Nr_0117_signed.pdf)), in force to 31 Dec 2029; [Förderaufruf](https://www.gesundheit.bremen.de/sixcms/media.php/13/F%C3%B6rderaufruf.pdf); [info page](https://www.gesundheit.bremen.de/gesundheit/pflege-heimrecht-wohn-und-betreuungsaufsicht/erster-foerderaufruf-fuer-modellvorhaben-nach-123-sgb-xi-54877).
+   - *Who may apply (V, SB:22).* Juristische Personen des Privatrechts, Personengesellschaften and kommunale Gebietskörperschaften (Richtlinie Nr. 3). "Natürliche Personen sind von der Förderung ausgenommen". The founder needs a legal entity or a Träger as applicant.
+   - *Deadline (V, SB:20).* The first call closed on 11 Aug 2025. Whether a second call for 2026/27 comes: not found (TV).
+   - *Co-funding (V, SB:21).* Anteilfinanzierung: equal grants from the Pflegeversicherung and the Land or Kommune; the municipal share may be in kind; own share not stated; evaluation costs planned in, capped at 15 % of the grant; a panel of the lead Pflegekassen association and the Senatorin decides; no legal entitlement.
+   - *Scope (V, SB:19).* 2025 to 2028; Bremen's maximum about 570,000 EUR a year; aims include digital networking of care offers and easier access to care; focus on home care in a defined Quartier (Richtlinie 2.2).
+   - *Documents (V, SB:23).* A fachlich-inhaltliches Konzept and a Finanzierungsplan, in text form.
+   - *Contact (V, SB:20).* Faulenstraße 9-15, 28195 Bremen; bjoern.sander@gesundheit.bremen.de. Ask whether a second call is planned (SB:54).
+   - *To verify.* BAS budget notice of 26 Mar 2026: Bremen 286,365 EUR for 2026, 562,502 EUR with carry-over (TV, SB:24).
 8. **Aktion Mensch.** Are the 2027 windows 1 Jan to 15 Feb (decision 30 Jun 2027) and 1 May to 15 Jun (decision 29 Oct 2027)? Is there any current digital programme, and would it need a Träger (e.V. or gGmbH) with an inclusion framing? Source so far: a [ZWST slide deck](https://zwst.org/sites/default/files/2026-08/AktionMensch_ZWST_5_6_2026_%20end.pdf); check the [Förderfinder](https://www.aktion-mensch.de/foerderung/antrag/foerderfinder).
 9. **Civic Coding / Civic Innovation Platform.** Is there a 2027 call, and does a non-AI tool outside the world of work fit? [Förderrichtlinie 2025_2026](https://www.civic-innovation.de/fileadmin/Dokumente/CIP_Foerderrichtlinie_2025_2026.pdf).
 10. **Deutsche Stiftung für Engagement und Ehrenamt.** Is there an open call, and does it fund tools beyond Ehrenamt digitalisation?
@@ -45,7 +53,7 @@ Each item is a question to ask before relying on it. 16 items.
 
 ### 1. § 123 SGB XI model project, with a Kommune or Wohlfahrtsverband as applicant
 
-The applicant is `[Kommune oder Träger]` in `[Land]`, with Land or Kommune co-funding (§ 123). Anspruch is one component of the project. ZAPF@DigitAl in Schleswig-Holstein is the verified precedent for a funded regional project on this route. The application should say:
+The applicant is `[Kommune oder Träger]` in Bremen, with Land or Kommune co-funding (§ 123). In Bremen natural persons are excluded and the first call has closed (question 7). Anspruch is one component of the project. ZAPF@DigitAl in Schleswig-Holstein is the verified precedent for a funded regional project on this route. The application should say:
 
 - **The problem, in the statute's own terms.** Families have a right to Pflegeberatung (§ 7a) and to an appointment within two weeks of a first application (§ 7b). Anspruch prepares them for that appointment and for the Begutachtung.
 - **What the tool does.** Estimates the likely Pflegegrad from 12 to 20 questions in a typical intake, compares the entitlement with what the household receives, lists the steps with their statute, and produces a PDF in German or English with the answers given. Interface in six languages.
@@ -100,4 +108,4 @@ From pilots and the founder:
 - `[ ]` running costs per month (hosting, analytics): `[Budget]`
 - `[ ]` cost and date of the native-speaker review
 - `[ ]` cost of the PNOG update if the bill passes
-- `[ ]` for § 123: the co-funding commitment of `[Land]` or `[Kommune oder Träger]`
+- `[ ]` for § 123: the co-funding commitment of the Land Bremen or `[Kommune oder Träger]`
