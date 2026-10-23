@@ -10,21 +10,30 @@ here and are not asserted on the pages.
 ## 1. Fill in the blanks
 
 All blanks are in `lib/legal/blanks.ts` (`BLANKS`); fill them there once and both pages
-follow. `lib/legal/legal.test.ts` fails if a blank is added or dropped without updating
+follow. Still open: the name, then the optional items. `lib/legal/legal.test.ts` fails if a blank is added or dropped without updating
 the list.
 
-| Blank | Needed for | Source |
-| --- | --- | --- |
-| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 |
-| Straße und Hausnummer, Postleitzahl und Ort | Ladungsfähige Anschrift; a P.O. box is not enough | SC:11-12 |
-| E-Mail-Adresse | Fast electronic contact; also where objections go | SC:11 |
-| USt-IdNr. or Wirtschafts-ID, Register, licensing authority, profession | Only if they apply; otherwise delete the lines | SC:11 |
-| Datenschutz-Aufsichtsbehörde of the Land | Right to complain, Art. 13(2)(d) | SC:52, SC:74 |
+| Blank | Needed for | Source | State |
+| --- | --- | --- | --- |
+| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 | **Open** |
+| Straße und Hausnummer, Postleitzahl und Ort | Ladungsfähige Anschrift; a P.O. box is not enough | SC:11-12 | Filled 23 Oct 2026: Alhardstraße 21, 28757 Bremen |
+| E-Mail-Adresse | Fast electronic contact; also where objections go | SC:11 | Filled 23 Oct 2026: kinlotangiri911@gmail.com |
+| USt-IdNr. or Wirtschafts-ID, Register, licensing authority, profession | Only if they apply; otherwise delete the lines | SC:11 | Open, "falls zutreffend" |
+| Datenschutz-Aufsichtsbehörde of the Land | Right to complain, Art. 13(2)(d) | SC:52, SC:74 | Filled 23 Oct 2026: LfDI Bremen (decision 2.1) |
+
+Filled values carry no brackets; `BLANKS` lists only the open ones.
 
 ## 2. Decisions to take
 
-1. **Land of residence and the authority.** For a private individual, the authority of the
-   Land of residence (*to verify*). List: https://www.bfdi.bund.de/DE/Service/Anschriften/Laender/Laender-node.html. SC:52
+1. **Land of residence and the authority.** Decided 23 Oct 2026: the founder lives in Bremen.
+   The authority is "Der Landesbeauftragte für Datenschutz und Informationsfreiheit der Freien
+   Hansestadt Bremen", Georgstraße 122-124, 27570 Bremerhaven, office@datenschutz.bremen.de,
+   https://www.datenschutz.bremen.de/ (V: the BfDI entry
+   https://www.bfdi.bund.de/SharedDocs/Adressen/DE/LfD/Bremen.html and the LfDI Impressum
+   https://www.datenschutz.bremen.de/impressum-1478 agree). The BfDI states that the Länder
+   authorities supervise the non-public sector, with no exception for Bremen (V); Bremen's own
+   pages do not state it (*to verify*). Now in `DPA_AUTHORITY`. SC:52;
+   `.orchestration/runs/2026-10-23-bremen-blanks/scout-bremen.md`, section 1
 2. **Vercel Hobby or Pro.** Hobby is for non-commercial personal use only; partner links
    and analytics for organisations may count as commercial (*to verify* the fair-use text).
    The plan also sets runtime-log retention (Hobby 1 h, Pro 1 day), which the page does not
@@ -52,7 +61,7 @@ the list.
 ## 3. Before analytics go live (in order)
 
 1. Fill every blank in section 1; `npm test` still passes.
-2. Decide the Land and authority (2.1) and put it in `DPA_AUTHORITY`.
+2. Decide the Land and authority (2.1) and put it in `DPA_AUTHORITY`. Done 23 Oct 2026 (Bremen).
 3. Choose the Vercel plan (2.2); if the plan's log retention should appear on the page, add
    it to section 5 of `lib/legal/datenschutz.ts`.
 4. Confirm both DPAs apply (2.4, 2.5) and file them.
