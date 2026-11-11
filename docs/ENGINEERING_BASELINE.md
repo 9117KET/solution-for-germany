@@ -2,6 +2,17 @@
 
 Date: 2026-11-11 · HEAD: `36e081a` · Previous baseline: none
 
+## Progress since this baseline
+
+The tables below are the audit as it stood at `36e081a`. Gaps closed since:
+
+| Gap | Closed by | Items now met |
+|---|---|---|
+| 1. CI workflow | PR #11 (`.github/workflows/ci.yml`; actions pinned to commit SHAs) | A1, A2, A3, A4, A5, A8 |
+| 2. Protect `main` | GitHub setting, 2026-11-11: pull request required (0 approvals), check "Lint, typecheck, test, build" required from GitHub Actions, applies to admins, no force push, no deletion | A10; D3 partly (merges gated, local actions still by rule) |
+| 3. End-to-end tests | `docs/features/2026-11-11-e2e-tests.md`: Playwright, Chromium + Firefox + WebKit at phone size, 11 tests × 3 engines, run in CI | A6, B3, B4 (privacy rule) |
+| 5. Automated accessibility | Same change: axe on welcome, a question and the report, de and ar; fixed WCAG 2.5.3 on the text-size buttons | B6 |
+
 Mark each item **met**, **partly** or **not met**, with the file or command output that shows it.
 A thing that cannot be found is "not found in the repo", never guessed.
 
