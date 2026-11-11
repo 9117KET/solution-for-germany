@@ -1,0 +1,50 @@
+# The checks every change must pass before it reaches main, and after it lands.
+# Same commands, same order, as README "Running it" and the SDLC section.
+# No step is continue-on-error: a red step fails the run.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Node 24 is Vercel's default runtime, which builds production.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit and integration tests
+        run: npm test
+
+      # Analytics variables are deliberately unset: this is the default build,
+      # which contains no analytics script.
+      - name: Build
+        run: npm run build
