@@ -155,7 +155,15 @@ npm test             # unit tests
 npm run typecheck
 npm run lint
 npm run build
+npm run test:e2e     # end-to-end, against the build: Chromium, Firefox, WebKit at phone size
 ```
+
+The end-to-end tests (`e2e/*.e2e.ts`, Playwright) need the browsers once:
+`npx playwright install chromium firefox webkit`. They drive the real journey to the
+report and the PDF, resume and erase, the Arabic right-to-left layout, the legal pages,
+an axe accessibility check, and the promise that no request goes to any other origin.
+CI runs all of the above on every pull request, and `main` accepts only pull requests
+whose run is green.
 
 ### Counting usage
 

@@ -56,3 +56,9 @@ next-env.d.ts
 /docs/dossier/**/*.fdb_latexmk
 /docs/dossier/**/*.synctex.gz
 /docs/dossier/**/*.pdf
+
+# Playwright: reports and traces from end-to-end runs
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

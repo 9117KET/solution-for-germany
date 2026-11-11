@@ -77,7 +77,9 @@ export function A11yBar() {
             type="button"
             onClick={() => set('textSize', smaller)}
             disabled={sizeIndex === 0}
-            aria-label={t('textSizeSmaller')}
+            // The name starts with what is shown, so a voice-control user who
+            // says "A minus" reaches it (WCAG 2.5.3 Label in Name; e2e/a11y).
+            aria-label={`A− ${t('textSizeSmaller')}`}
             className="target bordered rounded-md px-3 text-sm font-semibold disabled:opacity-40"
           >
             A<span aria-hidden="true" className="text-xs">−</span>
@@ -86,7 +88,7 @@ export function A11yBar() {
             type="button"
             onClick={() => set('textSize', bigger)}
             disabled={sizeIndex === TEXT_SIZES.length - 1}
-            aria-label={t('textSizeBigger')}
+            aria-label={`A+ ${t('textSizeBigger')}`}
             className="target bordered rounded-md px-3 text-base font-semibold disabled:opacity-40"
           >
             A<span aria-hidden="true" className="text-xs">+</span>
