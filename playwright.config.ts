@@ -1,18 +1,33 @@
 import { defineConfig, devices } from '@playwright/test';
+import pkg from './package.json';
 
 /**
  * End-to-end tests against the production build.
  *
  * `npm run build` must have run first: the web server below is `next start`,
  * as the Next.js testing guide recommends, so what is tested is what Vercel
- * serves. Locally an already running server on port 3000 is reused.
+ * serves. It runs on its own port and is never reused, so a `next dev` left
+ * running on 3000 cannot stand in for the build.
  *
  * Files are named `*.e2e.ts`, not `*.spec.ts`, so Vitest's default pattern
  * (which has no config file in this repo) never picks them up.
  *
  * Record: docs/features/2026-11-11-e2e-tests.md
  */
-const PORT = 3000;
+
+// `playwright-core` is pinned beside `@playwright/test` only so that
+// `@axe-core/playwright` (which takes it as a peer) shares the runner's copy.
+// Two different versions break the types and the browser revisions, so a bump
+// of one without the other stops here rather than somewhere obscure.
+const runner = pkg.devDependencies['@playwright/test'];
+const core = pkg.devDependencies['playwright-core'];
+if (runner !== core) {
+  throw new Error(
+    `@playwright/test (${runner}) and playwright-core (${core}) must be the same version in package.json`,
+  );
+}
+
+const PORT = 3100;
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -39,9 +54,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run start',
+    command: `npm run start -- -p ${PORT}`,
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 60_000,
     // Analytics stay off: the build must not have NEXT_PUBLIC_ANALYTICS_PROVIDER set.
   },

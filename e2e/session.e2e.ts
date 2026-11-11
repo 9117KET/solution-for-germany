@@ -1,11 +1,12 @@
 import {
-  SESSION_KEY,
   T,
   answerScreen,
+  escapeRegExp,
   expect,
   goForward,
   reportMarker,
   savedSession,
+  settle,
   start,
   test,
 } from './helpers';
@@ -31,7 +32,7 @@ test('resume offer, carry on, start fresh', async ({ page }) => {
   await expect(question(page)).toHaveText(secondQuestion!);
 
   // The earlier answer is still there.
-  await page.getByRole('button', { name: new RegExp(`${T('back')}$`) }).click();
+  await page.getByRole('button', { name: new RegExp(`${escapeRegExp(T('back'))}$`) }).click();
   await expect(question(page)).toHaveText(firstQuestion!);
   await expect(page.locator('main input[type=radio]:checked')).toHaveCount(1);
 
@@ -58,10 +59,11 @@ test('erase removes the answers and keeps them gone', async ({ page }) => {
   // A change on the report after erasing must not write the file back.
   // The shared-household question is on the report whatever the grade.
   await page.getByRole('button', { name: T('adjust'), exact: true }).click();
-  await page.getByRole('group', { name: T('sharedQ') }).getByRole('radio').first().check();
-  expect(
-    await page.evaluate((key) => window.localStorage.getItem(key), SESSION_KEY),
-  ).toBeNull();
+  const yes = page.getByRole('group', { name: T('sharedQ') }).getByRole('radio').first();
+  await yes.check();
+  await expect(yes).toBeChecked();
+  await settle(page);
+  expect(await savedSession(page)).toBeNull();
 
   // And the next visit offers nothing to resume.
   await page.reload();

@@ -13,10 +13,14 @@ export function T(key: UiKey, lang: Lang = 'de', vars?: Record<string, string | 
   return translate(key, lang, vars);
 }
 
+/** Text made safe to put inside a regular expression. */
+export function escapeRegExp(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /** A string with `{placeholders}` as a regular expression; each placeholder matches anything. */
 export function pattern(key: UiKey, lang: Lang = 'de') {
-  const escaped = translate(key, lang).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(escaped.replace(/\\\{\w+\\\}/g, '.+?'));
+  return new RegExp(escapeRegExp(translate(key, lang)).replace(/\\\{\w+\\\}/g, '.+?'));
 }
 
 /** Where the saved intake lives on the device (`lib/intake/session.ts`). */
@@ -47,11 +51,21 @@ export const test = base.extend<{ consoleErrors: string[] }>({
 
 export { expect };
 
-/** Open the app fresh, pick the interface language, and press Start. */
-export async function start(page: Page, lang: Lang = 'de') {
+/** Open the welcome screen in the given interface language. */
+export async function openApp(page: Page, lang: Lang = 'de') {
   await page.goto('/');
   if (lang !== 'de') await chooseLanguage(page, lang);
+}
+
+/** Press Start on the welcome screen. */
+export async function pressStart(page: Page, lang: Lang = 'de') {
   await page.getByRole('button', { name: T('start', lang), exact: true }).click();
+}
+
+/** Open the app fresh, pick the interface language, and press Start. */
+export async function start(page: Page, lang: Lang = 'de') {
+  await openApp(page, lang);
+  await pressStart(page, lang);
 }
 
 export async function chooseLanguage(page: Page, lang: Lang) {
@@ -62,9 +76,7 @@ export async function chooseLanguage(page: Page, lang: Lang) {
 
 /** The button that moves on: "Weiter" on a question, "Ergebnis anzeigen" on the last one. */
 export function forward(page: Page, lang: Lang = 'de') {
-  const names = [T('next', lang), T('seeResult', lang)].map((s) =>
-    s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-  );
+  const names = [T('next', lang), T('seeResult', lang)].map(escapeRegExp);
   // The label is "{text} →" (`app/page.tsx`). Anchoring on the arrow matters: in
   // Arabic "see my result" is a prefix of "show me the result now".
   return page.getByRole('button', { name: new RegExp(`^(${names.join('|')}) →$`) });
@@ -106,15 +118,41 @@ export async function goForward(page: Page, lang: Lang = 'de') {
   const button = forward(page, lang);
   const width = page.viewportSize()?.width ?? Infinity;
   if (width < SM) await expect(button).toBeInViewport();
+
+  // Wait until the screen has really changed before anything else looks at it:
+  // the progress bar's value goes up by one per screen, and the bar is gone on
+  // the report. Without this, the next step can act on the old screen or, worse,
+  // answer the report's own questions while it is still rendering.
+  const progress = page.getByRole('progressbar');
+  const before = await progress.getAttribute('aria-valuenow');
   await button.click();
+  await expect
+    .poll(async () => {
+      if (await reportMarker(page, lang).isVisible()) return 'report';
+      const now = await progress.getAttribute('aria-valuenow', { timeout: 1000 }).catch(() => null);
+      return now !== null && now !== before ? 'moved' : 'waiting';
+    })
+    .not.toBe('waiting');
 }
 
 /** From the situation screen, answer and continue until the report shows. Returns screens passed. */
 export async function runToReport(page: Page, lang: Lang = 'de') {
   for (let screens = 0; screens < 80; screens++) {
+    // Settled by goForward: the screen is either the report or a new question.
     if (await reportMarker(page, lang).isVisible()) return screens;
     await answerScreen(page);
     await goForward(page, lang);
   }
   throw new Error('the report did not appear within 80 screens');
+}
+
+/**
+ * Let React commit and run its effects (where the session is saved) before
+ * asserting that something was *not* written. An absence checked too early
+ * passes for the wrong reason.
+ */
+export async function settle(page: Page) {
+  await page.evaluate(
+    () => new Promise<void>((r) => requestAnimationFrame(() => setTimeout(r, 50))),
+  );
 }

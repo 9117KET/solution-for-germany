@@ -5,7 +5,8 @@ import { expect, reportMarker, runToReport, start, test } from './helpers';
 test('a full run talks to no other origin and sets no cookie', async ({ page, context, baseURL }) => {
   const own = new URL(baseURL!).origin;
   const foreign: string[] = [];
-  page.on('request', (req) => {
+  // Every page, popup and worker in the browser context, not just this tab.
+  context.on('request', (req) => {
     const url = new URL(req.url());
     // data: and blob: URLs never leave the browser.
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
