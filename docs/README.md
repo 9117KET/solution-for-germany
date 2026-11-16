@@ -24,7 +24,7 @@ lawyer's review.
 | Factsheet (de, en) | `dossier/partner/factsheet.tex` | attach to any first contact | draft, blanks |
 | Impressum, Datenschutzerklärung | `/impressum`, `/datenschutz` in the app; text in `lib/legal/` | the live site | draft, blanks, lawyer |
 
-Missing, as the dossier's section 7 says: a licence file (recommendation EUPL-1.2), a record of
+Missing, as the dossier's section 7 says (the licence file was added on 16 Nov 2026, EUPL-1.2): a record of
 processing activities, a data protection concept, an accessibility statement, the founder's CV,
 and the two data-processing agreements with Vercel and Plausible.
 

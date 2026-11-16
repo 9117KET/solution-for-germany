@@ -12,7 +12,7 @@
  * Filled on 2026-10-23: address and email from the founder's message; the
  * supervisory authority from
  * `.orchestration/runs/2026-10-23-bremen-blanks/scout-bremen.md`, section 1
- * (verified). The name is still open.
+ * (verified). The name was filled on 2026-11-16 from the founder's message.
  */
 
 export interface LegalSection {
@@ -29,7 +29,7 @@ export interface LegalText {
 }
 
 // § 5 Abs. 1 Nr. 1 DDG: name and ladungsfähige Anschrift (no P.O. box).
-export const NAME = '[Vor- und Nachname]';
+export const NAME = 'Kinlo Tangiri';
 export const STREET = 'Alhardstraße 21';
 export const CITY = '28757 Bremen';
 // § 5 Abs. 1 Nr. 2 DDG: fast electronic contact, including email.
@@ -46,7 +46,7 @@ export const DPA_AUTHORITY =
   'Der Landesbeauftragte für Datenschutz und Informationsfreiheit der Freien Hansestadt Bremen, Georgstraße 122-124, 27570 Bremerhaven, office@datenschutz.bremen.de, https://www.datenschutz.bremen.de/';
 
 /** The filled values. They carry no square brackets. */
-export const FILLED = [STREET, CITY, EMAIL, DPA_AUTHORITY] as const;
+export const FILLED = [NAME, STREET, CITY, EMAIL, DPA_AUTHORITY] as const;
 
 /** Every open blank, in the order the checklist in docs/COMPLIANCE.md lists them. */
-export const BLANKS = [NAME, VAT_ID, REGISTER, LICENSING_AUTHORITY, PROFESSION] as const;
+export const BLANKS = [VAT_ID, REGISTER, LICENSING_AUTHORITY, PROFESSION] as const;

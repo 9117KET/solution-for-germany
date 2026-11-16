@@ -251,4 +251,6 @@ the transcription is never edited for readability.
 
 ## Licence
 
-Not yet chosen.
+European Union Public Licence, version 1.2 (EUPL-1.2). The full text is in [`LICENSE`](LICENSE).
+
+Copyright © 2026 Kinlo Tangiri.
