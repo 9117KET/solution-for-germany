@@ -60,7 +60,7 @@ Sie können Familien deshalb sagen: Was Sie tippen, verlässt Ihr Gerät nicht. 
 ### Kosten
 
 Pilot über drei Monate: `[Betrag]`.
-Der Quellcode hat noch keine Lizenz. Diese Entscheidung steht aus; wir teilen sie Ihnen vor Beginn des Piloten mit.
+Der Quellcode steht unter der European Union Public Licence, Version 1.2 (EUPL-1.2).
 
 ### Kontakt
 

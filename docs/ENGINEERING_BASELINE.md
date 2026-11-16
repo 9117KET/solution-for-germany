@@ -12,6 +12,9 @@ The tables below are the audit as it stood at `36e081a`. Gaps closed since:
 | 2. Protect `main` | GitHub setting, 2026-11-11: pull request required (0 approvals), check "Lint, typecheck, test, build" required from GitHub Actions, applies to admins, no force push, no deletion | A10; D3 partly (merges gated, local actions still by rule) |
 | 3. End-to-end tests | `docs/features/2026-11-11-e2e-tests.md`: Playwright, Chromium + Firefox + WebKit at phone size, 11 tests × 3 engines, run in CI | A6, B3, B4 (privacy rule) |
 | 5. Automated accessibility | Same change: axe on welcome, a question and the report, de and ar; fixed WCAG 2.5.3 on the text-size buttons | B6 |
+| 4. Tests for the PDF (partly) | Branch `sdlc-followups`, 2026-11-16, not yet merged: `lib/report/pdf.test.ts`, 14 tests on what the PDF says in German and English. Still open: `lib/intake/summary.ts`, `session-store.ts` | B7 partly |
+| Dependency audit in CI | Same branch: `npm audit --omit=dev --audit-level=high` as a CI step | Stage 6 of `/sdlc` |
+| Security audit | `docs/SECURITY_BASELINE.md`, 2026-11-16: no Critical or High; eight findings, two Medium (name on the Impressum, no response headers or CSP) | |
 
 Mark each item **met**, **partly** or **not met**, with the file or command output that shows it.
 A thing that cannot be found is "not found in the repo", never guessed.

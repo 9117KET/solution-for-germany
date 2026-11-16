@@ -75,7 +75,7 @@ Apply only after Q3, Q4 and Q5 are answered. The deadline leaves about five week
 
 ## Licence decision
 
-`README.md` says "Not yet chosen". The scout found these points (section 4 of the scout file):
+Decided on 16 Nov 2026: EUPL-1.2, `LICENSE` in the repository root. The scout had found these points (section 4 of the scout file):
 
 - **EUPL-1.2.** OSI-certified. Reciprocal. Its compatibility list includes GPL, AGPL, LGPL, EPL and MPL; Apache is not in that list ([EU FAQ](https://interoperable-europe.ec.europa.eu/collection/eupl/faq), verified).
 - **AGPL-3.0.** Copyleft. Third parties may host and self-brand the code free, so revenue rests on hosting, support, updates and statute maintenance rather than on code exclusivity (scout's reasoning, not sourced).

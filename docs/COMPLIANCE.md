@@ -10,12 +10,12 @@ here and are not asserted on the pages.
 ## 1. Fill in the blanks
 
 All blanks are in `lib/legal/blanks.ts` (`BLANKS`); fill them there once and both pages
-follow. Still open: the name, then the optional items. `lib/legal/legal.test.ts` fails if a blank is added or dropped without updating
+follow. Still open: the optional items. `lib/legal/legal.test.ts` fails if a blank is added or dropped without updating
 the list.
 
 | Blank | Needed for | Source | State |
 | --- | --- | --- | --- |
-| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 | **Open** |
+| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 | Filled 16 Nov 2026: Kinlo Ephriam Tangiri |
 | Straße und Hausnummer, Postleitzahl und Ort | Ladungsfähige Anschrift; a P.O. box is not enough | SC:11-12 | Filled 23 Oct 2026: Alhardstraße 21, 28757 Bremen |
 | E-Mail-Adresse | Fast electronic contact; also where objections go | SC:11 | Filled 23 Oct 2026: kinlotangiri911@gmail.com |
 | USt-IdNr. or Wirtschafts-ID, Register, licensing authority, profession | Only if they apply; otherwise delete the lines | SC:11 | Open, "falls zutreffend" |

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BLANKS, DPA_AUTHORITY, EMAIL, FILLED, type LegalSection } from './blanks';
+import { BLANKS, DPA_AUTHORITY, EMAIL, FILLED, NAME, type LegalSection } from './blanks';
 import { DATENSCHUTZ, DATENSCHUTZ_TITLE, countingStatus, datenschutzForBuild } from './datenschutz';
 import { IMPRESSUM, IMPRESSUM_TITLE } from './impressum';
 
@@ -33,8 +33,9 @@ describe('legal texts', () => {
     expect([...found].sort()).toEqual([...BLANKS].sort());
   });
 
-  it('keeps the name open and the filled values free of brackets', () => {
-    expect(BLANKS[0]).toBe('[Vor- und Nachname]');
+  it('has the name filled and the filled values free of brackets', () => {
+    expect(NAME).toBe('Kinlo Ephriam Tangiri');
+    expect(BLANKS as readonly string[]).not.toContain(NAME);
     for (const v of FILLED) expect(v).not.toMatch(/[[\]]/);
   });
 
@@ -42,6 +43,7 @@ describe('legal texts', () => {
     const impressum = allText(IMPRESSUM).join('\n');
     const datenschutz = allText(DATENSCHUTZ).join('\n');
     for (const t of [impressum, datenschutz]) {
+      expect(t).toContain(NAME);
       expect(t).toContain('Alhardstraße 21');
       expect(t).toContain('28757 Bremen');
       expect(t).toContain(EMAIL);
