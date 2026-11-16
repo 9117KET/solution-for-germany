@@ -15,7 +15,7 @@ the list.
 
 | Blank | Needed for | Source | State |
 | --- | --- | --- | --- |
-| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 | Filled 16 Nov 2026: Kinlo Tangiri |
+| Vor- und Nachname | Impressum, controller | § 5 Abs. 1 Nr. 1 DDG, SC:11; Art. 13(1)(a), SC:67 | Filled 16 Nov 2026: Kinlo Ephriam Tangiri |
 | Straße und Hausnummer, Postleitzahl und Ort | Ladungsfähige Anschrift; a P.O. box is not enough | SC:11-12 | Filled 23 Oct 2026: Alhardstraße 21, 28757 Bremen |
 | E-Mail-Adresse | Fast electronic contact; also where objections go | SC:11 | Filled 23 Oct 2026: kinlotangiri911@gmail.com |
 | USt-IdNr. or Wirtschafts-ID, Register, licensing authority, profession | Only if they apply; otherwise delete the lines | SC:11 | Open, "falls zutreffend" |

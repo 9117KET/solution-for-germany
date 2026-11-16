@@ -34,7 +34,7 @@ describe('legal texts', () => {
   });
 
   it('has the name filled and the filled values free of brackets', () => {
-    expect(NAME).toBe('Kinlo Tangiri');
+    expect(NAME).toBe('Kinlo Ephriam Tangiri');
     expect(BLANKS as readonly string[]).not.toContain(NAME);
     for (const v of FILLED) expect(v).not.toMatch(/[[\]]/);
   });

@@ -29,7 +29,7 @@ export interface LegalText {
 }
 
 // § 5 Abs. 1 Nr. 1 DDG: name and ladungsfähige Anschrift (no P.O. box).
-export const NAME = 'Kinlo Tangiri';
+export const NAME = 'Kinlo Ephriam Tangiri';
 export const STREET = 'Alhardstraße 21';
 export const CITY = '28757 Bremen';
 // § 5 Abs. 1 Nr. 2 DDG: fast electronic contact, including email.
