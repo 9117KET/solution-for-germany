@@ -36,6 +36,11 @@ jobs:
       - name: Install
         run: npm ci
 
+      # Only what ships to the browser (--omit=dev), and only High or Critical
+      # blocks. Advisories in lint and test tooling are tracked by Dependabot.
+      - name: Dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Lint
         run: npm run lint
 
