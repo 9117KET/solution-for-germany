@@ -13,22 +13,17 @@
 
 \begin{document}
 {\LARGE\sffamily\bfseries Anspruch: Projektbeschreibung\par}
-\blank{Name der Antragstellerin oder des Antragstellers}\par
+Kinlo Tangiri\par
 
 \section*{Vor dem Versand ausfüllen}
 Jeder gelb markierte Platzhalter muss vor dem Versand ersetzt werden.
 Randnotizen in Rot sind offene Prüfpunkte; sie werden vor dem Versand geklärt und gelöscht.
 \begin{quote}\raggedright
-\blank{Name der Antragstellerin oder des Antragstellers} \textperiodcentered{}
-\blank{Adresse der Seite} \textperiodcentered{}
 \blank{Programm und Spur} \textperiodcentered{}
-\blank{Vergleich mit ähnlichen Angeboten} \textperiodcentered{}
-\blank{Ergebnis AP1} bis \blank{Ergebnis AP5} \textperiodcentered{}
 \blank{Aufwand AP1} bis \blank{Aufwand AP5} \textperiodcentered{}
 \blank{Arbeitsstunden gesamt} \textperiodcentered{}
 \blank{Anzahl Pilotpartner} \textperiodcentered{}
 \blank{Pilotpartner} \textperiodcentered{}
-\blank{Lizenzentscheidung} \textperiodcentered{}
 \blank{Team} \textperiodcentered{}
 \blank{Erfahrung, bis zu drei Projekte} \textperiodcentered{}
 \blank{Kommune oder Träger}
@@ -116,7 +111,7 @@ Es ist keine Begutachtung durch den Medizinischen Dienst und keine Rechtsberatun
 
 \subsection{Was heute besteht}
 \todo{Formularfeld 5 \enquote{Aktueller Stand}, max.\ 100 Wörter (J02, Archiv)}%
-Die Seite ist gebaut und auf Vercel bereitgestellt (\blank{Adresse der Seite}).
+Die Seite ist gebaut und auf Vercel bereitgestellt (\url{https://solution-for-germany.vercel.app}).
 \begin{itemize}
   \item \textbf{Kurze Befragung.} In der Regel 12 bis 20 Fragen statt 64.
         Die Befragung endet, wenn weitere Antworten das Ergebnis nicht mehr ändern können.
@@ -132,14 +127,16 @@ Die Seite ist gebaut und auf Vercel bereitgestellt (\blank{Adresse der Seite}).
         Antworten, auf Deutsch oder Englisch.
   \item \textbf{Sechs Sprachen} in der Oberfläche. Die Fragen stehen auf Deutsch oder Englisch,
         weil sie dem amtlichen Instrument folgen.
+  \item \textbf{Geprüft bei jeder Änderung.} 362 Tests für Regelwerk, Befragung und PDF; dazu Tests
+        in Chromium, Firefox und WebKit. Sie prüfen auch, dass ohne Zählung keine Anfrage die Seite verlässt.
   \item \textbf{Barrierefreiheit.} Einstellungen für Schrift, Farbe, Sprache und Tempo auf der
         ersten Seite; vier Farbschemata mit Kontrast nach WCAG AAA; Vorlesen; Antworten per Sprache
         in Browsern, die Spracherkennung anbieten (Chrome und Edge).
   \item \textbf{Zählung und Partnerlinks.} Ohne Einstellung sendet die Seite nichts.
         Eingeschaltet zählt sie Besuche und fünf Schritte ohne Cookies.
         Partner erhalten einen eigenen Link mit Kürzel.
-  \item \textbf{Impressum und Datenschutzerklärung} als Seiten, mit markierten Lücken für die
-        Angaben zum Betreiber.
+  \item \textbf{Impressum und Datenschutzerklärung} als Seiten, mit Namen, Anschrift und
+        zuständiger Aufsichtsbehörde.
 \end{itemize}
 
 \subsection{Technische Umsetzung}
@@ -167,7 +164,13 @@ Anspruch ist eine Web-Anwendung mit Next.js. Schätzung, Speicherung und PDF ent
 \todo{Formularfeld 7 \enquote{Innovation / ähnliche Ansätze}, max.\ 100 Wörter (J02, Archiv)}%
 Die Seite verkürzt die Befragung, ohne zu raten: Sie hört erst auf, wenn das Ergebnis feststeht,
 und zeigt sonst einen Bereich. Sie braucht keinen Server für Antworten.
-Abgrenzung zu ähnlichen Angeboten: \blank{Vergleich mit ähnlichen Angeboten}.
+Pflegegradrechner gibt es bereits, unter anderem von den Verbraucherzentralen.%
+\todo{Vor dem Versand am Rechner der Verbraucherzentralen prüfen: Sprachen, Zahl der Fragen, Leistungsvergleich, PDF}
+Anspruch geht vier Schritte weiter: Es vergleicht den geschätzten Pflegegrad mit den Leistungen,
+die der Haushalt schon bezieht. Es nennt die nächsten Schritte mit Paragraf. Es gibt die Antworten
+als PDF für die Begutachtung mit. Und die Oberfläche gibt es in sechs Sprachen.
+Der Quellcode ist offen (EUPL-1.2): Jede Beratungsstelle kann die Rechnung nachprüfen und die Seite
+selbst betreiben.
 
 \subsection{Was die geförderte Phase ergänzt}
 Es fehlen die muttersprachliche Prüfung, die rechtliche Prüfung, Erfahrung mit Partnern, eine Auswertung
@@ -191,7 +194,7 @@ Pflegesystem kennt, liest zuerst die Texte mit gesetzlichem Inhalt
 Dabei werden drei offene Fragen entschieden: Polnisch nutzt die Du-Form, wo das Deutsche
 \enquote{Sie} sagt; die arabischen Schaltflächen mischen Befehlsform und Verbalsubstantiv;
 und ob Pflegegeld, Pflegesachleistung und Pflegekasse beim ersten Vorkommen erklärt werden.
-\par\textbf{Ergebnis:} \blank{Ergebnis AP1}\quad \textbf{Aufwand:} \blank{Aufwand AP1}
+\par\textbf{Ergebnis:} Alle Texte auf Türkisch, Russisch, Polnisch und Arabisch sind von je einer Person gelesen und korrigiert. Die drei offenen Fragen sind entschieden und im Repository festgehalten.\quad \textbf{Aufwand:} \blank{Aufwand AP1}
 
 \subsection*{AP2: Rechtliche und fachliche Prüfung}
 Aus \texttt{docs/COMPLIANCE.md}, vor dem Einschalten der Zählung:
@@ -204,7 +207,7 @@ Aus \texttt{docs/COMPLIANCE.md}, vor dem Einschalten der Zählung:
         und zum Band der monatlichen Lücke in der Zählung.
   \item Verzeichnis der Verarbeitungstätigkeiten mit drei Einträgen; Position zu BFSG und BITV~2.0.
   \item Klären, wie Chrome und Edge die Spracherkennung verarbeiten.
-  \item Lizenz entscheiden und den Weg der Doppellizenz anwaltlich bestätigen lassen
+  \item Den Weg der Doppellizenz anwaltlich bestätigen lassen
         (Abschnitt~\ref{sec:oss}).
 \end{itemize}
 Fachliche Textfragen aus der Prüfung vom 22.10.2026: ob die Pflegekasse ein englisches PDF annimmt;
@@ -212,7 +215,7 @@ ob der Hinweis zu Pflegegeld und Pflegesachleistung die Kombination nach § 38 S
 richtig wiedergibt; ein Hinweistext mit einer Zahl ohne Quellenangabe (\texttt{estimateHigherBody});
 die erneute Prüfung der Begutachtungs-Richtlinien, damit das angezeigte Datum des Regelwerks
 aktuell wird.
-\par\textbf{Ergebnis:} \blank{Ergebnis AP2}\quad \textbf{Aufwand:} \blank{Aufwand AP2}
+\par\textbf{Ergebnis:} Eine schriftliche rechtliche Einschätzung zu Zählung und Speicherung im Browser. Datenschutzerklärung und Verzeichnis der Verarbeitungstätigkeiten sind auf diesem Stand. Die fachlichen Textfragen sind beantwortet, das Datum des Regelwerks ist aktuell.\quad \textbf{Aufwand:} \blank{Aufwand AP2}
 
 \subsection*{AP3: Pilotprojekte mit Partnern}
 Nach dem Vorschlag an Organisationen (\texttt{docs/proposal-organisations.md}):
@@ -220,22 +223,24 @@ drei Monate je Partner; zwei Beraterinnen oder Berater, die die Seite im Gesprä
 den Link mitgeben; ein Rückmeldegespräch pro Monat; eine Strichliste der Beratenden ohne Namen.
 Jeder Partner erhält einen eigenen Link. Geplant sind \blank{Anzahl Pilotpartner} Partner:
 \blank{Pilotpartner}. Die Pilotprojekte beginnen erst, wenn AP1 und AP2 abgeschlossen sind.
-\par\textbf{Ergebnis:} \blank{Ergebnis AP3}\quad \textbf{Aufwand:} \blank{Aufwand AP3}
+\par\textbf{Ergebnis:} Je Partner ein abgeschlossener Pilot über drei Monate mit drei Rückmeldegesprächen und einer Strichliste. Die Änderungen, die daraus folgen, sind umgesetzt und veröffentlicht.\quad \textbf{Aufwand:} \blank{Aufwand AP3}
 
 \subsection*{AP4: Anpassung an das Pflegeneuordnungsgesetz, falls beschlossen}
 Das Kabinett hat den Entwurf des Pflegeneuordnungsgesetzes (PNOG) am 30.09.2026 beschlossen.
-Die erste Lesung im Bundestag ist für den 05.11.2026 angesetzt. Das Gesetz ist noch nicht beschlossen
+Die erste Lesung im Bundestag war am 05.11.2026.%
+\todo{Stand und Termin der zweiten und dritten Lesung vor dem Versand prüfen}
+Das Gesetz ist noch nicht beschlossen
 und kann sich ändern. Wird es wie entworfen beschlossen, ändern sich die meisten Beträge und die
 Schwellen der Pflegegrade ab dem 01.01.2027. Dann müssen Regelwerk, Quellen-IDs, Tests, Texte in
 sechs Sprachen und das PDF angepasst werden; neue Texte gehen durch AP1.
 Wird es nicht beschlossen, bleibt die Prüfung aller Beträge vor jeder Veröffentlichung.
-\par\textbf{Ergebnis:} \blank{Ergebnis AP4}\quad \textbf{Aufwand:} \blank{Aufwand AP4}
+\par\textbf{Ergebnis:} Regelwerk, Quellen, Tests, Texte und PDF entsprechen dem Recht, das am Tag der Veröffentlichung gilt. Jeder Betrag trägt ein Prüfdatum aus der Förderphase.\quad \textbf{Aufwand:} \blank{Aufwand AP4}
 
 \subsection*{AP5: Auswertung}
 Monatlich und je Partnerlink die Summenzahlen aus Abschnitt~\ref{sec:wirkung},
 dazu die Strichlisten der Beratenden und die Notizen aus den Rückmeldegesprächen.
 Am Ende steht ein Bericht ohne personenbezogene Daten.
-\par\textbf{Ergebnis:} \blank{Ergebnis AP5}\quad \textbf{Aufwand:} \blank{Aufwand AP5}
+\par\textbf{Ergebnis:} Ein öffentlicher Bericht ohne personenbezogene Daten: Nutzung je Monat und Partner, was die Beratenden berichten und was an der Seite geändert wurde.\quad \textbf{Aufwand:} \blank{Aufwand AP5}
 
 % ---------------------------------------------------------------------------
 \section{Wirkung und Indikatoren}\label{sec:wirkung}
@@ -277,14 +282,14 @@ der Datenschutzerklärung ist Teil von AP2.
 
 % ---------------------------------------------------------------------------
 \section{Open Source und Nachhaltigkeit}\label{sec:oss}
-Der Quellcode hat noch keine Lizenz. Entscheidung: \blank{Lizenzentscheidung}.
+Der Quellcode steht seit dem 16.11.2026 unter der European Union Public Licence, Version 1.2
+(EUPL-1.2). Der Lizenztext liegt als \texttt{LICENSE} im Repository.
 \begin{itemize}
-  \item \textbf{Empfehlung:} EUPL-1.2. Das Urheberrecht bleibt in einer Hand, und vor jedem
+  \item \textbf{Warum EUPL-1.2:} Das Urheberrecht bleibt in einer Hand, und vor jedem
         Beitrag von außen wird eine Beitragsvereinbarung (CLA) geschlossen. Die EUPL-1.2 ist
         OSI-zertifiziert und wechselseitig; ein Partner kann den Code nicht schließen.
   \item \textbf{Prototype Fund:} Die Ergebnisse sollen unter einer Open-Source-Lizenz öffentlich
         zugänglich sein.\todo{Archiv J02; keine Liste zulässiger Lizenzen, EUPL-1.2 nicht genannt}
-        Die Entscheidung fällt vor dem 30.11.2026, wenn die Bewerbung kommt.
   \item \textbf{Doppellizenz:} Mit dem Urheberrecht in einer Hand kann neben der offenen Lizenz
         eine gepflegte Fassung für Organisationen angeboten werden. Das muss anwaltlich bestätigt werden.
   \item \textbf{Hessen:} Ein dort nach § 123 SGB XI gefördertes Ergebnis darf nicht kommerziell
